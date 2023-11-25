@@ -5,7 +5,7 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,4 +17,4 @@ jobs:
           distribution: 'corretto'
           cache: maven
       - name: Test with Maven
-        run: mvn -B test --file pom.xml
+        run: mvn --batch-mode --update-snapshots test
