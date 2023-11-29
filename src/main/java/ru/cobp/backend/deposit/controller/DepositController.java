@@ -10,7 +10,7 @@ import ru.cobp.backend.deposit.dto.DepositDto;
 public class DepositController {
 
     @GetMapping
-    DepositDto get() {
+    public DepositDto getDeposit() {
         return new DepositDto("deposit1");
     }
 
