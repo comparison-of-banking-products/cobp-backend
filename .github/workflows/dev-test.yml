@@ -16,7 +16,22 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
           cache: maven
+
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
-      - name: Run shell command
-        run: ls -al ./target
+
+      - name: Run JAR file
+        run: java -jar cobp-backend-0.0.1-SNAPSHOT.jar
+
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '20.x'
+
+      - name: Install newman
+        run: |
+          npm install -g newman
+
+      - name: Run POSTMAN collection
+        run: |
+          newman run ./postman/cobp-backend-api-test.json -r cli
