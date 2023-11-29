@@ -1,0 +1,17 @@
+{
+	"info": {
+		"_postman_id": "97369f96-e02c-40b7-b13c-3348702ae507",
+		"name": "cobp-backend-api-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Basic test",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
