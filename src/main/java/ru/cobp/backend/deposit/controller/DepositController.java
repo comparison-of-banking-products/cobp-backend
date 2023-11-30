@@ -11,7 +11,9 @@ public class DepositController {
 
     @GetMapping
     public DepositDto getDeposit() {
-        return new DepositDto("deposit1");
+        DepositDto deposit = new DepositDto();
+        deposit.setName("deposit");
+        return deposit;
     }
 
 }
