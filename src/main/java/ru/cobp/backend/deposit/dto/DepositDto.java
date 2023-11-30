@@ -4,9 +4,6 @@ public class DepositDto {
 
     private String name;
 
-    public DepositDto() {
-    }
-
     public DepositDto(String name) {
         this.name = name;
     }
