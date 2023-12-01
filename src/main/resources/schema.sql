@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS credits (
 	payment_type_id			INT             NOT NULL REFERENCES payment_types(id),
 	deposit_is_required		BOOLEAN			NOT NULL,
 	online_approve			BOOLEAN			NOT NULL,
-	online_gettting			BOOLEAN			NOT NULL,
+	online_geting			BOOLEAN			NOT NULL,
 	insurance 				BOOLEAN			NOT NULL
 );
 
@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS deposits (
 	product_url				VARCHAR(255) 	NOT NULL,	
 	is_active				BOOLEAN			NOT NULL,
 	currencies_num  		INT				NOT NULL REFERENCES currencies(num),
-	min_ammount 			INT             NOT NULL,
-    max_ammount 			INT				NOT NULL,
+	min_amount 			INT             NOT NULL,
+    max_amount 			INT				NOT NULL,
 	min_rate				FLOAT           NOT NULL,	
 	max_rate				FLOAT           NOT NULL,	
 	min_period				INT             NOT NULL,
