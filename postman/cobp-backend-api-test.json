@@ -27,14 +27,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/deposit",
+					"raw": "http://localhost:8080/v1/deposits",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"deposit"
+						"v1",
+						"deposits"
 					]
 				}
 			},
