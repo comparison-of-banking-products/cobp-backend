@@ -7,7 +7,7 @@ import ru.cobp.backend.credit.dto.CreditParams;
 import java.util.List;
 
 @Service
-public class CreditServiceImpl implements CreditService {
+public class CreditPublicServiceImpl implements CreditPublicService {
 
     @Override
     public List<CreditDto> getAll(CreditParams params) {

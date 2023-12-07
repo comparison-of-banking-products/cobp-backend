@@ -15,7 +15,7 @@ import lombok.ToString;
 public class Currency {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "num", nullable = false)
     private Long num;
 
     @Column(name = "code", nullable = false, length = 3)

@@ -5,7 +5,7 @@ import ru.cobp.backend.credit.dto.CreditParams;
 
 import java.util.List;
 
-public interface CreditService {
+public interface CreditPublicService {
     List<CreditDto> getAll(CreditParams params);
 
     CreditDto getById(long id);

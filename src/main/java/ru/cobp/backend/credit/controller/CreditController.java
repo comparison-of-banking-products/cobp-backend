@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.cobp.backend.credit.dto.CreditDto;
 import ru.cobp.backend.credit.dto.CreditParams;
-import ru.cobp.backend.credit.service.CreditService;
+import ru.cobp.backend.credit.service.CreditPublicService;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ import java.util.List;
 @Validated
 public class CreditController {
 
-    private final CreditService creditService;
+    private final CreditPublicService creditPublicService;
 
     @Operation(
             summary = "Найти кредиты",
@@ -60,7 +60,7 @@ public class CreditController {
             @RequestParam(required = false) Boolean insurance) {
         CreditParams params = new CreditParams(isActive, currenciesNum, minAmount, maxAmount, minRate, minPeriod,
                 maxPeriod, paymentTypeId, depositIsRequired, onlineApprove, onlineGetting, insurance);
-        return creditService.getAll(params);
+        return creditPublicService.getAll(params);
     }
 
     @Operation(
@@ -80,7 +80,7 @@ public class CreditController {
     })
     @GetMapping("/{id}")
     CreditDto getById(@PathVariable long id) {
-        return creditService.getById(id);
+        return creditPublicService.getById(id);
     }
 
 }
