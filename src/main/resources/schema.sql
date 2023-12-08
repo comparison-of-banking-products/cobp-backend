@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS credits (
 	payment_type_id			INT             NOT NULL REFERENCES payment_types(id),
 	deposit_is_required		BOOLEAN			NOT NULL,
 	online_approve			BOOLEAN			NOT NULL,
-	online_geting			BOOLEAN			NOT NULL,
+	online_getting			BOOLEAN			NOT NULL,
 	insurance 				BOOLEAN			NOT NULL
 );
 
