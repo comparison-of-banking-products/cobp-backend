@@ -6,7 +6,7 @@ import ru.cobp.backend.currency.dto.CurrencyDto;
 import java.util.List;
 
 @Service
-public class CurrencyServiceImpl implements CurrencyService{
+public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public CurrencyDto create(CurrencyDto newCurrency) {
