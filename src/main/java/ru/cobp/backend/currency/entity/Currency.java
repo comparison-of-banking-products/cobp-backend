@@ -1,6 +1,9 @@
 package ru.cobp.backend.currency.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,12 +19,12 @@ public class Currency {
 
     @Id
     @Column(name = "num", nullable = false)
-    private Long num;
+    private Integer num;
 
-    @Column(name = "code", nullable = false, length = 3)
+    @Column(name = "code", length = 3, nullable = false)
     private String code;
 
-    @Column(name = "currency", nullable = false, length = 20)
+    @Column(name = "currency", length = 30, nullable = false)
     private String currency;
 
 }
