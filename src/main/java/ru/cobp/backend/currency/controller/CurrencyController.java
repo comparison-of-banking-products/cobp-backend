@@ -1,5 +1,6 @@
 package ru.cobp.backend.currency.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,14 @@ import ru.cobp.backend.currency.service.CurrencyService;
 
 import java.util.List;
 
+@Tag(
+        name = "Валюты",
+        description = "Контроллер для работы с валютами"
+)
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/currencies")
+@RequestMapping(path = "/v1/currencies")
 public class CurrencyController {
 
     private final CurrencyService currencyService;
