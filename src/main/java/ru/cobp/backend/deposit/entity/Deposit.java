@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.cobp.backend.banks.entity.Bank;
+import ru.cobp.backend.bank.entity.Bank;
 import ru.cobp.backend.currency.entity.Currency;
 
 @Entity
