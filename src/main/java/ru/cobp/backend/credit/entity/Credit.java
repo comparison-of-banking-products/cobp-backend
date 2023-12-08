@@ -1,6 +1,14 @@
 package ru.cobp.backend.credit.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,37 +28,37 @@ public class Credit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "banks_bic", referencedColumnName = "bic")
+    @ManyToOne
+    @JoinColumn(name = "banks_bic", nullable = false)
     private Bank bank;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name", length = 100, nullable = false)
     private String name;
+
+    @Column(name = "product_url", length = 250, nullable = false)
+    private String productUrl;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
     @ManyToOne
-    @JoinColumn(name = "currencies_num", referencedColumnName = "num")
+    @JoinColumn(name = "currencies_num", nullable = false)
     private Currency currency;
 
-    @Column(name = "product_url", nullable = false, length = 100)
-    private String productUrl;
+    @Column(name = "amount_min", nullable = false)
+    private Integer amountMin;
 
-    @Column(name = "min_amount", nullable = false)
-    private Integer minAmount;
+    @Column(name = "amount_max", nullable = false)
+    private Integer amountMax;
 
-    @Column(name = "max_amount", nullable = false)
-    private Integer maxAmount;
+    @Column(name = "rate_min", nullable = false)
+    private Double rateMin;
 
-    @Column(name = "min_rate", nullable = false)
-    private Float minRate;
+    @Column(name = "term_min", nullable = false)
+    private Integer termMin;
 
-    @Column(name = "min_period", nullable = false)
-    private Integer minPeriod;
-
-    @Column(name = "max_period", nullable = false)
-    private Integer maxPeriod;
+    @Column(name = "term_max", nullable = false)
+    private Integer termMax;
 
     @ManyToOne
     @JoinColumn(name = "payment_type_id", nullable = false)

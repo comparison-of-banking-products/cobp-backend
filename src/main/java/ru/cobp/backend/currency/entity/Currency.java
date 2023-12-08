@@ -21,10 +21,10 @@ public class Currency {
     @Column(name = "num", nullable = false)
     private Integer num;
 
-    @Column(name = "code", length = 3, nullable = false)
+    @Column(name = "code", length = 3, nullable = false, unique = true)
     private String code;
 
-    @Column(name = "currency", length = 30, nullable = false)
+    @Column(name = "currency", length = 30, nullable = false, unique = true)
     private String currency;
 
 }
