@@ -1,4 +1,4 @@
-package ru.cobp.backend.credit.entity;
+package ru.cobp.backend.deposit.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,12 +16,12 @@ import ru.cobp.backend.bank.entity.Bank;
 import ru.cobp.backend.currency.entity.Currency;
 
 @Entity
-@Table(name = "credits")
+@Table(name = "deposits")
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Credit {
+public class Deposit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,11 +47,14 @@ public class Credit {
     @Column(name = "amount_min", nullable = false)
     private Integer amountMin;
 
-    @Column(name = "amount_max", nullable = false)
+    @Column(name = "amountMax", nullable = false)
     private Integer amountMax;
 
     @Column(name = "rate_min", nullable = false)
     private Double rateMin;
+
+    @Column(name = "rate_max", nullable = false)
+    private Double rateMax;
 
     @Column(name = "term_min", nullable = false)
     private Integer termMin;
@@ -59,20 +62,16 @@ public class Credit {
     @Column(name = "term_max", nullable = false)
     private Integer termMax;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_type_id", nullable = false)
-    private PaymentType paymentType;
+    @Column(name = "capitalization", nullable = false)
+    private Boolean capitalization;
 
-    @Column(name = "deposit_is_required", nullable = false)
-    private Boolean depositIsRequired;
+    @Column(name = "interest_payment", nullable = false)
+    private Boolean interestPayment;
 
-    @Column(name = "online_approve", nullable = false)
-    private Boolean onlineApprove;
+    @Column(name = "partial_withdrawal", nullable = false)
+    private Boolean partialWithdrawal;
 
-    @Column(name = "online_getting", nullable = false)
-    private Boolean onlineGetting;
-
-    @Column(name = "insurance", nullable = false)
-    private Boolean insurance;
+    @Column(name = "replenishment", nullable = false)
+    private Boolean replenishment;
 
 }

@@ -1,6 +1,9 @@
 package ru.cobp.backend.bank.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,21 +19,21 @@ public class Bank {
 
     @Id
     @Column(name = "bic", nullable = false)
-    private Long bic;
+    private Integer bic;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name", length = 100, nullable = false, unique = true)
     private String name;
 
-    @Column(name = "legal_entity", nullable = false, length = 100)
+    @Column(name = "legal_entity", length = 100, nullable = false, unique = true)
     private String legalEntity;
 
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "logotype", nullable = false, length = 254)
-    private String logotype;
+    @Column(name = "logo", length = 100, nullable = false)
+    private String logo;
 
-    @Column(name = "url", nullable = false, length = 100)
+    @Column(name = "url", length = 100, nullable = false)
     private String url;
 
 }
