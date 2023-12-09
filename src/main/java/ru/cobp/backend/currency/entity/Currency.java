@@ -1,5 +1,5 @@
 package ru.cobp.backend.currency.entity;
-`` rthbn
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
