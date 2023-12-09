@@ -1,5 +1,5 @@
 package ru.cobp.backend.currency.entity;
-
+`` rthbn
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,12 +20,12 @@ public class Currency {
 
     @Id
     @Column(name = "num", nullable = false)
-    private Long num;
+    private Integer num;
 
-    @Column(name = "code", nullable = false, length = 3)
+    @Column(name = "code", length = 3, nullable = false, unique = true)
     private String code;
 
-    @Column(name = "currency", nullable = false, length = 20)
+    @Column(name = "currency", length = 30, nullable = false, unique = true)
     private String currency;
 
 }
