@@ -7,7 +7,7 @@ import java.util.List;
 public interface BankService {
     BankDto create(BankDto newBank);
 
-    BankDto update(Long BankId, BankDto UpdBank);
+    BankDto update(Long bankId, BankDto updBank);
 
     BankDto getById(Long bankId);
 
