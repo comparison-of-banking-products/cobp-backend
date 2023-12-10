@@ -14,7 +14,7 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public BankDto update(Long BankId, BankDto UpdBank) {
+    public BankDto update(Long bankId, BankDto updBank) {
         return null;
     }
 
