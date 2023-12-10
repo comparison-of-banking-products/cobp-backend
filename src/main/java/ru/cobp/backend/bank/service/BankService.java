@@ -9,9 +9,9 @@ public interface BankService {
 
     BankDto update(Long bankId, BankDto updBank);
 
-    BankDto getById(Long bankId);
+    BankDto getById(Long id);
 
-    void deleteById(Long bankId);
+    void deleteById(Long id);
 
     List<BankDto> getAll();
 }

@@ -19,12 +19,12 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public BankDto getById(Long bankId) {
+    public BankDto getById(Long id) {
         return null;
     }
 
     @Override
-    public void deleteById(Long bankId) {
+    public void deleteById(Long id) {
 
     }
 
