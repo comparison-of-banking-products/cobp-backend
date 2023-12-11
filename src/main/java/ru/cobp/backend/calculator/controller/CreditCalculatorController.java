@@ -1,6 +1,7 @@
 package ru.cobp.backend.calculator.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,7 +34,7 @@ public class CreditCalculatorController {
 
     @Operation(
             summary = "Рассчитать аннуитетный кредит",
-            description = "Конечная точка для расчета аннуитетного кредита с наинизшей ставкой"
+            description = "Конечная точка для расчета аннуитетного кредита с наинизшей доступной ставкой"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
@@ -45,7 +46,10 @@ public class CreditCalculatorController {
     )})
     @GetMapping("/annuity")
     public AnnuityCreditCalculatorDto calculateAnnuityCredit(
+            @Parameter(description = "Сумма кредита")
             @RequestParam @Positive int amount,
+
+            @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term
     ) {
         return annuityCreditCalculator.calculate(amount, term);
@@ -53,7 +57,7 @@ public class CreditCalculatorController {
 
     @Operation(
             summary = "Рассчитать дифференцированный кредит",
-            description = "Конечная точка для расчета дифференцированного кредита с наинизшей ставкой"
+            description = "Конечная точка для расчета дифференцированного кредита с наинизшей доступной ставкой"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
@@ -65,7 +69,10 @@ public class CreditCalculatorController {
     )})
     @GetMapping("/differential")
     public DifferentialCreditCalculatorDto calculateDifferentialCredit(
+            @Parameter(description = "Сумма кредита")
             @RequestParam @Positive int amount,
+
+            @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term
     ) {
         return differentialCreditCalculator.calculate(amount, term);
