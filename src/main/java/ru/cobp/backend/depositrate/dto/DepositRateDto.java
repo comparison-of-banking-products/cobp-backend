@@ -1,7 +1,6 @@
 package ru.cobp.backend.depositrate.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
 import lombok.*;
 import ru.cobp.backend.deposit.entity.Deposit;
 
