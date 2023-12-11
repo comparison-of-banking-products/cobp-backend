@@ -10,8 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.cobp.backend.calculator.dto.CalculatorDepositDto;
-import ru.cobp.backend.deposit.dto.DepositDto;
+import ru.cobp.backend.calculator.dto.DepositCalculatorDto;
 
 @Tag(
         name = "Депозитный калькулятор",
@@ -22,19 +21,19 @@ import ru.cobp.backend.deposit.dto.DepositDto;
 public class DepositCalculatorController {
 
     @Operation(
-            summary = "Посчитать депозит",
+            summary = "Рассчитать депозит",
             description = "Конечная точка для расчета депозита с наивысшей доступной ставкой"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
-            description = "Депозит найден",
+            description = "Депозит рассчитан",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = DepositDto.class)
+                    schema = @Schema(implementation = DepositCalculatorDto.class)
             )}
     )})
     @GetMapping
-    public CalculatorDepositDto get() {
+    public DepositCalculatorDto calculateDeposit() {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
