@@ -12,15 +12,15 @@ import ru.cobp.backend.depositrate.service.DepositRateService;
 import java.util.ArrayList;
 import java.util.List;
 
-@Tag(
+/*@Tag(
         name = "Ставки депозитов",
         description = "Контроллер для ставок по депозитам"
 )
 @RequestMapping(path = "/v1/deposits/{depositId}/rates")
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor*/
 public class DepositRateController {
-    private final DepositRateService depositRateService;
+/*    private final DepositRateService depositRateService;
 
     @Operation(
             summary = "Получить ставку для депозита",
@@ -73,5 +73,5 @@ public class DepositRateController {
                                          @RequestBody DepositRateDto newDepositRateDto) {
         return new DepositRateDto();
     }
-
+*/
 }
