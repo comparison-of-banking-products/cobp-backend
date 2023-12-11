@@ -9,7 +9,6 @@ import ru.cobp.backend.deposit.dto.DepositDto;
 import ru.cobp.backend.deposit.dto.NewDepositDto;
 import ru.cobp.backend.deposit.service.DepositService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Tag(
@@ -20,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(path = "/v1/deposits")
 public class DepositController {
-    private DepositService depositService;
+    private final DepositService depositService;
 
     @Operation(
             summary = "Получить список депозитов",
@@ -29,7 +28,7 @@ public class DepositController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<DepositDto> getDepositList() {
-        return new ArrayList<>();
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Operation(
@@ -39,7 +38,7 @@ public class DepositController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public DepositDto getDeposit(@PathVariable Long id) {
-        return new DepositDto();
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Operation(
@@ -50,6 +49,7 @@ public class DepositController {
     @DeleteMapping("/{id}")
 
     public void deleteDeposit(@PathVariable Long id) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Operation(
@@ -59,7 +59,7 @@ public class DepositController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public DepositDto addDeposit(@RequestBody NewDepositDto newDepositDto) {
-        return new DepositDto();
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Operation(
@@ -69,7 +69,7 @@ public class DepositController {
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public DepositDto updateDeposit(@PathVariable Long id, @RequestBody DepositDto depositDto) {
-        return new DepositDto();
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
 }
