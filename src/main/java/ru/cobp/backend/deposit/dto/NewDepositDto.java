@@ -1,9 +1,12 @@
 package ru.cobp.backend.deposit.dto;
 
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import ru.cobp.backend.bank.dto.BankDto;
 import ru.cobp.backend.currency.dto.CurrencyDto;
 
 import java.util.List;
@@ -13,14 +16,12 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Сущность депозита")
-public class DepositDto {
-    @NotNull
-    @Positive
-    private Long id;
+@Schema(description = "Сущность нового депозита")
+public class NewDepositDto {
 
+    @Positive
     @NotNull
-    private BankDto bank;
+    private Long banksBic;
 
     @NotBlank
     @Size(max = 100)
@@ -73,5 +74,5 @@ public class DepositDto {
 
     @NotNull
     private Boolean replenishment;
-    private List<RateDto> rates;
+    private List<NewRateDto> rates;
 }

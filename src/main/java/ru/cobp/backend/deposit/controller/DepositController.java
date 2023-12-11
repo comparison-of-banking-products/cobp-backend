@@ -1,44 +1,75 @@
 package ru.cobp.backend.deposit.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import ru.cobp.backend.deposit.dto.DepositDto;
+import ru.cobp.backend.deposit.dto.NewDepositDto;
+import ru.cobp.backend.deposit.service.DepositService;
+
+import java.util.List;
 
 @Tag(
         name = "Депозиты",
         description = "Контроллер для работы с депозитами"
 )
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/v1/deposits")
 public class DepositController {
+    private final DepositService depositService;
+
+    @Operation(
+            summary = "Получить список депозитов",
+            description = "Конечная точка для получения депозитов"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public List<DepositDto> getDepositList() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 
     @Operation(
             summary = "Найти депозит",
             description = "Конечная точка для поиска депозита"
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Депозит найден",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = DepositDto.class)
-                            )}
-            )
-    })
-    @GetMapping
-    public DepositDto getDeposit() {
-        DepositDto deposit = new DepositDto();
-        deposit.setName("deposit");
-        return deposit;
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public DepositDto getDeposit(@PathVariable Long id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Operation(
+            summary = "Удалить депозит",
+            description = "Конечная точка для удаления депозита"
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+
+    public void deleteDeposit(@PathVariable Long id) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Operation(
+            summary = "Добавить депозит",
+            description = "Конечная точка для добавления депозита"
+    )
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping()
+    public DepositDto addDeposit(@RequestBody NewDepositDto newDepositDto) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Operation(
+            summary = "Изменить депозит",
+            description = "Конечная точка для изменения депозита"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{id}")
+    public DepositDto updateDeposit(@PathVariable Long id, @RequestBody DepositDto depositDto) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
 }
