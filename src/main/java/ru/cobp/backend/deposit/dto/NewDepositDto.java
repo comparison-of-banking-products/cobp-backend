@@ -1,7 +1,7 @@
 package ru.cobp.backend.deposit.dto;
 
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
 import lombok.*;
 import ru.cobp.backend.bank.entity.Bank;
 import ru.cobp.backend.currency.entity.Currency;
@@ -11,9 +11,8 @@ import ru.cobp.backend.currency.entity.Currency;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Сущность депозита")
-public class DepositDto {
-    private Long id;
+@Schema(description = "Сущность нового депозита")
+public class NewDepositDto {
     private Bank bank;
     private String name;
     private String productUrl;

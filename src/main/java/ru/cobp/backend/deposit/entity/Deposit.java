@@ -73,5 +73,4 @@ public class Deposit {
 
     @Column(name = "replenishment", nullable = false)
     private Boolean replenishment;
-
 }
