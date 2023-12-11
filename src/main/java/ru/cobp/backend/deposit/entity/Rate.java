@@ -1,11 +1,10 @@
-package ru.cobp.backend.depositrate.entity;
+package ru.cobp.backend.deposit.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.cobp.backend.deposit.entity.Deposit;
 
 @Entity
 @Table(name = "deposit_rates")
@@ -13,7 +12,7 @@ import ru.cobp.backend.deposit.entity.Deposit;
 @Getter
 @Setter
 @ToString
-public class DepositRate {
+public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,4 +35,5 @@ public class DepositRate {
 
     @Column(name = "term_max", nullable = false)
     private Integer termMax;
+
 }

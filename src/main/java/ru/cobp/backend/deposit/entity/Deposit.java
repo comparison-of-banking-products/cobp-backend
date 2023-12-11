@@ -1,19 +1,14 @@
 package ru.cobp.backend.deposit.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ru.cobp.backend.bank.entity.Bank;
 import ru.cobp.backend.currency.entity.Currency;
+
+import java.util.List;
 
 @Entity
 @Table(name = "deposits")
@@ -22,7 +17,6 @@ import ru.cobp.backend.currency.entity.Currency;
 @Setter
 @ToString
 public class Deposit {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -73,4 +67,9 @@ public class Deposit {
 
     @Column(name = "replenishment", nullable = false)
     private Boolean replenishment;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "deposits_id")
+    private List<Rate> rates;
+
 }
