@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.cobp.backend.dto.calculator.AnnuityCreditCalculatorDto;
-import ru.cobp.backend.dto.calculator.DifferentialCreditCalculatorDto;
-import ru.cobp.backend.service.calculator.AnnuityCreditCalculator;
-import ru.cobp.backend.service.calculator.DifferentialCreditCalculator;
+import ru.cobp.backend.dto.calculator.AnnuityCreditCalculatorResponse;
+import ru.cobp.backend.dto.calculator.DifferentialCreditCalculatorResponse;
+import ru.cobp.backend.service.calculator.CreditCalculatorService;
 
 @Tag(
         name = "Кредитный калькулятор",
@@ -28,9 +27,7 @@ import ru.cobp.backend.service.calculator.DifferentialCreditCalculator;
 @RequiredArgsConstructor
 public class CreditCalculatorController {
 
-    private final AnnuityCreditCalculator annuityCreditCalculator;
-
-    private final DifferentialCreditCalculator differentialCreditCalculator;
+    private final CreditCalculatorService creditCalculator;
 
     @Operation(
             summary = "Рассчитать аннуитетный кредит",
@@ -41,18 +38,18 @@ public class CreditCalculatorController {
             description = "Аннуитетный кредит рассчитан",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = AnnuityCreditCalculatorDto.class)
+                    schema = @Schema(implementation = AnnuityCreditCalculatorResponse.class)
             )}
     )})
     @GetMapping("/annuity")
-    public AnnuityCreditCalculatorDto calculateAnnuityCredit(
+    public AnnuityCreditCalculatorResponse calculateAnnuityCredit(
             @Parameter(description = "Сумма кредита")
             @RequestParam @Positive int amount,
 
             @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term
     ) {
-        return annuityCreditCalculator.calculate(amount, term);
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Operation(
@@ -64,18 +61,18 @@ public class CreditCalculatorController {
             description = "Дифференцированный кредит рассчитан",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = DifferentialCreditCalculatorDto.class)
+                    schema = @Schema(implementation = DifferentialCreditCalculatorResponse.class)
             )}
     )})
     @GetMapping("/differential")
-    public DifferentialCreditCalculatorDto calculateDifferentialCredit(
+    public DifferentialCreditCalculatorResponse calculateDifferentialCredit(
             @Parameter(description = "Сумма кредита")
             @RequestParam @Positive int amount,
 
             @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term
     ) {
-        return differentialCreditCalculator.calculate(amount, term);
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
 }
