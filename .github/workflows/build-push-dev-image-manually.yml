@@ -1,8 +1,6 @@
-name: Dev test on pull request
+name: Build and push DEV image manually
 
-on:
-  pull_request:
-    branches: [ "dev" ]
+on: workflow_dispatch
 
 env:
   REGISTRY: ghcr.io
@@ -29,16 +27,6 @@ jobs:
 
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
-
-      - name: Run 'cobp' Backend App
-        run: |
-          cd target
-          java -jar cobp-backend-0.0.1-SNAPSHOT.jar &
-
-      - name: Test Backend API with Postman collection
-        uses: matt-ball/newman-action@master
-        with:
-          collection: ./postman/cobp-backend-api-test.json
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
