@@ -1,4 +1,4 @@
 package ru.cobp.backend.service.calculator;
 
-public interface CreditCalculator {
+public interface DepositCalculatorService {
 }
