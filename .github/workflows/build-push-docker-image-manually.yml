@@ -1,7 +1,9 @@
 name: Build and Push docker image to Container repository
 
 on:
-  workflow_dispatch
+  workflow_dispatch: {}
+  pull_request:
+    branches: [dev]
 
 env:
   REGISTRY: ghcr.io
