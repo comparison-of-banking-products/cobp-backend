@@ -1,4 +1,4 @@
-name: Test DEV on pull request
+name: Build and Test DEV on pull request
 
 on:
   pull_request:
