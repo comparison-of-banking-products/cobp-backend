@@ -1,4 +1,4 @@
-name: Build and Push Docker image manually
+name: Build and push DEV image manually
 
 on:
   workflow_dispatch: {}
@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: dev
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
