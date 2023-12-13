@@ -28,7 +28,7 @@ public class Credit {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "banks_bic", nullable = false)
+    @JoinColumn(name = "bank_bic", nullable = false)
     private Bank bank;
 
     @Column(name = "name", length = 100, nullable = false)
@@ -41,7 +41,7 @@ public class Credit {
     private Boolean isActive;
 
     @ManyToOne
-    @JoinColumn(name = "currencies_num", nullable = false)
+    @JoinColumn(name = "currency_num", nullable = false)
     private Currency currency;
 
     @Column(name = "amount_min", nullable = false)
@@ -50,29 +50,10 @@ public class Credit {
     @Column(name = "amount_max", nullable = false)
     private Integer amountMax;
 
-    @Column(name = "rate_min", nullable = false)
-    private Double rateMin;
+    @Column(name = "term", nullable = false)
+    private Integer term;
 
-    @Column(name = "term_min", nullable = false)
-    private Integer termMin;
-
-    @Column(name = "term_max", nullable = false)
-    private Integer termMax;
-
-    @ManyToOne
-    @JoinColumn(name = "payment_type_id", nullable = false)
-    private PaymentType paymentType;
-
-    @Column(name = "deposit_is_required", nullable = false)
-    private Boolean depositIsRequired;
-
-    @Column(name = "online_approve", nullable = false)
-    private Boolean onlineApprove;
-
-    @Column(name = "online_getting", nullable = false)
-    private Boolean onlineGetting;
-
-    @Column(name = "insurance", nullable = false)
-    private Boolean insurance;
+    @Column(name = "rate", nullable = false)
+    private Double rate;
 
 }

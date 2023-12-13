@@ -1,14 +1,19 @@
 package ru.cobp.backend.model.deposit;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.currency.Currency;
-
-import java.util.List;
 
 @Entity
 @Table(name = "deposits")
@@ -17,12 +22,13 @@ import java.util.List;
 @Setter
 @ToString
 public class Deposit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "banks_bic", nullable = false)
+    @JoinColumn(name = "bank_bic", nullable = false)
     private Bank bank;
 
     @Column(name = "name", length = 100, nullable = false)
@@ -35,41 +41,19 @@ public class Deposit {
     private Boolean isActive;
 
     @ManyToOne
-    @JoinColumn(name = "currencies_num", nullable = false)
+    @JoinColumn(name = "currency_num", nullable = false)
     private Currency currency;
 
     @Column(name = "amount_min", nullable = false)
     private Integer amountMin;
 
-    @Column(name = "amountMax", nullable = false)
+    @Column(name = "amount_max", nullable = false)
     private Integer amountMax;
 
-    @Column(name = "rate_min", nullable = false)
+    @Column(name = "term", nullable = false)
+    private Integer term;
+
+    @Column(name = "rate", nullable = false)
     private Double rateMin;
-
-    @Column(name = "rate_max", nullable = false)
-    private Double rateMax;
-
-    @Column(name = "term_min", nullable = false)
-    private Integer termMin;
-
-    @Column(name = "term_max", nullable = false)
-    private Integer termMax;
-
-    @Column(name = "capitalization", nullable = false)
-    private Boolean capitalization;
-
-    @Column(name = "interest_payment", nullable = false)
-    private Boolean interestPayment;
-
-    @Column(name = "partial_withdrawal", nullable = false)
-    private Boolean partialWithdrawal;
-
-    @Column(name = "replenishment", nullable = false)
-    private Boolean replenishment;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "deposits_id")
-    private List<Rate> rates;
 
 }
