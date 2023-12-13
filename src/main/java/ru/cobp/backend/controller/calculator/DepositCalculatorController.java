@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.cobp.backend.dto.calculator.DepositCalculatorMapper;
 import ru.cobp.backend.dto.calculator.DepositCalculatorResponse;
 import ru.cobp.backend.service.calculator.DepositCalculatorService;
+import ru.cobp.backend.service.calculator.impl.DepositCalculator;
 
 @Tag(
         name = "Депозитный калькулятор",
@@ -48,7 +50,9 @@ public class DepositCalculatorController {
             @Parameter(description = "Срок вклада в месяцах")
             @RequestParam @Positive int term
     ) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        DepositCalculator dc = depositCalculatorService.calculateMaximumRateDeposit(amount, term);
+
+        return DepositCalculatorMapper.toResponse(dc);
     }
 
 }
