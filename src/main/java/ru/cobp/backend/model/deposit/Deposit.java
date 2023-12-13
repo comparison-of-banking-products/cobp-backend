@@ -54,6 +54,6 @@ public class Deposit {
     private Integer term;
 
     @Column(name = "rate", nullable = false)
-    private Double rateMin;
+    private Double rate;
 
 }

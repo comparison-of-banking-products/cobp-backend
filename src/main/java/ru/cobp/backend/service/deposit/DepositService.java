@@ -1,7 +1,9 @@
 package ru.cobp.backend.service.deposit;
 
-import org.springframework.stereotype.Service;
+import ru.cobp.backend.model.deposit.Deposit;
 
-@Service
 public interface DepositService {
+
+    Deposit findMaximumRateDepositByAmountAndTerm(int amount, int term);
+
 }
