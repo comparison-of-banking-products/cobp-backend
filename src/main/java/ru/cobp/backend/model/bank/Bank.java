@@ -19,7 +19,7 @@ public class Bank {
 
     @Id
     @Column(name = "bic", nullable = false)
-    private Integer bic;
+    private Long bic;
 
     @Column(name = "name", length = 100, nullable = false, unique = true)
     private String name;
@@ -30,10 +30,10 @@ public class Bank {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "logo", length = 100, nullable = false)
+    @Column(name = "logo", length = 250, nullable = false)
     private String logo;
 
-    @Column(name = "url", length = 100, nullable = false)
+    @Column(name = "url", length = 250, nullable = false)
     private String url;
 
 }
