@@ -1,6 +1,6 @@
 package ru.cobp.backend.service.calculator;
 
-import ru.cobp.backend.service.calculator.impl.DepositCalculator;
+import ru.cobp.backend.model.calculator.DepositCalculator;
 
 public interface DepositCalculatorService {
 

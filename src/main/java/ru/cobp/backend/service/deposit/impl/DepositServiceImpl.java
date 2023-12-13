@@ -1,4 +1,4 @@
-package ru.cobp.backend.service.deposit;
+package ru.cobp.backend.service.deposit.impl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.repository.deposit.DepositRepository;
+import ru.cobp.backend.service.deposit.DepositService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class DepositServiceImpl implements DepositService {
     @Override
     public Deposit findMaximumRateDepositByAmountAndTerm(int amount, int term) {
         Predicate p = buildQDepositPredicateByAmountAndTerm(amount, term);
-        Sort s = Sort.by(Sort.Direction.DESC, "rate");
+        Sort s = Sort.by("rate").descending();
         List<Deposit> deposits = toList(depositRepository.findAll(p, s));
         return deposits.get(0);
     }

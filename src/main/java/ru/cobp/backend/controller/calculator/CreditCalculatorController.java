@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.cobp.backend.dto.calculator.CreditCalculatorMapper;
 import ru.cobp.backend.dto.calculator.CreditCalculatorResponse;
+import ru.cobp.backend.model.calculator.CreditCalculator;
 import ru.cobp.backend.service.calculator.CreditCalculatorService;
 
 @Tag(
@@ -26,7 +28,7 @@ import ru.cobp.backend.service.calculator.CreditCalculatorService;
 @RequiredArgsConstructor
 public class CreditCalculatorController {
 
-    private final CreditCalculatorService creditCalculator;
+    private final CreditCalculatorService creditCalculatorService;
 
     @Operation(
             summary = "Рассчитать кредит",
@@ -48,7 +50,9 @@ public class CreditCalculatorController {
             @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term
     ) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        CreditCalculator cc = creditCalculatorService.calculateMinimumRateAnnuityCredit(amount, term);
+
+        return CreditCalculatorMapper.toResponse(cc);
     }
 
 }

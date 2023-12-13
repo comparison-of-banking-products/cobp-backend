@@ -2,7 +2,7 @@ package ru.cobp.backend.dto.calculator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.cobp.backend.service.calculator.impl.DepositCalculator;
+import ru.cobp.backend.model.calculator.DepositCalculator;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DepositCalculatorMapper {
