@@ -1,4 +1,4 @@
-package ru.cobp.backend.bank.dto;
+package ru.cobp.backend.dto.bank;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

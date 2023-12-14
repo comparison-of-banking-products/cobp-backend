@@ -1,7 +1,7 @@
-package ru.cobp.backend.bank.service;
+package ru.cobp.backend.service.bank;
 
-import ru.cobp.backend.bank.dto.NewBankDto;
-import ru.cobp.backend.bank.dto.ResponseBankDto;
+import ru.cobp.backend.dto.bank.NewBankDto;
+import ru.cobp.backend.dto.bank.ResponseBankDto;
 
 import java.util.List;
 

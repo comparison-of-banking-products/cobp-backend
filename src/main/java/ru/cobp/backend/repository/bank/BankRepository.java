@@ -1,7 +1,7 @@
-package ru.cobp.backend.bank.repository;
+package ru.cobp.backend.repository.bank;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.cobp.backend.bank.entity.Bank;
+import ru.cobp.backend.model.bank.Bank;
 
 public interface BankRepository extends JpaRepository<Bank, Long> {
 
