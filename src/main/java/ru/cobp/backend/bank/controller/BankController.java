@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.cobp.backend.bank.dto.BankDto;
+import ru.cobp.backend.bank.dto.NewBankDto;
+import ru.cobp.backend.bank.dto.ResponseBankDto;
 import ru.cobp.backend.bank.service.BankService;
 
 import java.util.List;
@@ -18,35 +18,35 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/v1/banks")
+@RequestMapping("/v1/banks")
 public class BankController {
 
     private final BankService bankService;
 
     @PostMapping
-    public ResponseEntity<BankDto> create(@RequestBody BankDto bankDto) {
-        return new ResponseEntity<>(bankService.create(bankDto), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public NewBankDto create(@RequestBody NewBankDto newBankDto) {
+        return bankService.create(newBankDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BankDto> update(@PathVariable Long id, @RequestBody BankDto bankDto) {
-        return new ResponseEntity<>(bankService.update(id, bankDto), HttpStatus.OK);
+    @PutMapping("/{bic}")
+    public NewBankDto update(@PathVariable Long bic, @RequestBody NewBankDto newBankDto) {
+        return bankService.update(bic, newBankDto);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BankDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(bankService.getById(id), HttpStatus.OK);
+    @GetMapping("/{bic}")
+    public ResponseBankDto getByBic(@PathVariable Long bic) {
+        return bankService.getByBic(bic);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<BankDto> delete(@PathVariable Long id) {
-        bankService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @DeleteMapping("/{bic}")
+    public void delete(@PathVariable Long bic) {
+        bankService.deleteByBic(bic);
     }
 
     @GetMapping
-    public ResponseEntity<List<BankDto>> getAll(@RequestBody BankDto bankDto) {
-        return new ResponseEntity<>(bankService.getAll(), HttpStatus.OK);
+    public List<ResponseBankDto> getAll() {
+        return bankService.getAll();
     }
 
 }

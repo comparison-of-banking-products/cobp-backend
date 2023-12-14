@@ -19,7 +19,7 @@ public class Bank {
 
     @Id
     @Column(name = "bic", nullable = false)
-    private Integer bic;
+    private Long bic;
 
     @Column(name = "name", length = 100, nullable = false, unique = true)
     private String name;

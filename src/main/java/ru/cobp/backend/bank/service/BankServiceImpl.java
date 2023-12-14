@@ -1,7 +1,8 @@
 package ru.cobp.backend.bank.service;
 
 import org.springframework.stereotype.Service;
-import ru.cobp.backend.bank.dto.BankDto;
+import ru.cobp.backend.bank.dto.NewBankDto;
+import ru.cobp.backend.bank.dto.ResponseBankDto;
 
 import java.util.List;
 
@@ -9,28 +10,28 @@ import java.util.List;
 public class BankServiceImpl implements BankService {
 
     @Override
-    public BankDto create(BankDto newBank) {
-        return null;
+    public NewBankDto create(NewBankDto newBank) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public BankDto update(Long bankId, BankDto updBank) {
-        return null;
+    public NewBankDto update(Long bic, NewBankDto updBank) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public BankDto getById(Long id) {
-        return null;
+    public ResponseBankDto getByBic(Long bic) {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteByBic(Long bic) {
 
     }
 
     @Override
-    public List<BankDto> getAll() {
-        return null;
+    public List<ResponseBankDto> getAll() {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
 }

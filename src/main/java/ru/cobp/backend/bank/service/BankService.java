@@ -1,17 +1,18 @@
 package ru.cobp.backend.bank.service;
 
-import ru.cobp.backend.bank.dto.BankDto;
+import ru.cobp.backend.bank.dto.NewBankDto;
+import ru.cobp.backend.bank.dto.ResponseBankDto;
 
 import java.util.List;
 
 public interface BankService {
-    BankDto create(BankDto newBank);
+    NewBankDto create(NewBankDto newBank);
 
-    BankDto update(Long bankId, BankDto updBank);
+    NewBankDto update(Long bic, NewBankDto updBank);
 
-    BankDto getById(Long id);
+    ResponseBankDto getByBic(Long bic);
 
-    void deleteById(Long id);
+    void deleteByBic(Long bic);
 
-    List<BankDto> getAll();
+    List<ResponseBankDto> getAll();
 }
