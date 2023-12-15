@@ -3,7 +3,7 @@ VALUES
     (1, 'ban4ok-1', 'ban4ok-1-legalnyy', 'dlya vas svezhenkiy tovarchik, a dlya nas - solidnyy navarchik', 'ban4ok-1-logo', 'ban4ok-1-url'),
     (2, 'ban4ok-2', 'ban4ok-2-legalnyy', 'u kogo net nalichnykh, budet rydat neprilichno', 'ban4ok-2-logo', 'ban4ok-2-url'),
     (044525974, 'Тинькофф Банк', '?', 'Онлайн-экосистема, основанная на финансовых и лайфстайл-услугах', '?', 'https://www.tinkoff.ru'),
-    (044525187, 'Банк ВТБ', '?', 'Системообразующий универсальный российский банк', '?', 'https://www.vtb.ru');
+    (044525187, 'Банк ВТБ', '??', 'Системообразующий универсальный российский банк', '??', 'https://www.vtb.ru');
 
 INSERT INTO currencies (num, code, currency)
 VALUES (643, 'RUB', 'Russian ruble');
