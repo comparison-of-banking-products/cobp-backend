@@ -5,6 +5,7 @@ import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.repository.deposit.DepositRepository;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DepositServiceImpl implements DepositService {
 
@@ -24,7 +26,7 @@ public class DepositServiceImpl implements DepositService {
     @Override
     public Deposit findMaximumRateDepositByAmountAndTerm(int amount, int term) {
         Predicate p = buildQDepositPredicateByAmountAndTerm(amount, term);
-        Sort s = Sort.by(Sort.Direction.DESC, "rate");
+        Sort s = Sort.by("rate").descending();
         List<Deposit> deposits = toList(depositRepository.findAll(p, s));
         return deposits.get(0);
     }
