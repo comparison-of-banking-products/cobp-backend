@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.calculator.DepositCalculatorMapper;
 import ru.cobp.backend.dto.calculator.DepositCalculatorResponse;
 import ru.cobp.backend.service.calculator.DepositCalculatorService;
-import ru.cobp.backend.service.calculator.impl.DepositCalculator;
+import ru.cobp.backend.model.calculator.DepositCalculator;
 
 @Tag(
         name = "Депозитный калькулятор",

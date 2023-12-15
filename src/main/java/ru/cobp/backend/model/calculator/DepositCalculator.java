@@ -1,4 +1,4 @@
-package ru.cobp.backend.service.calculator.impl;
+package ru.cobp.backend.model.calculator;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
