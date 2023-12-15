@@ -9,9 +9,10 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BankDto {
+public class NewBankDto {
+
     @NotNull
-    private Integer bic;
+    private Long bic;
 
     @NotNull
     @Size(max = 100)
@@ -31,7 +32,4 @@ public class BankDto {
     @NotNull
     @Size(max = 100)
     private String url;
-
 }
-
-

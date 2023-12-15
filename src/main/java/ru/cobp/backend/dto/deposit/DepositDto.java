@@ -3,7 +3,7 @@ package ru.cobp.backend.dto.deposit;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import ru.cobp.backend.dto.bank.BankDto;
+import ru.cobp.backend.dto.bank.ResponseBankDto;
 import ru.cobp.backend.dto.currency.CurrencyDto;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class DepositDto {
     private Long id;
 
     @NotNull
-    private BankDto bank;
+    private ResponseBankDto bank;
 
     @NotBlank
     @Size(max = 100)
