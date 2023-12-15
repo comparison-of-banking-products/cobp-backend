@@ -63,6 +63,6 @@ public class Deposit {
     private Boolean replenishment;
 
     @Column(name = "partial_withdrawal", nullable = false)
-    private Boolean partial_withdrawal;
-    
+    private Boolean partialWithdrawal;
+
 }
