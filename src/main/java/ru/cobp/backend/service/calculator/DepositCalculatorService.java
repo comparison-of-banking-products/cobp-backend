@@ -1,9 +1,13 @@
 package ru.cobp.backend.service.calculator;
 
-import ru.cobp.backend.model.calculator.DepositCalculator;
+import ru.cobp.backend.model.calculator.CalculatedDeposit;
+
+import java.util.List;
 
 public interface DepositCalculatorService {
 
-    DepositCalculator calculateMaximumRateDeposit(int amount, int term);
+    CalculatedDeposit getMaximumRateCalculatedDeposit(int amount, int term);
+
+    List<CalculatedDeposit> getCalculatedDeposits(int amount, int term, double rate);
 
 }
