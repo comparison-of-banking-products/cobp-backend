@@ -14,5 +14,4 @@ public interface DepositService {
 
     List<Deposit> findMaximumRateDeposits(Integer amount, Integer term);
 
-
 }
