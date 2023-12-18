@@ -9,8 +9,7 @@ import org.springframework.data.domain.Sort;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
 
-    public static Pageable getPageSortedByDepositRateDesc(int from, int size) {
-        int page = from / size;
+    public static Pageable getPageSortedByDepositRateDesc(int page, int size) {
         return PageRequest.of(page, size, Sort.by(Constants.DEPOSIT_RATE).descending());
     }
 

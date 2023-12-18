@@ -25,9 +25,9 @@ public class DepositServiceImpl implements DepositService {
     private final DepositRepository depositRepository;
 
     @Override
-    public List<Deposit> findAllMaximumRateDeposits(int amount, int term, Pageable page) {
+    public List<Deposit> findAllMaximumRateDeposits(int amount, int term, Pageable pageable) {
         Predicate p = buildQDepositMaximumRatePredicateBy(amount, term);
-        Iterable<Deposit> deposits = depositRepository.findAll(p, page);
+        Iterable<Deposit> deposits = depositRepository.findAll(p, pageable);
         return toList(deposits);
     }
 

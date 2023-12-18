@@ -21,8 +21,8 @@ public class DepositCalculatorServiceImpl implements DepositCalculatorService {
     private final DepositService depositService;
 
     @Override
-    public List<CalculatedDeposit> getAllMaximumRateCalculatedDeposits(int amount, int term, Pageable page) {
-        List<Deposit> deposits = depositService.findAllMaximumRateDeposits(amount, term, page);
+    public List<CalculatedDeposit> getAllMaximumRateCalculatedDeposits(int amount, int term, Pageable pageable) {
+        List<Deposit> deposits = depositService.findAllMaximumRateDeposits(amount, term, pageable);
         return calculateDepositsInterest(deposits, amount, term);
     }
 
