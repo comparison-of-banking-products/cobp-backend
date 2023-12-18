@@ -3,7 +3,7 @@ package ru.cobp.backend.service.calculator.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.cobp.backend.common.Constant;
+import ru.cobp.backend.common.Constants;
 import ru.cobp.backend.model.calculator.CreditCalculator;
 import ru.cobp.backend.model.credit.Credit;
 import ru.cobp.backend.service.calculator.CreditCalculatorService;
@@ -30,7 +30,7 @@ public class CreditCalculatorServiceImpl implements CreditCalculatorService {
     }
 
     private double calculateMonthlyInterestRate(double annualRate) {
-        return annualRate / (100.0 * Constant.NUMBER_OF_MONTHS_IN_YEAR);
+        return annualRate / (100.0 * Constants.NUMBER_OF_MONTHS_IN_YEAR);
     }
 
 }
