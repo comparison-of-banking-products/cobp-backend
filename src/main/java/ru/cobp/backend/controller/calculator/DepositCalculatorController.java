@@ -58,15 +58,15 @@ public class DepositCalculatorController {
             @Parameter(description = "Срок вклада в месяцах")
             @RequestParam @Positive int term,
 
-            @Parameter(description = "Текущий элемент в наборе")
-            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+            @Parameter(description = "Индекс страницы")
+            @RequestParam(defaultValue = "0") @PositiveOrZero int page,
 
-            @Parameter(description = "Количество элементов в наборе")
+            @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable page = Utils.getPageSortedByDepositRateDesc(from, size);
+        Pageable pageable = Utils.getPageSortedByDepositRateDesc(page, size);
         List<CalculatedDeposit> deposits
-                = depositCalculatorService.getAllMaximumRateCalculatedDeposits(amount, term, page);
+                = depositCalculatorService.getAllMaximumRateCalculatedDeposits(amount, term, pageable);
 
         return DepositCalculatorMapper.toDtos(deposits);
     }
