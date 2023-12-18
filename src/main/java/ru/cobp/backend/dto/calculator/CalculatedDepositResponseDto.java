@@ -11,9 +11,6 @@ import ru.cobp.backend.dto.deposit.DepositShortResponseDto;
 @NoArgsConstructor
 public class CalculatedDepositResponseDto {
 
-    @Schema(description = "Банк")
-    private BankShortResponseDto bank;
-
     @Schema(description = "Вклад")
     private DepositShortResponseDto deposit;
 

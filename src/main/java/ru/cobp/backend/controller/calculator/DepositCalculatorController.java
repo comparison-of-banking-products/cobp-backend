@@ -9,12 +9,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.cobp.backend.common.Utils;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
 import ru.cobp.backend.dto.calculator.DepositCalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
@@ -23,8 +26,8 @@ import ru.cobp.backend.service.calculator.DepositCalculatorService;
 import java.util.List;
 
 @Tag(
-        name = "Депозитный калькулятор",
-        description = "Контроллер для работы с депозитным калькулятором"
+        name = "Калькуляторы вклада и кредита",
+        description = "Контроллер для работы с калькуляторами вклада и кредита"
 )
 @RestController
 @RequestMapping(path = "/v1/calculators")
@@ -34,36 +37,12 @@ public class DepositCalculatorController {
     private final DepositCalculatorService depositCalculatorService;
 
     @Operation(
-            summary = "Рассчитать депозит",
-            description = "Конечная точка для расчета депозита с наивысшей доступной ставкой"
+            summary = "Рассчитать вклады",
+            description = "Конечная точка для расчета вкладов с наивысшей доступной ставкой"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
-            description = "Депозит рассчитан",
-            content = {@Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = CalculatedDepositResponseDto.class)
-            )}
-    )})
-    @GetMapping("/deposit")
-    public CalculatedDepositResponseDto calcMaximumRateDeposit(
-            @Parameter(description = "Сумма вклада в рублях")
-            @RequestParam @Positive int amount,
-
-            @Parameter(description = "Срок вклада в месяцах")
-            @RequestParam @Positive int term
-    ) {
-        CalculatedDeposit cd = depositCalculatorService.getMaximumRateCalculatedDeposit(amount, term);
-        return DepositCalculatorMapper.toDto(cd);
-    }
-
-    @Operation(
-            summary = "Рассчитать депозиты",
-            description = "Конечная точка для расчета депозитов"
-    )
-    @ApiResponses(value = {@ApiResponse(
-            responseCode = "200",
-            description = "Депозиты рассчитаны",
+            description = "Вклады рассчитаны",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(
@@ -72,18 +51,24 @@ public class DepositCalculatorController {
             )}
     )})
     @GetMapping("/deposits")
-    public List<CalculatedDepositResponseDto> calcAllDeposits(
+    public List<CalculatedDepositResponseDto> getAllCalculatedDeposits(
             @Parameter(description = "Сумма вклада в рублях")
             @RequestParam @Positive int amount,
 
             @Parameter(description = "Срок вклада в месяцах")
             @RequestParam @Positive int term,
 
-            @Parameter(description = "Максимальная ставка")
-            @RequestParam @Positive double rate
+            @Parameter(description = "Текущий элемент в наборе")
+            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+
+            @Parameter(description = "Количество элементов в наборе")
+            @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        List<CalculatedDeposit> cds = depositCalculatorService.getCalculatedDeposits(amount, term, rate);
-        return DepositCalculatorMapper.toDtos(cds);
+        Pageable page = Utils.getPageSortedByDepositRateDesc(from, size);
+        List<CalculatedDeposit> deposits
+                = depositCalculatorService.getAllMaximumRateCalculatedDeposits(amount, term, page);
+
+        return DepositCalculatorMapper.toDtos(deposits);
     }
 
 }

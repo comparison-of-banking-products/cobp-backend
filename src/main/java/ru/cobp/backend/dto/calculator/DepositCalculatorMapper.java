@@ -2,7 +2,6 @@ package ru.cobp.backend.dto.calculator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.cobp.backend.dto.bank.BankMapper;
 import ru.cobp.backend.dto.deposit.DepositMapper;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
 
@@ -15,7 +14,6 @@ public class DepositCalculatorMapper {
     public static CalculatedDepositResponseDto toDto(CalculatedDeposit o) {
         CalculatedDepositResponseDto dto = new CalculatedDepositResponseDto();
 
-        dto.setBank(BankMapper.toDto(o.getBank()));
         dto.setDeposit(DepositMapper.toDto(o.getDeposit()));
         dto.setAnnualInterest(o.getAnnualInterest());
         dto.setMaturityInterest(o.getMaturityInterest());
