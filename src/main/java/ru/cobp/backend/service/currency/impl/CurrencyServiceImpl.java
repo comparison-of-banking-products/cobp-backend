@@ -1,7 +1,8 @@
-package ru.cobp.backend.service.currency;
+package ru.cobp.backend.service.currency.impl;
 
 import org.springframework.stereotype.Service;
 import ru.cobp.backend.dto.currency.CurrencyDto;
+import ru.cobp.backend.service.currency.CurrencyService;
 
 import java.util.List;
 

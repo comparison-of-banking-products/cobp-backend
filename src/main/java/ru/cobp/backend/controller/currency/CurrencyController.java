@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.currency.CurrencyDto;
+import ru.cobp.backend.dto.currency.CurrencyRateResponseDto;
+import ru.cobp.backend.dto.currency.CurrencyRatesMapper;
+import ru.cobp.backend.model.currency.CurrencyRate;
+import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
 
 import java.util.List;
@@ -29,6 +33,8 @@ import java.util.List;
 public class CurrencyController {
 
     private final CurrencyService currencyService;
+
+    private final CurrencyRatesService currencyRateService;
 
     @PostMapping
     public ResponseEntity<CurrencyDto> create(@RequestBody CurrencyDto currencyDto) {
@@ -59,6 +65,12 @@ public class CurrencyController {
         log.info("Получен DELETE запрос по эндпоинту /currencies/{} на удаление Currency {}.", id, id);
         currencyService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/rates")
+    public List<CurrencyRateResponseDto> getCurrencyRates() {
+        List<CurrencyRate> rates = currencyRateService.getCurrencyRates();
+        return CurrencyRatesMapper.toDto(rates);
     }
 
 }
