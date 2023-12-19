@@ -8,19 +8,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.currency.Currency;
 
 @Entity
 @Table(name = "credits")
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@AllArgsConstructor
+@Data
+@Builder
 public class Credit {
 
     @Id
