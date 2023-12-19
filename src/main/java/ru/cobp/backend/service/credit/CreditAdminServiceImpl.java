@@ -49,7 +49,8 @@ public class CreditAdminServiceImpl implements CreditAdminService {
             } else {
                 throw new NotFoundException("Bank not with bic = " + creditDto.getBanksBic() + " was not found");
             }
-        } if (creditDto.getName() != null) {
+        }
+        if (creditDto.getName() != null) {
             credit.setName(creditDto.getName());
         }
         if (creditDto.getProductUrl() != null) {
