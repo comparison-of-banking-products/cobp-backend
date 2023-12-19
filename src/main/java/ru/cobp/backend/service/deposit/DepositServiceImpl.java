@@ -7,13 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.cobp.backend.common.Utils;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.repository.deposit.DepositRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +27,7 @@ public class DepositServiceImpl implements DepositService {
     public List<Deposit> findAllMaximumRateDeposits(int amount, int term, Pageable pageable) {
         Predicate p = buildQDepositMaximumRatePredicateBy(amount, term);
         Iterable<Deposit> deposits = depositRepository.findAll(p, pageable);
-        return toList(deposits);
+        return Utils.toList(deposits);
     }
 
     private Predicate buildQDepositMaximumRatePredicateBy(int amount, int term) {
@@ -40,12 +39,6 @@ public class DepositServiceImpl implements DepositService {
                 .and(Q_DEPOSIT.amountMin.loe(amount))
                 .and(Q_DEPOSIT.amountMax.goe(amount))
                 .and(Q_DEPOSIT.term.eq(term));
-    }
-
-    private List<Deposit> toList(Iterable<Deposit> iterable) {
-        return StreamSupport
-                .stream(iterable.spliterator(), false)
-                .collect(Collectors.toList());
     }
 
 }

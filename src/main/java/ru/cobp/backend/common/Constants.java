@@ -10,4 +10,6 @@ public class Constants {
 
     public static final String DEPOSIT_RATE = "rate";
 
+    public static final String CREDIT_RATE = "rate";
+
 }

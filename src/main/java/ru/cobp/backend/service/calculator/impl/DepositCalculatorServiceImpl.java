@@ -34,6 +34,7 @@ public class DepositCalculatorServiceImpl implements DepositCalculatorService {
 
     private CalculatedDeposit calculateDepositInterest(Deposit deposit, int amount, int term) {
         double rate = deposit.getRate();
+
         double annualInterest = calculateSimpleInterest(amount, Constants.NUMBER_OF_MONTHS_IN_YEAR, rate);
         double maturityInterest = calculateSimpleInterest(amount, term, rate);
         double totalAmount = amount + maturityInterest;

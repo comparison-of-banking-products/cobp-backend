@@ -1,9 +1,12 @@
 package ru.cobp.backend.service.calculator;
 
-import ru.cobp.backend.model.calculator.CreditCalculator;
+import org.springframework.data.domain.Pageable;
+import ru.cobp.backend.model.calculator.CalculatedCredit;
+
+import java.util.List;
 
 public interface CreditCalculatorService {
 
-    CreditCalculator calculateMinimumRateAnnuityCredit(int amount, int term);
+    List<CalculatedCredit> getAllMinimumRateCalculatedCredits(int amount, int term, Pageable pageable);
 
 }

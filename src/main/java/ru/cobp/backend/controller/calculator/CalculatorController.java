@@ -18,9 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.common.Utils;
+import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
+import ru.cobp.backend.dto.calculator.CreditCalculatorMapper;
 import ru.cobp.backend.dto.calculator.DepositCalculatorMapper;
+import ru.cobp.backend.model.calculator.CalculatedCredit;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
+import ru.cobp.backend.service.calculator.CreditCalculatorService;
 import ru.cobp.backend.service.calculator.DepositCalculatorService;
 
 import java.util.List;
@@ -32,9 +36,11 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/v1/calculators")
 @RequiredArgsConstructor
-public class DepositCalculatorController {
+public class CalculatorController {
 
     private final DepositCalculatorService depositCalculatorService;
+
+    private final CreditCalculatorService creditCalculatorService;
 
     @Operation(
             summary = "Рассчитать вклады",
@@ -45,9 +51,7 @@ public class DepositCalculatorController {
             description = "Вклады рассчитаны",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(
-                            schema = @Schema(implementation = CalculatedDepositResponseDto.class)
-                    )
+                    array = @ArraySchema(schema = @Schema(implementation = CalculatedDepositResponseDto.class))
             )}
     )})
     @GetMapping("/deposits")
@@ -69,6 +73,39 @@ public class DepositCalculatorController {
                 = depositCalculatorService.getAllMaximumRateCalculatedDeposits(amount, term, pageable);
 
         return DepositCalculatorMapper.toDtos(deposits);
+    }
+
+    @Operation(
+            summary = "Рассчитать кредиты",
+            description = "Конечная точка для расчета кредитов с наинизшей доступной ставкой"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Кредиты рассчитаны",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = CalculatedCreditResponseDto.class))
+            )}
+    )})
+    @GetMapping("/credits")
+    public List<CalculatedCreditResponseDto> getAllCalculatedCredits(
+            @Parameter(description = "Сумма кредита в рублях")
+            @RequestParam @Positive int amount,
+
+            @Parameter(description = "Срок кредита в месяцах")
+            @RequestParam @Positive int term,
+
+            @Parameter(description = "Индекс страницы")
+            @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+
+            @Parameter(description = "Размер страницы")
+            @RequestParam(defaultValue = "10") @Positive int size
+    ) {
+        Pageable pageable = Utils.getPageSortedByCreditRateAsc(page, size);
+        List<CalculatedCredit> credits =
+                creditCalculatorService.getAllMinimumRateCalculatedCredits(amount, term, pageable);
+
+        return CreditCalculatorMapper.toDtos(credits);
     }
 
 }
