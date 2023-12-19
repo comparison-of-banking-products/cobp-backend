@@ -101,7 +101,7 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = Utils.getPageSortedByDepositRateAsc(page, size);
+        Pageable pageable = Utils.getPageSortedByCreditRateAsc(page, size);
         List<CalculatedCredit> credits =
                 creditCalculatorService.getAllMinimumRateCalculatedCredits(amount, term, pageable);
 

@@ -17,8 +17,8 @@ public class Utils {
         return PageRequest.of(page, size, Sort.by(Constants.DEPOSIT_RATE).descending());
     }
 
-    public static Pageable getPageSortedByDepositRateAsc(int page, int size) {
-        return PageRequest.of(page, size, Sort.by(Constants.DEPOSIT_RATE).ascending());
+    public static Pageable getPageSortedByCreditRateAsc(int page, int size) {
+        return PageRequest.of(page, size, Sort.by(Constants.CREDIT_RATE).ascending());
     }
 
     public static <T> List<T> toList(Iterable<T> iterable) {
