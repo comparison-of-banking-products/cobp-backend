@@ -1,10 +1,16 @@
 package ru.cobp.backend.dto.credit;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Schema(description = "Сущность кредита")
 public class CreditDto {
 
     private Long id;
@@ -15,7 +21,7 @@ public class CreditDto {
 
     private Boolean isActive;
 
-    private Integer currenciesNum;
+    private Long currenciesNum;
 
     private String productUrl;
 
@@ -23,20 +29,8 @@ public class CreditDto {
 
     private Integer maxAmount;
 
-    private Float minRate;
+    private Double rate;
 
-    private Integer minPeriod;
-
-    private Integer maxPeriod;
-
-    private Integer paymentTypeId;
-
-    private Boolean depositIsRequired;
-
-    private Boolean onlineApprove;
-
-    private Boolean onlineGetting;
-
-    private Boolean insurance;
+    private Integer term;
 
 }
