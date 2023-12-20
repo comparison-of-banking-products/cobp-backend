@@ -8,7 +8,11 @@ VALUES
     (044525225, 'Сбербанк', 'ПАО "Сбербанк России"', 'Российский финансовый конгломерат, крупнейший универсальный банк', 'logo', 'https://www.sberbank.ru');
 
 INSERT INTO currencies (num, code, currency)
-VALUES (643, 'RUB', 'Russian ruble');
+VALUES
+    (156, 'CNY', 'Yuan Renminbi'),
+    (392, 'JPY', 'Japanese yen'),
+    (643, 'RUB', 'Russian ruble'),
+    (840, 'USD', 'United States dollar');
 
 INSERT INTO deposits (bank_bic, name, product_url, is_active, currency_num, amount_min, amount_max, term, rate, capitalization, replenishment, partial_withdrawal)
 VALUES

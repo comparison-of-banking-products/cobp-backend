@@ -8,4 +8,6 @@ public class ExceptionMessage {
 
     public static final String DEPOSIT_NOT_FOUND = "Deposit not found";
 
+    public static final String EXCHANGE_RATES_PROCESSING_FAILED = "Exchange rates processing failed";
+
 }
