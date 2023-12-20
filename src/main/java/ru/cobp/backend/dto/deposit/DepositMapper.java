@@ -11,7 +11,7 @@ public class DepositMapper {
     public static DepositShortResponseDto toDto(Deposit o) {
         DepositShortResponseDto dto = new DepositShortResponseDto();
 
-        dto.setBank(BankMapper.toDto(o.getBank()));
+        dto.setBank(BankMapper.toBankShortResponseDto(o.getBank()));
         dto.setDepositName(o.getName());
         dto.setDepositUrl(o.getProductUrl());
         dto.setTerm(o.getTerm());
