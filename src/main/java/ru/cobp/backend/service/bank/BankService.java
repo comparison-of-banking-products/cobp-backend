@@ -12,7 +12,7 @@ public interface BankService {
 
     NewBankDto update(Long bic, NewBankDto updBank);
 
-    ResponseBankDto getByBic(Long bic);
+    Bank getByBic(Long bic);
 
     void deleteByBic(Long bic);
 
