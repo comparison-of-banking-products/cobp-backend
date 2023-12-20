@@ -41,8 +41,8 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
     }
 
     @Transactional
-    private void deleteAll() {
-        currencyRatesRepository.deleteAll();
+    private void deleteAllInBatch() {
+        currencyRatesRepository.deleteAllInBatch();
     }
 
     private List<ExchangeRate> getExchangeRates(Set<String> codes) {
@@ -50,8 +50,9 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
     }
 
     @Scheduled(fixedDelay = 3_600_000)
+    @Transactional
     void getAndSaveExchangeRates() {
-        this.deleteAll();
+        this.deleteAllInBatch();
 
         Map<String, Currency> codeToCurrency = currencyService.findAll()
                 .stream()
