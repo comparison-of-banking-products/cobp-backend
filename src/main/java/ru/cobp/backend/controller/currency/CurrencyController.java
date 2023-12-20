@@ -1,9 +1,16 @@
 package ru.cobp.backend.controller.currency;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.currency.CurrencyDto;
 import ru.cobp.backend.dto.currency.CurrencyRateResponseDto;
-import ru.cobp.backend.dto.currency.CurrencyRatesMapper;
+import ru.cobp.backend.dto.currency.CurrencyRateMapper;
 import ru.cobp.backend.model.currency.CurrencyRate;
 import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
@@ -67,10 +74,22 @@ public class CurrencyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Получить актуальные котировки валют",
+            description = "Конечная точка для получения актуальных котировок валют"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Получены актуальные котировки валют",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = CurrencyRateResponseDto.class))
+            )}
+    )})
     @GetMapping("/rates")
     public List<CurrencyRateResponseDto> getCurrencyRates() {
         List<CurrencyRate> rates = currencyRateService.getCurrencyRates();
-        return CurrencyRatesMapper.toDto(rates);
+        return CurrencyRateMapper.toCurrencyRateResponseDtos(rates);
     }
 
 }

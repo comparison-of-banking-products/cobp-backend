@@ -15,7 +15,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "deposits")
+@Table(name = "currency_rates")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

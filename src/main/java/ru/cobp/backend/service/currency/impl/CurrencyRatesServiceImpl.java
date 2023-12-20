@@ -7,13 +7,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.client.exchange.ExchangeRatesClient;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.currency.CurrencyRate;
-import ru.cobp.backend.model.exchange.ExchangeRates;
+import ru.cobp.backend.model.exchange.ExchangeRate;
 import ru.cobp.backend.repository.currency.CurrencyRatesRepository;
 import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,40 +34,43 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
         return currencyRatesRepository.findAll();
     }
 
-    private List<CurrencyRate> getExchangeRates() {
-        ExchangeRates rates = exchangeRatesClient.getExchangeRates();
-        return toCurrencyRates(rates);
-    }
-
-    private List<CurrencyRate> toCurrencyRates(ExchangeRates exchangeRates) {
-        List<Currency> currencies = currencyService.findAll();
-
-//        currencies.stream()
-//                .map(c -> exchangeRates.getQuotes().)
-
-        List<CurrencyRate> rates = new ArrayList<>();
-
-        for (Currency currency : currencies) {
-            if (exchangeRates.getQuotes().containsKey(currency.getCode())) {
-                CurrencyRate e = new CurrencyRate(null, exchangeRates.getBase(), currency.getCode(), exchangeRates.getQuotes().get(currency.getCode()));
-                rates.add(e);
-            }
-        }
-
-
-        return exchangeRates
-
+    @Transactional
+    private void saveAll(List<CurrencyRate> rates) {
+        currencyRatesRepository.saveAll(rates);
     }
 
     @Transactional
-    private void saveAll(List<CurrencyRate> currencyRates) {
-        currencyRatesRepository.saveAll(currencyRates);
+    private void deleteAll() {
+        currencyRatesRepository.deleteAll();
+    }
+
+    private List<ExchangeRate> getExchangeRates(Set<String> codes) {
+        return exchangeRatesClient.getExchangeRates(codes);
     }
 
     @Scheduled(fixedDelay = 3_600_000)
     void getAndSaveExchangeRates() {
-        List<CurrencyRate> rates = this.getExchangeRates();
-        this.saveAll(rates);
+        this.deleteAll();
+
+        Map<String, Currency> codeToCurrency = currencyService.findAll()
+                .stream()
+                .collect(Collectors
+                        .toMap(Currency::getCode, Function.identity()));
+
+        List<CurrencyRate> currencyRates = this.getExchangeRates(codeToCurrency.keySet())
+                .stream()
+                .map(er -> this.toCurrencyRate(er, codeToCurrency))
+                .toList();
+
+        this.saveAll(currencyRates);
+    }
+
+    private CurrencyRate toCurrencyRate(ExchangeRate er, Map<String, Currency> codeToCurrency) {
+        Currency base = codeToCurrency.get(er.getBase());
+        Currency quote = codeToCurrency.get(er.getQuote());
+        Double rate = er.getRate();
+
+        return new CurrencyRate(null, base, quote, rate);
     }
 
 }
