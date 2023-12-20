@@ -11,7 +11,7 @@ public class CreditMapper {
     public static CreditShortResponseDto toDto(Credit o) {
         CreditShortResponseDto dto = new CreditShortResponseDto();
 
-        dto.setBank(BankMapper.toDto(o.getBank()));
+        dto.setBank(BankMapper.toBankShortResponseDto(o.getBank()));
         dto.setCreditName(o.getName());
         dto.setCreditUrl(o.getProductUrl());
         dto.setTerm(o.getTerm());
