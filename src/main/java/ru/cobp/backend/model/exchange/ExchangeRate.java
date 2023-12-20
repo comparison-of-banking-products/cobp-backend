@@ -9,12 +9,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ExchangeRate {
 
-    private LocalDateTime dateTime;
+    private LocalDateTime actualDate;
 
-    private String base;
+    private String baseCode;
 
-    private String quote;
+    private String quoteCode;
 
-    private Double rate;
+    private Double actualRate;
+
+    private Double previousRate;
+
+    private LocalDateTime previousDate;
 
 }

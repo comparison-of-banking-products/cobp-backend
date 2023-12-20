@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.currency.CurrencyDto;
-import ru.cobp.backend.dto.currency.CurrencyRateResponseDto;
 import ru.cobp.backend.dto.currency.CurrencyRateMapper;
+import ru.cobp.backend.dto.currency.CurrencyRateResponseDto;
 import ru.cobp.backend.model.currency.CurrencyRate;
 import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
@@ -75,12 +75,12 @@ public class CurrencyController {
     }
 
     @Operation(
-            summary = "Получить актуальные котировки валют",
-            description = "Конечная точка для получения актуальных котировок валют"
+            summary = "Получить актуальные валютные котировки",
+            description = "Конечная точка для получения актуальных валютных котировок"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
-            description = "Получены актуальные котировки валют",
+            description = "Получены актуальные валютные котировки",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     array = @ArraySchema(schema = @Schema(implementation = CurrencyRateResponseDto.class))
