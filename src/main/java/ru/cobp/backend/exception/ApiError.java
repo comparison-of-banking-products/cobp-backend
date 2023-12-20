@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ApiError {
 
-    private String[] errors;
-
     private String message;
 
     private String reason;

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.cobp.backend.dto.bank.BankMapper;
 import ru.cobp.backend.dto.bank.NewBankDto;
 import ru.cobp.backend.dto.bank.ResponseBankDto;
 import ru.cobp.backend.service.bank.BankService;
@@ -36,7 +37,7 @@ public class BankController {
 
     @GetMapping("/{bic}")
     public ResponseBankDto getByBic(@PathVariable Long bic) {
-        return bankService.getByBic(bic);
+        return BankMapper.toResponseBankDto(bankService.getByBic(bic));
     }
 
     @DeleteMapping("/{bic}")

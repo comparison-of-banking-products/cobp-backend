@@ -16,4 +16,9 @@ public class BankMapper {
         return dto;
     }
 
+    public static ResponseBankDto toResponseBankDto(Bank bank) {
+        return new ResponseBankDto(bank.getBic(), bank.getName(), bank.getLegalEntity(), bank.getDescription(),
+                bank.getLogo(), bank.getUrl());
+    }
+
 }

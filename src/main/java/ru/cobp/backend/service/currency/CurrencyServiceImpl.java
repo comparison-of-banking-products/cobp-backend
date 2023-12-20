@@ -2,6 +2,7 @@ package ru.cobp.backend.service.currency;
 
 import org.springframework.stereotype.Service;
 import ru.cobp.backend.dto.currency.CurrencyDto;
+import ru.cobp.backend.model.currency.Currency;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public CurrencyDto getById(Long currencyId) {
+    public Currency getById(Long currencyId) {
         return null;
     }
 

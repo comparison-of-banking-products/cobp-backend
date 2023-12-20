@@ -1,9 +1,6 @@
-
 DROP TABLE IF EXISTS banks CASCADE;
 DROP TABLE IF EXISTS currencies CASCADE;
-DROP TABLE IF EXISTS deposit_rates CASCADE;
 DROP TABLE IF EXISTS deposits CASCADE;
-DROP TABLE IF EXISTS payment_types CASCADE;
 DROP TABLE IF EXISTS credits CASCADE;
 
 CREATE TABLE banks (
@@ -60,6 +57,7 @@ CREATE TABLE credits (
     amount_max          INTEGER         NOT NULL,
     term                INTEGER         NOT NULL,
     rate                DECIMAL(4,2)    NOT NULL,
+    payment_type        VARCHAR(20)     NOT NULL,
 
 	CONSTRAINT pk_credits PRIMARY KEY (id),
 	CONSTRAINT fk_credits__banks FOREIGN KEY (bank_bic) REFERENCES banks(bic) ON DELETE CASCADE,

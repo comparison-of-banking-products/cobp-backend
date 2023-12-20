@@ -7,7 +7,7 @@ public class CreditParams {
 
     Boolean isActive;
 
-    Long currenciesNum;
+    Long currencyNum;
 
     Integer minAmount;
 
@@ -18,5 +18,7 @@ public class CreditParams {
     Integer minPeriod;
 
     Integer maxPeriod;
+
+    String paymentType;
 
 }

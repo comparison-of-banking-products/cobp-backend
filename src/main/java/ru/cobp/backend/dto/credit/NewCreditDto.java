@@ -21,7 +21,7 @@ public class NewCreditDto {
     private Boolean isActive;
 
     @NotNull
-    private Long currenciesNum;
+    private Long currencyNum;
 
     @NotBlank
     @Size(min = 3, max = 100)
@@ -42,5 +42,8 @@ public class NewCreditDto {
     @NotNull
     @Positive
     private Integer term;
+
+    @NotBlank
+    private String paymentType;
 
 }

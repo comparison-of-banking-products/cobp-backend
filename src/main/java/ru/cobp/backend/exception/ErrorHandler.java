@@ -15,12 +15,23 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiError> handle(final NotFoundException e) {
         String message = e.getMessage();
-        String[] errors = e.getStackTrace().toString().split("/");
         String reason = "The required object was not found.";
         String status = "NOT_FOUND";
         LocalDateTime timestamp = LocalDateTime.now();
-        ApiError errorResponse = new ApiError(errors, message, reason, status, timestamp);
+        ApiError errorResponse = new ApiError(message, reason, status, timestamp);
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(errorResponse, httpStatus);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiError> handle(final IncorrectPaymentTypeException e) {
+        String message = e.getMessage();
+        String reason = "Incorrect payment type";
+        String status = "BAD_REQUEST";
+        LocalDateTime timestamp = LocalDateTime.now();
+        ApiError errorResponse = new ApiError(message, reason, status, timestamp);
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(errorResponse, httpStatus);
     }
 

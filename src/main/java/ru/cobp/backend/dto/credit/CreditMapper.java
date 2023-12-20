@@ -3,8 +3,10 @@ package ru.cobp.backend.dto.credit;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankMapper;
+import ru.cobp.backend.exception.IncorrectPaymentTypeException;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.PaymentTypeConverter;
 import ru.cobp.backend.model.currency.Currency;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreditMapper {
+
+    public static final PaymentTypeConverter paymentTypeConverter = new PaymentTypeConverter();
 
     public static CreditShortResponseDto toDto(Credit o) {
         CreditShortResponseDto dto = new CreditShortResponseDto();
@@ -31,12 +35,13 @@ public class CreditMapper {
                 .banksBic(credit.getBank().getBic())
                 .name(credit.getName())
                 .isActive(credit.getIsActive())
-                .currenciesNum(credit.getCurrency().getNum())
+                .currencyNum(credit.getCurrency().getNum())
                 .productUrl(credit.getProductUrl())
                 .minAmount(credit.getAmountMin())
                 .maxAmount(credit.getAmountMax())
                 .rate(credit.getRate())
                 .term(credit.getTerm())
+                .paymentType(credit.getPaymentType().getPaymentType())
                 .build();
     }
 
@@ -51,16 +56,12 @@ public class CreditMapper {
     }
 
     public static Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
-        return Credit.builder()
-                .bank(bank)
-                .name(newCreditDto.getName())
-                .productUrl(newCreditDto.getProductUrl())
-                .isActive(newCreditDto.getIsActive())
-                .currency(currency)
-                .amountMin(newCreditDto.getMinAmount())
-                .amountMax(newCreditDto.getMaxAmount())
-                .term(newCreditDto.getTerm())
-                .rate(newCreditDto.getRate())
-                .build();
+        try {
+            return new Credit(bank, newCreditDto.getName(), newCreditDto.getProductUrl(), newCreditDto.getIsActive(),
+                    currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(), newCreditDto.getTerm(),
+                    newCreditDto.getRate(), paymentTypeConverter.convertToEntityAttribute(newCreditDto.getPaymentType()));
+        } catch (IllegalArgumentException e) {
+            throw new IncorrectPaymentTypeException("Incorrect payment type: " + newCreditDto.getPaymentType());
+        }
     }
 }
