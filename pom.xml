@@ -90,6 +90,12 @@
             <version>${querydsl.version}</version>
             <classifier>jakarta</classifier>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.16.0</version>
+        </dependency>
     </dependencies>
 
     <build>

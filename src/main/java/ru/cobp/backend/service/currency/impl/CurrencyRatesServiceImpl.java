@@ -5,17 +5,22 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.client.exchange.ExchangeRatesClient;
-import ru.cobp.backend.client.exchange.impl.ExchangeRates;
+import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.currency.CurrencyRate;
+import ru.cobp.backend.model.exchange.ExchangeRates;
 import ru.cobp.backend.repository.currency.CurrencyRatesRepository;
 import ru.cobp.backend.service.currency.CurrencyRatesService;
+import ru.cobp.backend.service.currency.CurrencyService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CurrencyRatesServiceImpl implements CurrencyRatesService {
+
+    private final CurrencyService currencyService;
 
     private final CurrencyRatesRepository currencyRatesRepository;
 
@@ -27,16 +32,33 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
     }
 
     private List<CurrencyRate> getExchangeRates() {
-        List<ExchangeRates> rates = exchangeRatesClient.getExchangeRates();
+        ExchangeRates rates = exchangeRatesClient.getExchangeRates();
         return toCurrencyRates(rates);
     }
 
-    private List<CurrencyRate> toCurrencyRates(List<ExchangeRates> rates) {
-        throw new UnsupportedOperationException();
+    private List<CurrencyRate> toCurrencyRates(ExchangeRates exchangeRates) {
+        List<Currency> currencies = currencyService.findAll();
+
+//        currencies.stream()
+//                .map(c -> exchangeRates.getQuotes().)
+
+        List<CurrencyRate> rates = new ArrayList<>();
+
+        for (Currency currency : currencies) {
+            if (exchangeRates.getQuotes().containsKey(currency.getCode())) {
+                CurrencyRate e = new CurrencyRate(null, exchangeRates.getBase(), currency.getCode(), exchangeRates.getQuotes().get(currency.getCode()));
+                rates.add(e);
+            }
+        }
+
+
+        return exchangeRates
+
     }
 
-    private void saveAll(List<CurrencyRate> rates) {
-        currencyRatesRepository.saveAll(rates);
+    @Transactional
+    private void saveAll(List<CurrencyRate> currencyRates) {
+        currencyRatesRepository.saveAll(currencyRates);
     }
 
     @Scheduled(fixedDelay = 3_600_000)
