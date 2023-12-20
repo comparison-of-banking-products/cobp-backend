@@ -21,7 +21,7 @@ public class CreditDto {
 
     private Boolean isActive;
 
-    private Long currenciesNum;
+    private Long currencyNum;
 
     private String productUrl;
 
@@ -32,5 +32,7 @@ public class CreditDto {
     private Double rate;
 
     private Integer term;
+
+    private String paymentType;
 
 }
