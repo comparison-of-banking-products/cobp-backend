@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "currency_rates")
 @NoArgsConstructor
@@ -27,6 +29,9 @@ public class CurrencyRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "actual_date", nullable = false)
+    private LocalDateTime actualDate;
+
     @ManyToOne
     @JoinColumn(name = "base_num", nullable = false)
     private Currency base;
@@ -35,7 +40,13 @@ public class CurrencyRate {
     @JoinColumn(name = "quote_num", nullable = false)
     private Currency quote;
 
-    @Column(name = "exchange_rate", nullable = false)
-    private Double rate;
+    @Column(name = "actual_rate", nullable = false)
+    private Double actualRate;
+
+    @Column(name = "previous_rate", nullable = false)
+    private Double previousRate;
+
+    @Column(name = "previous_date", nullable = false)
+    private LocalDateTime previousDate;
 
 }

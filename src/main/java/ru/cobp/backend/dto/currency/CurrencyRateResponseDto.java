@@ -12,10 +12,13 @@ public class CurrencyRateResponseDto {
     @Schema(description = "Базовая валюта")
     private String base;
 
-    @Schema(description = "Котируемая валюта")
-    private String quote;
+    @Schema(description = "Название валюты")
+    private String name;
 
     @Schema(description = "Валютный курс")
     private Double rate;
+
+    @Schema(description = "Курсовая разница")
+    private Double diff;
 
 }

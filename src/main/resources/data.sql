@@ -9,10 +9,13 @@ VALUES
 
 INSERT INTO currencies (num, code, currency)
 VALUES
-    (156, 'CNY', 'Yuan Renminbi'),
-    (392, 'JPY', 'Japanese yen'),
-    (643, 'RUB', 'Russian ruble'),
-    (840, 'USD', 'United States dollar');
+    (156, 'CNY', 'Китайский юань'),
+    (392, 'JPY', 'Японская иена'),
+    (643, 'RUB', 'Российский рубль'),
+    (756, 'CHF', 'Швейцарский франк'),
+    (826, 'GBP', 'Фунт стерлингов'),
+    (840, 'USD', 'Доллар США'),
+    (978, 'EUR', 'Евро');
 
 INSERT INTO deposits (bank_bic, name, product_url, is_active, currency_num, amount_min, amount_max, term, rate, capitalization, replenishment, partial_withdrawal)
 VALUES

@@ -20,8 +20,9 @@ public class CurrencyRateMapper {
         CurrencyRateResponseDto dto = new CurrencyRateResponseDto();
 
         dto.setBase(o.getBase().getCode());
-        dto.setQuote(o.getQuote().getCode());
-        dto.setRate(o.getRate());
+        dto.setName(o.getBase().getCurrency());
+        dto.setRate(o.getActualRate());
+        dto.setDiff(o.getActualRate() - o.getPreviousRate());
 
         return dto;
     }

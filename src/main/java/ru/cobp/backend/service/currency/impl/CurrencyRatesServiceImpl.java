@@ -12,6 +12,7 @@ import ru.cobp.backend.repository.currency.CurrencyRatesRepository;
 import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,12 +66,15 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
         this.saveAll(currencyRates);
     }
 
-    private CurrencyRate toCurrencyRate(ExchangeRate er, Map<String, Currency> codeToCurrency) {
-        Currency base = codeToCurrency.get(er.getBase());
-        Currency quote = codeToCurrency.get(er.getQuote());
-        Double rate = er.getRate();
+    private CurrencyRate toCurrencyRate(ExchangeRate exchangeRate, Map<String, Currency> codeToCurrency) {
+        LocalDateTime actDate = exchangeRate.getActualDate();
+        Currency base = codeToCurrency.get(exchangeRate.getBaseCode());
+        Currency quote = codeToCurrency.get(exchangeRate.getQuoteCode());
+        Double actRate = exchangeRate.getActualRate();
+        Double prevRate = exchangeRate.getPreviousRate();
+        LocalDateTime prevDate = exchangeRate.getPreviousDate();
 
-        return new CurrencyRate(null, base, quote, rate);
+        return new CurrencyRate(null, actDate, base, quote, actRate, prevRate, prevDate);
     }
 
 }
