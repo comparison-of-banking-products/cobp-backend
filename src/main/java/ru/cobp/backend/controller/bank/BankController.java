@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +27,7 @@ import ru.cobp.backend.dto.bank.NewBankDto;
 import ru.cobp.backend.dto.bank.ResponseBankDto;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.service.bank.BankService;
+import ru.cobp.backend.service.storage.StorageService;
 
 import java.util.List;
 
@@ -40,6 +42,8 @@ import java.util.List;
 public class BankController {
 
     private final BankService bankService;
+
+    private final StorageService storageService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -78,6 +82,22 @@ public class BankController {
     public List<BankResponseDto> getAll() {
         List<Bank> banks = bankService.getAll();
         return BankMapper.toBankResponseDtos(banks);
+    }
+
+    @Operation(
+            summary = "Получить лого банка",
+            description = "Конечная точка для получения лого банка"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Получено лого банка",
+            content = {@Content(mediaType = MediaType.IMAGE_PNG_VALUE)}
+    )})
+    @GetMapping(value = "/logo/{logoName:.+}")
+    public Resource getBankLogo(
+            @PathVariable String logoName
+    ) {
+        return storageService.getFileAsResource(logoName);
     }
 
 }
