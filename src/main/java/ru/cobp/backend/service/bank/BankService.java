@@ -1,7 +1,6 @@
 package ru.cobp.backend.service.bank;
 
 import ru.cobp.backend.dto.bank.NewBankDto;
-import ru.cobp.backend.dto.bank.ResponseBankDto;
 import ru.cobp.backend.model.bank.Bank;
 
 import java.util.List;
