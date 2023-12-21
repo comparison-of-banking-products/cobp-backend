@@ -24,6 +24,21 @@ public class DepositServiceImpl implements DepositService {
     private final DepositRepository depositRepository;
 
     @Override
+    public List<Deposit> findAllDeposits(
+            Integer amount,
+            Integer term,
+            Boolean capitalization,
+            Boolean replenishment,
+            Boolean partialWithdrawal,
+            Pageable pageable
+    ) {
+        Predicate p = buildQDepositPredicateBy(
+                amount, term, capitalization, replenishment, partialWithdrawal
+        );
+        return depositRepository.findAll(p, pageable).toList();
+    }
+
+    @Override
     public List<Deposit> findAllMaximumRateDeposits(
             int amount,
             int term,
@@ -50,6 +65,34 @@ public class DepositServiceImpl implements DepositService {
                 .and(Q_DEPOSIT.amountMin.loe(amount))
                 .and(Q_DEPOSIT.amountMax.goe(amount))
                 .and(Q_DEPOSIT.term.eq(term));
+
+        if (capitalization != null) {
+            builder.and(Q_DEPOSIT.capitalization.eq(capitalization));
+        }
+
+        if (replenishment != null) {
+            builder.and(Q_DEPOSIT.replenishment.eq(replenishment));
+        }
+
+        if (partialWithdrawal != null) {
+            builder.and(Q_DEPOSIT.partialWithdrawal.eq(partialWithdrawal));
+        }
+
+        return builder;
+    }
+
+    private Predicate buildQDepositPredicateBy(
+            Integer amount, Integer term, Boolean capitalization, Boolean replenishment, Boolean partialWithdrawal
+    ) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (amount != null) {
+            builder.and(Q_DEPOSIT.amountMin.loe(amount))
+                   .and(Q_DEPOSIT.amountMax.goe(amount));
+        }
+
+        if (term != null) {
+            builder.and(Q_DEPOSIT.term.eq(term));
+        }
 
         if (capitalization != null) {
             builder.and(Q_DEPOSIT.capitalization.eq(capitalization));
