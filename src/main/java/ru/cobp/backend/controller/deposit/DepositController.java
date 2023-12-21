@@ -10,13 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.cobp.backend.common.Utils;
-import ru.cobp.backend.dto.calculator.DepositCalculatorMapper;
 import ru.cobp.backend.dto.deposit.DepositDto;
 import ru.cobp.backend.dto.deposit.DepositMapper;
 import ru.cobp.backend.dto.deposit.DepositResponseDto;
 import ru.cobp.backend.dto.deposit.NewDepositDto;
-import ru.cobp.backend.model.calculator.CalculatedDeposit;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.service.deposit.DepositService;
 
