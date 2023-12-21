@@ -24,7 +24,7 @@ public class CbrDailyExchangeRatesClientImpl implements ExchangeRatesClient {
 
     private final RestTemplate restTemplate;
 
-    @Value("${exchange.rates.cbr_daily_url}")
+    @Value("${exchange.rates.cbr-daily-url}")
     private final String exchangeRatesUrl;
 
     @Override
