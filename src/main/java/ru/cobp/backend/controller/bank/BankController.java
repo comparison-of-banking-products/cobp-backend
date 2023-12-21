@@ -91,9 +91,9 @@ public class BankController {
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
             description = "Получено лого банка",
-            content = {@Content(mediaType = MediaType.IMAGE_PNG_VALUE)}
+            content = {@Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE)}
     )})
-    @GetMapping(value = "/logo/{logoName:.+}")
+    @GetMapping(value = "/logo/{logoName:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public Resource getBankLogo(
             @PathVariable String logoName
     ) {
