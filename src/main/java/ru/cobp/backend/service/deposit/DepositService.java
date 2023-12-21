@@ -7,6 +7,13 @@ import java.util.List;
 
 public interface DepositService {
 
-    List<Deposit> findAllMaximumRateDeposits(int amount, int term, Pageable pageable);
+    List<Deposit> findAllMaximumRateDeposits(
+            int amount,
+            int term,
+            Boolean capitalization,
+            Boolean replenishment,
+            Boolean partialWithdrawal,
+            Pageable pageable
+    );
 
 }

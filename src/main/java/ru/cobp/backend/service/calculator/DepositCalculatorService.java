@@ -7,6 +7,13 @@ import java.util.List;
 
 public interface DepositCalculatorService {
 
-    List<CalculatedDeposit> getAllMaximumRateCalculatedDeposits(int amount, int term, Pageable pageable);
+    List<CalculatedDeposit> getAllMaximumRateCalculatedDeposits(
+            int amount,
+            int term,
+            Boolean capitalization,
+            Boolean replenishment,
+            Boolean partialWithdrawal,
+            Pageable pageable
+    );
 
 }

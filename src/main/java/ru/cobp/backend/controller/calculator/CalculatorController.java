@@ -62,6 +62,15 @@ public class CalculatorController {
             @Parameter(description = "Срок вклада в месяцах")
             @RequestParam @Positive int term,
 
+            @Parameter(description = "Вклад с капитализацией")
+            @RequestParam(required = false) Boolean capitalization,
+
+            @Parameter(description = "Вклад с пополнением")
+            @RequestParam(required = false) Boolean replenishment,
+
+            @Parameter(description = "Вклад с частичным снятием")
+            @RequestParam(required = false) Boolean partialWithdrawal,
+
             @Parameter(description = "Индекс страницы")
             @RequestParam(defaultValue = "0") @PositiveOrZero int page,
 
@@ -69,8 +78,9 @@ public class CalculatorController {
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
         Pageable pageable = Utils.getPageSortedByDepositRateDesc(page, size);
-        List<CalculatedDeposit> deposits
-                = depositCalculatorService.getAllMaximumRateCalculatedDeposits(amount, term, pageable);
+        List<CalculatedDeposit> deposits = depositCalculatorService.getAllMaximumRateCalculatedDeposits(
+                amount, term, capitalization, replenishment, partialWithdrawal, pageable
+        );
 
         return DepositCalculatorMapper.toDtos(deposits);
     }

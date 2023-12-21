@@ -22,8 +22,8 @@ public class DepositCalculatorMapper {
         return dto;
     }
 
-    public static List<CalculatedDepositResponseDto> toDtos(List<CalculatedDeposit> o) {
-        return o.stream()
+    public static List<CalculatedDepositResponseDto> toDtos(List<CalculatedDeposit> l) {
+        return l.stream()
                 .map(DepositCalculatorMapper::toDto)
                 .collect(Collectors.toList());
     }
