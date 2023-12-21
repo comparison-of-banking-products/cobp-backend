@@ -8,14 +8,17 @@ import ru.cobp.backend.model.deposit.Deposit;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DepositMapper {
 
-    public static DepositShortResponseDto toDto(Deposit o) {
-        DepositShortResponseDto dto = new DepositShortResponseDto();
+    public static DepositResponseDto toDto(Deposit o) {
+        DepositResponseDto dto = new DepositResponseDto();
 
-        dto.setBank(BankMapper.toBankShortResponseDto(o.getBank()));
+        dto.setBank(BankMapper.toShortDto(o.getBank()));
         dto.setDepositName(o.getName());
         dto.setDepositUrl(o.getProductUrl());
         dto.setTerm(o.getTerm());
         dto.setRate(o.getRate());
+        dto.setCapitalization(o.getCapitalization());
+        dto.setReplenishment(o.getReplenishment());
+        dto.setPartialWithdrawal(o.getPartialWithdrawal());
 
         return dto;
     }

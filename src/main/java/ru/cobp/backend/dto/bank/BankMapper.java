@@ -10,20 +10,20 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BankMapper {
 
-    public static BankShortResponseDto toBankShortResponseDto(Bank o) {
+    public static BankShortResponseDto toShortDto(Bank o) {
         BankShortResponseDto dto = new BankShortResponseDto();
         dto.setName(o.getName());
         dto.setLogo(o.getLogo());
         return dto;
     }
 
-    public static List<BankResponseDto> toBankResponseDtos(List<Bank> l) {
+    public static List<BankResponseDto> toDtos(List<Bank> l) {
         return l.stream()
-                .map(BankMapper::toBankResponseDto)
+                .map(BankMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    private static BankResponseDto toBankResponseDto(Bank o) {
+    private static BankResponseDto toDto(Bank o) {
         BankResponseDto dto = new BankResponseDto();
 
         dto.setBic(o.getBic());

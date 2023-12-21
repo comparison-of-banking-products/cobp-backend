@@ -81,7 +81,7 @@ public class BankController {
     @GetMapping
     public List<BankResponseDto> getAll() {
         List<Bank> banks = bankService.getAll();
-        return BankMapper.toBankResponseDtos(banks);
+        return BankMapper.toDtos(banks);
     }
 
     @Operation(
