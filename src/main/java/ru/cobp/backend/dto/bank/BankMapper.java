@@ -23,7 +23,7 @@ public class BankMapper {
                 .collect(Collectors.toList());
     }
 
-    private static BankResponseDto toBankResponseDto(Bank o) {
+    public static BankResponseDto toBankResponseDto(Bank o) {
         BankResponseDto dto = new BankResponseDto();
 
         dto.setBic(o.getBic());
@@ -37,8 +37,15 @@ public class BankMapper {
     }
 
     public static ResponseBankDto toResponseBankDto(Bank bank) {
-        return new ResponseBankDto(bank.getBic(), bank.getName(), bank.getLegalEntity(), bank.getDescription(),
-                bank.getLogo(), bank.getUrl());
-    }
+        ResponseBankDto dto = new ResponseBankDto();
 
+        dto.setBic(bank.getBic());
+        dto.setName(bank.getName());
+        dto.setLegalEntity(bank.getLegalEntity());
+        dto.setDescription(bank.getDescription());
+        dto.setLogo(bank.getLogo());
+        dto.setUrl(bank.getUrl());
+
+        return dto;
+    }
 }

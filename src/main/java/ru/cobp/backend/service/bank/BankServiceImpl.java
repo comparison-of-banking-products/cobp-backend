@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.dto.bank.NewBankDto;
-import ru.cobp.backend.dto.bank.ResponseBankDto;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.repository.bank.BankRepository;
 
@@ -28,7 +27,7 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public ResponseBankDto getByBic(Long bic) {
+    public Bank getByBic(Long bic) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

@@ -54,7 +54,7 @@ public class BankController {
 
     @GetMapping("/{bic}")
     public ResponseBankDto getByBic(@PathVariable Long bic) {
-        return bankService.getByBic(bic);
+        return BankMapper.toResponseBankDto(bankService.getByBic(bic));
     }
 
     @DeleteMapping("/{bic}")

@@ -62,4 +62,5 @@ public class Credit {
         this.rate = rate;
         this.paymentType = paymentType;
     }
+
 }
