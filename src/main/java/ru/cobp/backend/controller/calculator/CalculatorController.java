@@ -25,8 +25,7 @@ import ru.cobp.backend.dto.calculator.CreditCalculatorMapper;
 import ru.cobp.backend.dto.calculator.DepositCalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
-import ru.cobp.backend.service.calculator.CreditCalculatorService;
-import ru.cobp.backend.service.calculator.DepositCalculatorService;
+import ru.cobp.backend.service.calculator.CalculatorService;
 
 import java.util.List;
 
@@ -39,9 +38,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CalculatorController {
 
-    private final DepositCalculatorService depositCalculatorService;
-
-    private final CreditCalculatorService creditCalculatorService;
+    private final CalculatorService calculatorService;
 
     @Operation(
             summary = "Рассчитать вклады",
@@ -80,7 +77,7 @@ public class CalculatorController {
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
         Pageable pageable = Utils.getPageSortedByDepositRateDesc(page, size);
-        List<CalculatedDeposit> deposits = depositCalculatorService.getAllMaximumRateCalculatedDeposits(
+        List<CalculatedDeposit> deposits = calculatorService.getAllMaximumRateCalculatedDeposits(
                 amount, term, capitalization, replenishment, partialWithdrawal, pageable
         );
 
@@ -115,8 +112,7 @@ public class CalculatorController {
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
         Pageable pageable = Utils.getPageSortedByCreditRateAsc(page, size);
-        List<CalculatedCredit> credits =
-                creditCalculatorService.getAllMinimumRateCalculatedCredits(amount, term, pageable);
+        List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(amount, term, pageable);
 
         return CreditCalculatorMapper.toDtos(credits);
     }
