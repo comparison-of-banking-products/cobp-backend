@@ -93,11 +93,11 @@ public class DepositServiceImpl implements DepositService {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (minAmount != null) {
-            builder.and(Q_DEPOSIT.amountMin.goe(minAmount));
+            builder.and(Q_DEPOSIT.amountMin.loe(minAmount));
         }
 
         if (maxAmount != null) {
-            builder.and(Q_DEPOSIT.amountMax.loe(maxAmount));
+            builder.and(Q_DEPOSIT.amountMax.goe(maxAmount));
         }
 
         if (minTerm != null) {
