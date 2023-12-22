@@ -40,4 +40,11 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(errorResponse, httpStatus);
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionHandlerResponseDto handle(UnsupportedPaymentTypeException e) {
+        log.error("", e);
+        return new ExceptionHandlerResponseDto(LocalDateTime.now(), e.getMessage());
+    }
+
 }

@@ -3,8 +3,10 @@ package ru.cobp.backend.dto.credit;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankMapper;
+import ru.cobp.backend.exception.UnsupportedPaymentTypeException;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.currency.Currency;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class CreditMapper {
                 .maxAmount(credit.getAmountMax())
                 .rate(credit.getRate())
                 .term(credit.getTerm())
+                .paymentType(credit.getPaymentType().getTitle())
                 .build();
     }
 
@@ -53,7 +56,18 @@ public class CreditMapper {
     public static Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
         return new Credit(null, bank, newCreditDto.getName(), newCreditDto.getProductUrl(),
                 newCreditDto.getIsActive(), currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(),
-                newCreditDto.getTerm(), newCreditDto.getRate());
+                newCreditDto.getTerm(), newCreditDto.getRate(), toPaymentType(newCreditDto.getPaymentType()));
+    }
+
+    public static PaymentType toPaymentType(Integer paymentType) {
+        switch (paymentType) {
+            case 1:
+                return PaymentType.ANNUITY;
+            case 2:
+                return PaymentType.DIFFERENTIATED;
+            default:
+                throw new UnsupportedPaymentTypeException("Incorrect payment type");
+        }
     }
 
 }

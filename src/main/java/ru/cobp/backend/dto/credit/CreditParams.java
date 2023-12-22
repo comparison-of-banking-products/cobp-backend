@@ -19,6 +19,6 @@ public class CreditParams {
 
     Integer maxPeriod;
 
-    String paymentType;
+    Integer paymentType;
 
 }

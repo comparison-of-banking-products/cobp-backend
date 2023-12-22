@@ -16,6 +16,7 @@ import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.credit.QCredit;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.repository.credit.CreditRepository;
@@ -146,8 +147,11 @@ public class CreditServiceImpl implements CreditService {
         if (params.getRate() != null) {
             builder.and(Q_CREDIT.rate.eq(params.getRate()));
         }
+        if (params.getPaymentType() != null) {
+            PaymentType paymentType = CreditMapper.toPaymentType(params.getPaymentType());
+            builder.and(Q_CREDIT.paymentType.eq(paymentType));
+        }
         return builder;
-
     }
 
 }

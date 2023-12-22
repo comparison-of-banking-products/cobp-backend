@@ -58,7 +58,7 @@ public class CreditController {
             @RequestParam(required = false) @Parameter(description = "Кредитная ставка") Double rate,
             @RequestParam(required = false) @Parameter(description = "Минимальный срок кредита") Integer minPeriod,
             @RequestParam(required = false) @Parameter(description = "Максимальный срок кредита") Integer maxPeriod,
-            @RequestParam(required = false) @Parameter(description = "Тип платежа") String paymentType) {
+            @RequestParam(required = false) @Parameter(description = "Тип платежа") Integer paymentType) {
         CreditParams params = new CreditParams(isActive, currencyNum, minAmount, maxAmount, rate, minPeriod,
                 maxPeriod, paymentType);
         return CreditMapper.toCreditDtoList(creditService.getAll(params));
