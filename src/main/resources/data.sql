@@ -196,7 +196,7 @@ VALUES
     (044525823, 'Газпромбанк Кредит наличными', 'https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/', true, 643, 10000, 7000000, 48, 14.15),
     (044525823, 'Газпромбанк Кредит наличными', 'https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/', true, 643, 10000, 7000000, 60, 10.73),
     (044525823, 'Газпромбанк Кредит наличными', 'https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/', true, 643, 10000, 7000000, 72, 7.32),
-    (044525823, 'Газпромбанк Кредит наличными', 'https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/', true, 643, 10000, 7000000, 84, 3.90,),
+    (044525823, 'Газпромбанк Кредит наличными', 'https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/', true, 643, 10000, 7000000, 84, 3.90),
 
     (044525593, 'Альфа-банк Кредит наличными', 'https://alfabank.ru/get-money/credit/credit-cash/', true, 643, 100000, 15000000, 12, 34.99),
     (044525593, 'Альфа-банк Кредит наличными', 'https://alfabank.ru/get-money/credit/credit-cash/', true, 643, 100000, 15000000, 24, 31.55),
