@@ -7,9 +7,12 @@ import java.util.List;
 
 public interface DepositService {
     List<Deposit> findAllDeposits(
-            Integer amount,
-            Integer term,
+            Integer minAmount,
+            Integer maxAmount,
+            Integer minTerm,
+            Integer maxTerm,
             Double minRate,
+            Double maxRate,
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,

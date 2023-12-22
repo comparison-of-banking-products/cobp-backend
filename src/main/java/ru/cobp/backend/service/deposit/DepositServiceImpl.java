@@ -25,16 +25,20 @@ public class DepositServiceImpl implements DepositService {
 
     @Override
     public List<Deposit> findAllDeposits(
-            Integer amount,
-            Integer term,
+            Integer minAmount,
+            Integer maxAmount,
+            Integer minTerm,
+            Integer maxTerm,
             Double minRate,
+            Double maxRate,
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,
             Pageable pageable
     ) {
         Predicate p = buildQDepositPredicateBy(
-                amount, term, minRate, capitalization, replenishment, partialWithdrawal
+                minAmount, maxAmount, minTerm, maxTerm, minRate, maxRate, capitalization, replenishment,
+                partialWithdrawal
         );
         return depositRepository.findAll(p, pageable).toList();
     }
@@ -83,21 +87,33 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private Predicate buildQDepositPredicateBy(
-            Integer amount, Integer term, Double minRate, Boolean capitalization, Boolean replenishment,
-            Boolean partialWithdrawal)
-    {
+            Integer minAmount, Integer maxAmount, Integer minTerm, Integer maxTerm, Double minRate, Double maxRate,
+            Boolean capitalization, Boolean replenishment, Boolean partialWithdrawal
+    ) {
         BooleanBuilder builder = new BooleanBuilder();
-        if (amount != null) {
-            builder.and(Q_DEPOSIT.amountMin.loe(amount))
-                   .and(Q_DEPOSIT.amountMax.goe(amount));
+
+        if (minAmount != null) {
+            builder.and(Q_DEPOSIT.amountMin.goe(minAmount));
         }
 
-        if (term != null) {
-            builder.and(Q_DEPOSIT.term.eq(term));
+        if (maxAmount != null) {
+            builder.and(Q_DEPOSIT.amountMax.loe(maxAmount));
+        }
+
+        if (minTerm != null) {
+            builder.and(Q_DEPOSIT.term.goe(minTerm));
+        }
+
+        if (maxTerm != null) {
+            builder.and(Q_DEPOSIT.term.loe(maxTerm));
         }
 
         if (minRate != null) {
             builder.and(Q_DEPOSIT.rate.goe(minRate));
+        }
+
+        if (maxRate != null) {
+            builder.and(Q_DEPOSIT.rate.loe(maxRate));
         }
 
         if (capitalization != null) {

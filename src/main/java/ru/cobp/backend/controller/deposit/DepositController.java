@@ -36,14 +36,23 @@ public class DepositController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<DepositResponseDto> getDepositList(
-            @Parameter(description = "Сумма вклада в рублях")
-            @RequestParam(required = false)  @Positive Integer amount,
+            @Parameter(description = "Минимальная сумма вклада в рублях")
+            @RequestParam(required = false)  @Positive Integer minAmount,
 
-            @Parameter(description = "Срок вклада в месяцах")
-            @RequestParam(required = false)  @Positive Integer term,
+            @Parameter(description = "Максимальная сумма вклада в рублях")
+            @RequestParam(required = false)  @Positive Integer maxAmount,
+
+            @Parameter(description = "Минимальный срок вклада в месяцах")
+            @RequestParam(required = false)  @Positive Integer minTerm,
+
+            @Parameter(description = "Максимальный срок вклада в месяцах")
+            @RequestParam(required = false)  @Positive Integer maxTerm,
 
             @Parameter(description = "Минимальная доходность вклада")
             @RequestParam(required = false)  @Positive Double minRate,
+
+            @Parameter(description = "Максимальная доходность вклада")
+            @RequestParam(required = false)  @Positive Double maxRate,
 
             @Parameter(description = "Вклад с капитализацией")
             @RequestParam(required = false) Boolean capitalization,
@@ -62,7 +71,8 @@ public class DepositController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         List<Deposit> deposits = depositService.findAllDeposits(
-                amount, term, minRate, capitalization, replenishment, partialWithdrawal, pageable
+                minAmount, maxAmount, minTerm, maxTerm, minRate, maxRate, capitalization, replenishment,
+                partialWithdrawal, pageable
         );
 
         return deposits.stream()
