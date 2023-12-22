@@ -1,11 +1,13 @@
 package ru.cobp.backend.dto.credit;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Schema(description = "Сущность нового кредита")
 public class NewCreditDto {
 
     @NotNull
@@ -19,8 +21,7 @@ public class NewCreditDto {
     private Boolean isActive;
 
     @NotNull
-    @PositiveOrZero
-    private Integer currenciesNum;
+    private Long currencyNum;
 
     @NotBlank
     @Size(min = 3, max = 100)
@@ -36,30 +37,10 @@ public class NewCreditDto {
 
     @NotNull
     @Positive
-    private Float minRate;
+    private Double rate;
 
     @NotNull
     @Positive
-    private Integer minPeriod;
-
-    @NotNull
-    @Positive
-    private Integer maxPeriod;
-
-    @NotNull
-    @PositiveOrZero
-    private Integer paymentTypeId;
-
-    @NotNull
-    private Boolean depositIsRequired;
-
-    @NotNull
-    private Boolean onlineApprove;
-
-    @NotNull
-    private Boolean onlineGetting;
-
-    @NotNull
-    private Boolean insurance;
+    private Integer term;
 
 }

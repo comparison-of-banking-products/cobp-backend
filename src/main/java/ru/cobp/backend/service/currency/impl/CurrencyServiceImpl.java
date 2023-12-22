@@ -28,7 +28,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public CurrencyDto getById(Long currencyId) {
+    public Currency getById(Long currencyId) {
         return null;
     }
 

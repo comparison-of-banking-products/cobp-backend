@@ -11,7 +11,7 @@ public interface CurrencyService {
 
     CurrencyDto update(Long currencyId, CurrencyDto updCurrency);
 
-    CurrencyDto getById(Long currencyId);
+    Currency getById(Long currencyId);
 
     List<CurrencyDto> getAll();
 

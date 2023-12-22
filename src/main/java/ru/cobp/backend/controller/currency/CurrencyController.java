@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.currency.CurrencyDto;
+import ru.cobp.backend.dto.currency.CurrencyMapper;
 import ru.cobp.backend.dto.currency.CurrencyRateMapper;
 import ru.cobp.backend.dto.currency.CurrencyRateResponseDto;
 import ru.cobp.backend.model.currency.CurrencyRate;
@@ -64,7 +65,8 @@ public class CurrencyController {
     @GetMapping("/{id}")
     public ResponseEntity<CurrencyDto> getById(@PathVariable Long id) {
         log.info("Получен GET запрос по эндпоинту /currencies/{} на обновление Currency с ID {}.", id, id);
-        return new ResponseEntity<>(currencyService.getById(id), HttpStatus.OK);
+        CurrencyDto currencyDto = CurrencyMapper.toCurrencyDto(currencyService.getById(id));
+        return new ResponseEntity<>(currencyDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
