@@ -73,7 +73,6 @@ CREATE TABLE credits (
     amount_max          INTEGER         NOT NULL,
     term                INTEGER         NOT NULL,
     rate                DECIMAL(4,2)    NOT NULL,
-    payment_type        VARCHAR(20)     NOT NULL,
 
 	CONSTRAINT pk_credits PRIMARY KEY (id),
 	CONSTRAINT fk_credits__banks FOREIGN KEY (bank_bic) REFERENCES banks(bic) ON DELETE CASCADE,
