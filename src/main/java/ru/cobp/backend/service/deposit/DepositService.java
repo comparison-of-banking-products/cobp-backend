@@ -9,6 +9,7 @@ public interface DepositService {
     List<Deposit> findAllDeposits(
             Integer amount,
             Integer term,
+            Double minRate,
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,

@@ -27,13 +27,14 @@ public class DepositServiceImpl implements DepositService {
     public List<Deposit> findAllDeposits(
             Integer amount,
             Integer term,
+            Double minRate,
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,
             Pageable pageable
     ) {
         Predicate p = buildQDepositPredicateBy(
-                amount, term, capitalization, replenishment, partialWithdrawal
+                amount, term, minRate, capitalization, replenishment, partialWithdrawal
         );
         return depositRepository.findAll(p, pageable).toList();
     }
@@ -82,8 +83,9 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private Predicate buildQDepositPredicateBy(
-            Integer amount, Integer term, Boolean capitalization, Boolean replenishment, Boolean partialWithdrawal
-    ) {
+            Integer amount, Integer term, Double minRate, Boolean capitalization, Boolean replenishment,
+            Boolean partialWithdrawal)
+    {
         BooleanBuilder builder = new BooleanBuilder();
         if (amount != null) {
             builder.and(Q_DEPOSIT.amountMin.loe(amount))
@@ -92,6 +94,10 @@ public class DepositServiceImpl implements DepositService {
 
         if (term != null) {
             builder.and(Q_DEPOSIT.term.eq(term));
+        }
+
+        if (minRate != null) {
+            builder.and(Q_DEPOSIT.rate.goe(minRate));
         }
 
         if (capitalization != null) {

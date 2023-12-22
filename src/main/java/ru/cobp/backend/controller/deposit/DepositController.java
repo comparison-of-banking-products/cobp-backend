@@ -42,6 +42,9 @@ public class DepositController {
             @Parameter(description = "Срок вклада в месяцах")
             @RequestParam(required = false)  @Positive Integer term,
 
+            @Parameter(description = "Минимальная доходность вклада")
+            @RequestParam(required = false)  @Positive Double minRate,
+
             @Parameter(description = "Вклад с капитализацией")
             @RequestParam(required = false) Boolean capitalization,
 
@@ -59,7 +62,7 @@ public class DepositController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         List<Deposit> deposits = depositService.findAllDeposits(
-                amount, term, capitalization, replenishment, partialWithdrawal, pageable
+                amount, term, minRate, capitalization, replenishment, partialWithdrawal, pageable
         );
 
         return deposits.stream()
