@@ -43,7 +43,4 @@ public class NewCreditDto {
     @Positive
     private Integer term;
 
-    @NotBlank
-    private String paymentType;
-
 }

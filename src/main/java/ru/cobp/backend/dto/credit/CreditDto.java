@@ -43,7 +43,4 @@ public class CreditDto {
     @Schema(description = "Срок кредита")
     private Integer term;
 
-    @Schema(description = "Тип платежа по кредиту")
-    private String paymentType;
-
 }

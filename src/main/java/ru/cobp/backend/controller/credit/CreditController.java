@@ -17,7 +17,7 @@ import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditMapper;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
-import ru.cobp.backend.service.credit.CreditPublicService;
+import ru.cobp.backend.service.credit.CreditService;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
 @Validated
 public class CreditController {
 
-    private final CreditPublicService creditPublicService;
+    private final CreditService creditService;
 
     @Operation(
             summary = "Найти кредиты",
@@ -61,7 +61,7 @@ public class CreditController {
             @RequestParam(required = false) @Parameter(description = "Тип платежа") String paymentType) {
         CreditParams params = new CreditParams(isActive, currencyNum, minAmount, maxAmount, rate, minPeriod,
                 maxPeriod, paymentType);
-        return CreditMapper.toCreditDtoList(creditPublicService.getAll(params));
+        return CreditMapper.toCreditDtoList(creditService.getAll(params));
     }
 
     @Operation(
@@ -81,7 +81,7 @@ public class CreditController {
     })
     @GetMapping("/{id}")
     CreditDto getById(@PathVariable @Parameter(description = "Идентификатор кредита") long id) {
-        return CreditMapper.toCreditDto(creditPublicService.getById(id));
+        return CreditMapper.toCreditDto(creditService.getById(id));
     }
 
     @Operation(
@@ -102,7 +102,7 @@ public class CreditController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreditDto create(@Valid @RequestBody @Parameter(description = "Новый кредит", required = true) NewCreditDto newCreditDto) {
-        return CreditMapper.toCreditDto(creditPublicService.create(newCreditDto));
+        return CreditMapper.toCreditDto(creditService.create(newCreditDto));
     }
 
     @Operation(
@@ -123,7 +123,7 @@ public class CreditController {
     @PutMapping("/{id}")
     public CreditDto update(@PathVariable @Parameter(description = "Идентификатор кредита", required = true) Long id,
                             @RequestBody @Parameter(description = "Обновленный кредит", required = true) CreditDto creditDto) {
-        return CreditMapper.toCreditDto(creditPublicService.update(id, creditDto));
+        return CreditMapper.toCreditDto(creditService.update(id, creditDto));
     }
 
     @Operation(
@@ -144,7 +144,7 @@ public class CreditController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable @Parameter(description = "Идентификатор кредита", required = true) Long id) {
-        creditPublicService.delete(id);
+        creditService.delete(id);
     }
 
 }

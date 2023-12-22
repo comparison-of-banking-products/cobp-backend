@@ -8,6 +8,7 @@ import ru.cobp.backend.model.currency.Currency;
 @Entity
 @Table(name = "credits")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -45,22 +46,5 @@ public class Credit {
 
     @Column(name = "rate", nullable = false)
     private Double rate;
-
-    @Column(name = "payment_type", nullable = false)
-    private PaymentType paymentType;
-
-    public Credit(Bank bank, String name, String productUrl, Boolean isActive, Currency currency, Integer amountMin,
-                  Integer amountMax, Integer term, Double rate, PaymentType paymentType) {
-        this.bank = bank;
-        this.name = name;
-        this.productUrl = productUrl;
-        this.isActive = isActive;
-        this.currency = currency;
-        this.amountMin = amountMin;
-        this.amountMax = amountMax;
-        this.term = term;
-        this.rate = rate;
-        this.paymentType = paymentType;
-    }
 
 }
