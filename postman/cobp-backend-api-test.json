@@ -7,14 +7,14 @@
 	},
 	"item": [
 		{
-			"name": "Get invalid deposits",
+			"name": "Get valid deposits",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Response should have 500 HTTP status code\", function () {\r",
-							"\tpm.response.to.have.status(500);\r",
+							"pm.test(\"Response should have 200 HTTP status code\", function () {\r",
+							"\tpm.response.to.have.status(200);\r",
 							"});"
 						],
 						"type": "text/javascript"
