@@ -35,6 +35,8 @@ jobs:
 
           script: |
             cd {{ secrets.COBP_DIR }}
-            echo "${{ secrets.PAT_PACKAGES }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
-            docker compose -f docker-compose-remote.yml pull
-            docker compose -f docker-compose-remote.yml up -d
+#            echo "${{ secrets.PAT_PACKAGES }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+            pwd
+            ls -al
+#            docker compose -f docker-compose-remote.yml pull
+#            docker compose -f docker-compose-remote.yml up -d
