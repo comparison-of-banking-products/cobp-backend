@@ -6,3 +6,9 @@ services:
     container_name: cobp-backend
     ports:
       - '8080:8080'
+
+  cobp-front:
+    image: ghcr.io/comparison-of-banking-products/cobp-frontend:dev
+    container_name: cobp-front
+    ports:
+      - '8081:80'
