@@ -1,8 +1,8 @@
-version: "3.8"
+version: '3.8'
 
 services:
   cobp-backend:
     image: ghcr.io/comparison-of-banking-products/cobp-backend:dev
     container_name: cobp-backend
     ports:
-      - "8080:8080"
+      - '8080:8080'
