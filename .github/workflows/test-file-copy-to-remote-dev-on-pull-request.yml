@@ -6,7 +6,10 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  GITHUB_ACTOR: ${{ github.actor }}
+  PAT_PACKAGES: ${{ secrets.PAT_PACKAGES }}
   COBP_DIR: ${{ secrets.COBP_DIR }}
+  DOCKER_COMPOSE_CONFIG: docker-compose-remote.yml
 
 jobs:
   scp-to-remote:
@@ -24,7 +27,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
 
-          source: docker-compose-remote.yml
+          source: ${{ env.DOCKER_COMPOSE_CONFIG }}
           target: ${{ secrets.COBP_DIR }}
 
       - name: SSH execute docker-compose using SSH_KEY on remote
@@ -33,8 +36,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: COBP_DIR
+
+          envs: REGISTRY, GITHUB_ACTOR, PAT_PACKAGES, COBP_DIR, DOCKER_COMPOSE_CONFIG
           script: |
             cd $COBP_DIR
-            pwd
-            ls -al
+            echo "$PAT_PACKAGES" | docker login $REGISTRY -u $GITHUB_ACTOR --password-stdin
+            docker compose -f $DOCKER_COMPOSE_CONFIG pull
+            docker compose -f $DOCKER_COMPOSE_CONFIG up -d
