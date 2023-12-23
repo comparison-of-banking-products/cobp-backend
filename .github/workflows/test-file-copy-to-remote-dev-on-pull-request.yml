@@ -1,0 +1,23 @@
+name: SCP file to DEV on pull request
+
+on:
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  scp-to-remote:
+    name: SCP file to remote
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: SCP file via SSH_KEY to remote
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: docker-compose.yml
+          target: ${{ secrets.COBP_DIR }}
