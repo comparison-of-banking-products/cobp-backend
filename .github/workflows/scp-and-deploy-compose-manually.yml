@@ -1,45 +1,43 @@
-name: SCP file to DEV on pull request
+name: SCP and deploy Docker compose manually
 
-on:
-  pull_request:
-    branches: [ dev ]
+on: workflow_dispatch
 
 env:
   REGISTRY: ghcr.io
   GITHUB_ACTOR: ${{ github.actor }}
   PAT_PACKAGES: ${{ secrets.PAT_PACKAGES }}
   COBP_DIR: ${{ secrets.COBP_DIR }}
-  DOCKER_COMPOSE_CONFIG: docker-compose-remote.yml
+  COMPOSE_CONFIG: docker-compose-remote.yml
 
 jobs:
-  scp-to-remote:
-    name: SCP file to remote
+  scp-and-deploy-compose:
+    name: SCP and deploy Docker compose
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: SCP docker-compose-remote.yml using SSH_KEY to remote
+      - name: SCP Docker compose config using SSH_KEY to remote
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
 
-          source: ${{ env.DOCKER_COMPOSE_CONFIG }}
+          source: ${{ env.COMPOSE_CONFIG }}
           target: ${{ secrets.COBP_DIR }}
 
-      - name: SSH execute docker-compose using SSH_KEY on remote
+      - name: SSH execute Docker compose using SSH_KEY on remote
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
 
-          envs: REGISTRY, GITHUB_ACTOR, PAT_PACKAGES, COBP_DIR, DOCKER_COMPOSE_CONFIG
+          envs: REGISTRY, GITHUB_ACTOR, PAT_PACKAGES, COBP_DIR, COMPOSE_CONFIG
           script: |
             cd $COBP_DIR
             echo "$PAT_PACKAGES" | docker login $REGISTRY -u $GITHUB_ACTOR --password-stdin
-            docker compose -f $DOCKER_COMPOSE_CONFIG pull
-            docker compose -f $DOCKER_COMPOSE_CONFIG up -d
+            docker compose -f $COMPOSE_CONFIG pull
+            docker compose -f $COMPOSE_CONFIG up -d
