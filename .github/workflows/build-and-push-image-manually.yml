@@ -1,4 +1,4 @@
-name: Build and push DEV image manually
+name: Build and push Docker image manually
 
 on: workflow_dispatch
 
@@ -7,12 +7,9 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
+  build-and-push-image:
+    name: Build and push Docker image
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout repository
