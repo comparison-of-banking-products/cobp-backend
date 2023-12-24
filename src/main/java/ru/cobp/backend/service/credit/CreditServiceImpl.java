@@ -148,8 +148,7 @@ public class CreditServiceImpl implements CreditService {
             builder.and(Q_CREDIT.rate.eq(params.getRate()));
         }
         if (params.getPaymentType() != null) {
-            PaymentType paymentType = CreditMapper.toPaymentType(params.getPaymentType());
-            builder.and(Q_CREDIT.paymentType.eq(paymentType));
+            builder.and(Q_CREDIT.paymentType.eq(params.getPaymentType()));
         }
         return builder;
     }

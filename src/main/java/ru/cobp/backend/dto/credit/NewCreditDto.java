@@ -54,6 +54,6 @@ public class NewCreditDto {
 
     @NotNull
     @Schema(description = "Тип платежа по кредиту")
-    private Integer paymentType;
+    private String paymentType;
 
 }

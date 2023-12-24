@@ -59,11 +59,11 @@ public class CreditMapper {
                 newCreditDto.getTerm(), newCreditDto.getRate(), toPaymentType(newCreditDto.getPaymentType()));
     }
 
-    public static PaymentType toPaymentType(Integer paymentType) {
+    public static PaymentType toPaymentType(String paymentType) {
         switch (paymentType) {
-            case 0:
+            case "Аннуитетный":
                 return PaymentType.ANNUITY;
-            case 1:
+            case "Дифференцированный":
                 return PaymentType.DIFFERENTIATED;
             default:
                 throw new UnsupportedPaymentTypeException("Incorrect payment type");
