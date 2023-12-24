@@ -61,9 +61,9 @@ public class CreditMapper {
 
     public static PaymentType toPaymentType(Integer paymentType) {
         switch (paymentType) {
-            case 1:
+            case 0:
                 return PaymentType.ANNUITY;
-            case 2:
+            case 1:
                 return PaymentType.DIFFERENTIATED;
             default:
                 throw new UnsupportedPaymentTypeException("Incorrect payment type");
