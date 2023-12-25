@@ -17,6 +17,7 @@ import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditMapper;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
+import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.service.credit.CreditService;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class CreditController {
             @RequestParam(required = false) @Parameter(description = "Кредитная ставка") Double rate,
             @RequestParam(required = false) @Parameter(description = "Минимальный срок кредита") Integer minPeriod,
             @RequestParam(required = false) @Parameter(description = "Максимальный срок кредита") Integer maxPeriod,
-            @RequestParam(required = false) @Parameter(description = "Тип платежа") String paymentType) {
+            @RequestParam(required = false) @Parameter(description = "Тип платежа") PaymentType paymentType) {
         CreditParams params = new CreditParams(isActive, currencyNum, minAmount, maxAmount, rate, minPeriod,
                 maxPeriod, paymentType);
         return CreditMapper.toCreditDtoList(creditService.getAll(params));
