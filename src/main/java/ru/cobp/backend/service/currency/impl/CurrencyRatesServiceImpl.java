@@ -49,7 +49,7 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
         return exchangeRatesClient.getExchangeRates(codes);
     }
 
-    @Scheduled(fixedDelay = 3_600_000)
+    @Scheduled(fixedDelayString = "${exchange.rates.update-delay}")
     @Transactional
     void getAndSaveExchangeRates() {
         this.deleteAllInBatch();
