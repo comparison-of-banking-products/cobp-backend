@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.currency.CurrencyDto;
 import ru.cobp.backend.dto.currency.CurrencyMapper;
-import ru.cobp.backend.dto.currency.CurrencyRateMapper;
 import ru.cobp.backend.dto.currency.CurrencyRateResponseDto;
+import ru.cobp.backend.mapper.CurrencyRateMapper;
 import ru.cobp.backend.model.currency.CurrencyRate;
 import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
@@ -43,6 +43,8 @@ public class CurrencyController {
     private final CurrencyService currencyService;
 
     private final CurrencyRatesService currencyRateService;
+
+    private final CurrencyRateMapper currencyRateMapper;
 
     @PostMapping
     public ResponseEntity<CurrencyDto> create(@RequestBody CurrencyDto currencyDto) {
@@ -91,7 +93,7 @@ public class CurrencyController {
     @GetMapping("/rates")
     public List<CurrencyRateResponseDto> getCurrencyRates() {
         List<CurrencyRate> rates = currencyRateService.getCurrencyRates();
-        return CurrencyRateMapper.toCurrencyRateResponseDtos(rates);
+        return currencyRateMapper.toCurrencyRateResponseDtos(rates);
     }
 
 }

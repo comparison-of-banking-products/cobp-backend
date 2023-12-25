@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDateTime;
 
@@ -48,5 +49,8 @@ public class CurrencyRate {
 
     @Column(name = "previous_date", nullable = false)
     private LocalDateTime previousDate;
+
+    @Formula("actual_rate - previous_rate")
+    private Double ratesDifference;
 
 }

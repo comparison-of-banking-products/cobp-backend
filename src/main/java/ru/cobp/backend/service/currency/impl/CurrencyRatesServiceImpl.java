@@ -75,7 +75,7 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
         Double prevRate = exchangeRate.getPreviousRate();
         LocalDateTime prevDate = exchangeRate.getPreviousDate();
 
-        return new CurrencyRate(null, actDate, base, quote, actRate, prevRate, prevDate);
+        return new CurrencyRate(null, actDate, base, quote, actRate, prevRate, prevDate, null);
     }
 
 }

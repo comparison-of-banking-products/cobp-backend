@@ -1,4 +1,4 @@
-package ru.cobp.backend.exception.deposit;
+package ru.cobp.backend.exception;
 
 public class DepositNotFoundException extends RuntimeException {
 

@@ -23,8 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.common.Constants;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
-import ru.cobp.backend.dto.calculator.CreditCalculatorMapper;
-import ru.cobp.backend.dto.calculator.DepositCalculatorMapper;
+import ru.cobp.backend.mapper.CalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
 import ru.cobp.backend.service.calculator.CalculatorService;
@@ -41,6 +40,8 @@ import java.util.List;
 public class CalculatorController {
 
     private final CalculatorService calculatorService;
+
+    private final CalculatorMapper calculatorMapper;
 
     @Operation(
             summary = "Рассчитать вклады",
@@ -83,7 +84,7 @@ public class CalculatorController {
                 amount, term, capitalization, replenishment, partialWithdrawal, pageable
         );
 
-        return DepositCalculatorMapper.toDtos(deposits);
+        return calculatorMapper.toCalculatedDepositResponseDtos(deposits);
     }
 
     @Operation(
@@ -116,7 +117,7 @@ public class CalculatorController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.CREDIT_RATE).ascending());
         List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(amount, term, pageable);
 
-        return CreditCalculatorMapper.toDtos(credits);
+        return calculatorMapper.toCalculatedCreditResponseDtos(credits);
     }
 
 }
