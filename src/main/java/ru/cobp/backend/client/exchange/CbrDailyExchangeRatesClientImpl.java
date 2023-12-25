@@ -2,7 +2,6 @@ package ru.cobp.backend.client.exchange;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,8 @@ public class CbrDailyExchangeRatesClientImpl implements ExchangeRatesClient {
 
     private final RestTemplate restTemplate;
 
+    private final ObjectMapper objectMapper;
+
     @Value("${exchange.rates.cbr-daily-url}")
     private final String exchangeRatesUrl;
 
@@ -31,8 +32,7 @@ public class CbrDailyExchangeRatesClientImpl implements ExchangeRatesClient {
     public List<ExchangeRate> getExchangeRates(Set<String> currencyCodes) {
         String json = restTemplate.getForObject(exchangeRatesUrl, String.class);
         try {
-            ObjectMapper om = new ObjectMapper().registerModule(new JavaTimeModule());
-            CbrDailyResponseDto dto = om.readValue(json, CbrDailyResponseDto.class);
+            CbrDailyResponseDto dto = objectMapper.readValue(json, CbrDailyResponseDto.class);
 
             final String quoteCode = "RUB";
             LocalDateTime actDate = dto.getDate();
