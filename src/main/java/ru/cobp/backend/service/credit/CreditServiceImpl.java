@@ -25,7 +25,7 @@ import ru.cobp.backend.service.currency.CurrencyService;
 import java.util.List;
 
 @Service
-@Transactional()
+@Transactional
 @RequiredArgsConstructor
 public class CreditServiceImpl implements CreditService {
 
@@ -57,11 +57,7 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public List<Credit> getAll(CreditParams params) {
-        Currency currency = new Currency();
-        if (params.getCurrencyNum() != null) {
-            currency = currencyService.getById(params.getCurrencyNum());
-        }
-        Predicate p = buildQCreditPredicateByParams(params, currency);
+        Predicate p = buildQCreditPredicateByParams(params);
         Sort s = Sort.by("rate").ascending();
         return Utils.toList(creditRepository.findAll(p, s));
     }
@@ -82,35 +78,8 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Credit update(Long id, CreditDto creditDto) {
-        Credit credit = creditRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Credit with id = " + id + " was not found"));
-        if (creditDto.getIsActive() != null) {
-            credit.setIsActive(creditDto.getIsActive());
-        }
-        if (creditDto.getBanksBic() != null) {
-            credit.setBank(bankService.getByBic(creditDto.getBanksBic()));
-        }
-        if (creditDto.getName() != null) {
-            credit.setName(creditDto.getName());
-        }
-        if (creditDto.getProductUrl() != null) {
-            credit.setProductUrl(creditDto.getProductUrl());
-        }
-        if (creditDto.getCurrencyNum() != null) {
-            credit.setCurrency(currencyService.getById(creditDto.getCurrencyNum()));
-        }
-        if (creditDto.getRate() != null) {
-            credit.setRate(creditDto.getRate());
-        }
-        if (creditDto.getMinAmount() != null) {
-            credit.setAmountMin(creditDto.getMinAmount());
-        }
-        if (creditDto.getMaxAmount() != null) {
-            credit.setAmountMax(credit.getAmountMax());
-        }
-        if (creditDto.getTerm() != null) {
-            credit.setTerm(creditDto.getTerm());
-        }
+        Credit credit = getById(id);
+        CreditMapper.updateCredit(credit, creditDto);
         return creditRepository.save(credit);
     }
 
@@ -123,13 +92,13 @@ public class CreditServiceImpl implements CreditService {
         }
     }
 
-    private Predicate buildQCreditPredicateByParams(CreditParams params, Currency currency) {
+    private Predicate buildQCreditPredicateByParams(CreditParams params) {
         BooleanBuilder builder = new BooleanBuilder();
         if (params.getIsActive() != null) {
             builder.and(Q_CREDIT.isActive.eq(params.getIsActive()));
         }
         if (params.getCurrencyNum() != null) {
-            builder.and(Q_CREDIT.currency.eq(currency));
+            builder.and(Q_CREDIT.currency.eq(currencyService.getById(params.getCurrencyNum())));
         }
         if (params.getMinAmount() != null) {
             builder.and(Q_CREDIT.amountMin.loe(params.getMinAmount()));
@@ -147,7 +116,6 @@ public class CreditServiceImpl implements CreditService {
             builder.and(Q_CREDIT.rate.eq(params.getRate()));
         }
         return builder;
-
     }
 
 }

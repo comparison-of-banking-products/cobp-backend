@@ -56,4 +56,28 @@ public class CreditMapper {
                 newCreditDto.getTerm(), newCreditDto.getRate());
     }
 
+    public static void updateCredit(Credit credit, CreditDto creditDto) {
+        if (creditDto.getIsActive() != null) {
+            credit.setIsActive(creditDto.getIsActive());
+        }
+        if (creditDto.getName() != null) {
+            credit.setName(creditDto.getName());
+        }
+        if (creditDto.getProductUrl() != null) {
+            credit.setProductUrl(creditDto.getProductUrl());
+        }
+        if (creditDto.getRate() != null) {
+            credit.setRate(creditDto.getRate());
+        }
+        if (creditDto.getMinAmount() != null) {
+            credit.setAmountMin(creditDto.getMinAmount());
+        }
+        if (creditDto.getMaxAmount() != null) {
+            credit.setAmountMax(credit.getAmountMax());
+        }
+        if (creditDto.getTerm() != null) {
+            credit.setTerm(creditDto.getTerm());
+        }
+    }
+
 }
