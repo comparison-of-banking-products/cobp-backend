@@ -47,4 +47,8 @@ public class Credit {
     @Column(name = "rate", nullable = false)
     private Double rate;
 
+    @Column(name = "payment_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PaymentType paymentType;
+
 }

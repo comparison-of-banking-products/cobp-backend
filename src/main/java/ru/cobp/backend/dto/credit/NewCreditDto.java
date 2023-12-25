@@ -43,4 +43,7 @@ public class NewCreditDto {
     @Positive
     private Integer term;
 
+    @Schema(description = "Тип платежа")
+    private String paymentType;
+
 }
