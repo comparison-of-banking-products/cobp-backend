@@ -13,8 +13,8 @@ public class ExceptionUtil {
         return new DepositNotFoundException(ExceptionMessage.DEPOSIT_NOT_FOUND);
     }
 
-    public static ExchangeRatesProcessingFailedException getExchangeRatesProcessingFailedException() {
-        return new ExchangeRatesProcessingFailedException(ExceptionMessage.EXCHANGE_RATES_PROCESSING_FAILED);
+    public static ExchangeRatesProcessingFailedException getExchangeRatesProcessingFailedException(Throwable cause) {
+        return new ExchangeRatesProcessingFailedException(ExceptionMessage.EXCHANGE_RATES_PROCESSING_FAILED, cause);
     }
 
     public static LogoFileNotFoundException getLogoFileNotFoundException(String logoName) {

@@ -57,8 +57,8 @@ public class CbrDailyExchangeRatesClientImpl implements ExchangeRatesClient {
 
             return exchangeRates;
 
-        } catch (JsonProcessingException e) {
-            throw ExceptionUtil.getExchangeRatesProcessingFailedException();
+        } catch (JsonProcessingException ex) {
+            throw ExceptionUtil.getExchangeRatesProcessingFailedException(ex);
         }
     }
 
