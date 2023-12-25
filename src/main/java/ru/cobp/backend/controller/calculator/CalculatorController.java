@@ -11,14 +11,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.cobp.backend.common.Utils;
+import ru.cobp.backend.common.Constants;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
 import ru.cobp.backend.dto.calculator.CreditCalculatorMapper;
@@ -76,7 +78,7 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = Utils.getPageSortedByDepositRateDesc(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.DEPOSIT_RATE).descending());
         List<CalculatedDeposit> deposits = calculatorService.getAllMaximumRateCalculatedDeposits(
                 amount, term, capitalization, replenishment, partialWithdrawal, pageable
         );
@@ -111,7 +113,7 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = Utils.getPageSortedByCreditRateAsc(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.CREDIT_RATE).ascending());
         List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(amount, term, pageable);
 
         return CreditCalculatorMapper.toDtos(credits);

@@ -17,25 +17,25 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionHandlerResponseDto handle(ExchangeRatesProcessingFailedException e) {
-        log.error("", e);
-        return new ExceptionHandlerResponseDto(LocalDateTime.now(), e.getMessage());
+    public ErrorResponseDto handle(ExchangeRatesProcessingFailedException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionHandlerResponseDto handle(LogoFileNotFoundException e) {
-        log.error("", e);
-        return new ExceptionHandlerResponseDto(LocalDateTime.now(), e.getMessage());
+    public ErrorResponseDto handle(LogoFileNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ExceptionHandlerResponseDto> handle(final NotFoundException e) {
+    public ResponseEntity<ErrorResponseDto> handle(final NotFoundException e) {
         log.error("", e);
         String reason = "The required object was not found.";
         LocalDateTime timestamp = LocalDateTime.now();
-        ExceptionHandlerResponseDto errorResponse = new ExceptionHandlerResponseDto(timestamp, reason);
+        ErrorResponseDto errorResponse = new ErrorResponseDto(timestamp, reason);
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(errorResponse, httpStatus);
     }
