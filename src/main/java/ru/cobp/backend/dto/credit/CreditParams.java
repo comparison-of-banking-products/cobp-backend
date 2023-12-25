@@ -7,26 +7,18 @@ public class CreditParams {
 
     Boolean isActive;
 
-    Integer currenciesNum;
+    Long currencyNum;
 
     Integer minAmount;
 
     Integer maxAmount;
 
-    Integer minRate;
+    Double rate;
 
     Integer minPeriod;
 
     Integer maxPeriod;
 
-    Integer paymentTypeId;
-
-    Boolean depositIsRequired;
-
-    Boolean onlineApprove;
-
-    Boolean onlineGetting;
-
-    Boolean insurance;
+    String paymentType;
 
 }

@@ -56,4 +56,13 @@ public class Deposit {
     @Column(name = "rate", nullable = false)
     private Double rate;
 
+    @Column(name = "capitalization", nullable = false)
+    private Boolean capitalization;
+
+    @Column(name = "replenishment", nullable = false)
+    private Boolean replenishment;
+
+    @Column(name = "partial_withdrawal", nullable = false)
+    private Boolean partialWithdrawal;
+
 }

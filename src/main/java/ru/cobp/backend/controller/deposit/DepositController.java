@@ -1,12 +1,20 @@
 package ru.cobp.backend.controller.deposit;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.cobp.backend.dto.deposit.DepositDto;
+import ru.cobp.backend.dto.deposit.DepositMapper;
+import ru.cobp.backend.dto.deposit.DepositResponseDto;
 import ru.cobp.backend.dto.deposit.NewDepositDto;
+import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.service.deposit.DepositService;
 
 import java.util.List;
@@ -27,8 +35,49 @@ public class DepositController {
     )
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public List<DepositDto> getDepositList() {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public List<DepositResponseDto> getDepositList(
+            @Parameter(description = "Минимальная сумма вклада в рублях")
+            @RequestParam(required = false)  @Positive Integer minAmount,
+
+            @Parameter(description = "Максимальная сумма вклада в рублях")
+            @RequestParam(required = false)  @Positive Integer maxAmount,
+
+            @Parameter(description = "Минимальный срок вклада в месяцах")
+            @RequestParam(required = false)  @Positive Integer minTerm,
+
+            @Parameter(description = "Максимальный срок вклада в месяцах")
+            @RequestParam(required = false)  @Positive Integer maxTerm,
+
+            @Parameter(description = "Минимальная доходность вклада")
+            @RequestParam(required = false)  @Positive Double minRate,
+
+            @Parameter(description = "Максимальная доходность вклада")
+            @RequestParam(required = false)  @Positive Double maxRate,
+
+            @Parameter(description = "Вклад с капитализацией")
+            @RequestParam(required = false) Boolean capitalization,
+
+            @Parameter(description = "Вклад с пополнением")
+            @RequestParam(required = false) Boolean replenishment,
+
+            @Parameter(description = "Вклад с частичным снятием")
+            @RequestParam(required = false) Boolean partialWithdrawal,
+
+            @Parameter(description = "Индекс страницы")
+            @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+
+            @Parameter(description = "Размер страницы")
+            @RequestParam(defaultValue = "10") @Positive int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Deposit> deposits = depositService.findAllDeposits(
+                minAmount, maxAmount, minTerm, maxTerm, minRate, maxRate, capitalization, replenishment,
+                partialWithdrawal, pageable
+        );
+
+        return deposits.stream()
+                .map(DepositMapper::toDto)
+                .toList();
     }
 
     @Operation(

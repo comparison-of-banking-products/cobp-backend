@@ -1,9 +1,16 @@
 package ru.cobp.backend.controller.currency;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.currency.CurrencyDto;
+import ru.cobp.backend.dto.currency.CurrencyMapper;
+import ru.cobp.backend.dto.currency.CurrencyRateMapper;
+import ru.cobp.backend.dto.currency.CurrencyRateResponseDto;
+import ru.cobp.backend.model.currency.CurrencyRate;
+import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
 
 import java.util.List;
@@ -29,6 +41,8 @@ import java.util.List;
 public class CurrencyController {
 
     private final CurrencyService currencyService;
+
+    private final CurrencyRatesService currencyRateService;
 
     @PostMapping
     public ResponseEntity<CurrencyDto> create(@RequestBody CurrencyDto currencyDto) {
@@ -51,7 +65,8 @@ public class CurrencyController {
     @GetMapping("/{id}")
     public ResponseEntity<CurrencyDto> getById(@PathVariable Long id) {
         log.info("Получен GET запрос по эндпоинту /currencies/{} на обновление Currency с ID {}.", id, id);
-        return new ResponseEntity<>(currencyService.getById(id), HttpStatus.OK);
+        CurrencyDto currencyDto = CurrencyMapper.toCurrencyDto(currencyService.getById(id));
+        return new ResponseEntity<>(currencyDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -59,6 +74,24 @@ public class CurrencyController {
         log.info("Получен DELETE запрос по эндпоинту /currencies/{} на удаление Currency {}.", id, id);
         currencyService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Получить актуальные валютные котировки",
+            description = "Конечная точка для получения актуальных валютных котировок"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Получены актуальные валютные котировки",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = CurrencyRateResponseDto.class))
+            )}
+    )})
+    @GetMapping("/rates")
+    public List<CurrencyRateResponseDto> getCurrencyRates() {
+        List<CurrencyRate> rates = currencyRateService.getCurrencyRates();
+        return CurrencyRateMapper.toCurrencyRateResponseDtos(rates);
     }
 
 }

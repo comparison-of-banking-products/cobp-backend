@@ -1,6 +1,7 @@
 package ru.cobp.backend.service.currency;
 
 import ru.cobp.backend.dto.currency.CurrencyDto;
+import ru.cobp.backend.model.currency.Currency;
 
 import java.util.List;
 
@@ -10,9 +11,12 @@ public interface CurrencyService {
 
     CurrencyDto update(Long currencyId, CurrencyDto updCurrency);
 
-    CurrencyDto getById(Long currencyId);
+    Currency getById(Long currencyId);
 
     List<CurrencyDto> getAll();
 
     void deleteById(Long currencyId);
+
+    List<Currency> findAll();
+
 }
