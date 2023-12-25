@@ -29,7 +29,7 @@ public class LogoStorageServiceImpl implements StorageService {
             }
 
         } catch (MalformedURLException ex) {
-            throw ExceptionUtil.getLogoFileNotFoundException(fileName);
+            throw ExceptionUtil.getLogoFileNotFoundException(fileName, ex);
         }
     }
 

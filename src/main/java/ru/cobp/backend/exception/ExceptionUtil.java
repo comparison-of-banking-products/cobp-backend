@@ -23,4 +23,10 @@ public class ExceptionUtil {
         );
     }
 
+    public static LogoFileNotFoundException getLogoFileNotFoundException(String logoName, Throwable cause) {
+        return new LogoFileNotFoundException(
+                String.format("%s [%s]", ExceptionMessage.LOGO_FILE_NOT_FOUND, logoName), cause
+        );
+    }
+
 }

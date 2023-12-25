@@ -6,4 +6,8 @@ public class LogoFileNotFoundException extends RuntimeException {
         super(message);
     }
 
+    public LogoFileNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

@@ -17,16 +17,16 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionHandlerResponseDto handle(ExchangeRatesProcessingFailedException e) {
-        log.error("", e);
-        return new ExceptionHandlerResponseDto(LocalDateTime.now(), e.getMessage());
+    public ExceptionHandlerResponseDto handle(ExchangeRatesProcessingFailedException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ExceptionHandlerResponseDto(LocalDateTime.now(), ex.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionHandlerResponseDto handle(LogoFileNotFoundException e) {
-        log.error("", e);
-        return new ExceptionHandlerResponseDto(LocalDateTime.now(), e.getMessage());
+    public ExceptionHandlerResponseDto handle(LogoFileNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ExceptionHandlerResponseDto(LocalDateTime.now(), ex.getMessage());
     }
 
     @ExceptionHandler
