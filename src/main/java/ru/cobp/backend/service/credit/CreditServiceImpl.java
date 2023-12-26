@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
 import ru.cobp.backend.dto.credit.CreditDto;
-import ru.cobp.backend.dto.credit.CreditMapper;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
@@ -44,17 +43,6 @@ public class CreditServiceImpl implements CreditService {
         return Utils.toList(credits);
     }
 
-    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term) {
-        return new BooleanBuilder()
-                .and(Q_CREDIT.rate.goe(JPAExpressions
-                        .select(Q_CREDIT.rate.min())
-                        .from(Q_CREDIT)
-                ))
-                .and(Q_CREDIT.amountMin.loe(amount))
-                .and(Q_CREDIT.amountMax.goe(amount))
-                .and(Q_CREDIT.term.eq(term));
-    }
-
     @Override
     public List<Credit> getAll(CreditParams params) {
         Predicate p = buildQCreditPredicateByParams(params);
@@ -72,14 +60,14 @@ public class CreditServiceImpl implements CreditService {
     public Credit create(NewCreditDto newCreditDto) {
         Bank bank = bankService.getByBic(newCreditDto.getBanksBic());
         Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
-        Credit credit = CreditMapper.toCredit(newCreditDto, bank, currency);
+        Credit credit = toCredit(newCreditDto, bank, currency);
         return creditRepository.save(credit);
     }
 
     @Override
     public Credit update(Long id, CreditDto creditDto) {
         Credit credit = getById(id);
-        CreditMapper.updateCredit(credit, creditDto);
+        updateCredit(credit, creditDto);
         return creditRepository.save(credit);
     }
 
@@ -90,6 +78,17 @@ public class CreditServiceImpl implements CreditService {
         } else {
             throw new NotFoundException("Credit with id = " + id + " was not found");
         }
+    }
+
+    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term) {
+        return new BooleanBuilder()
+                .and(Q_CREDIT.rate.goe(JPAExpressions
+                        .select(Q_CREDIT.rate.min())
+                        .from(Q_CREDIT)
+                ))
+                .and(Q_CREDIT.amountMin.loe(amount))
+                .and(Q_CREDIT.amountMax.goe(amount))
+                .and(Q_CREDIT.term.eq(term));
     }
 
     private Predicate buildQCreditPredicateByParams(CreditParams params) {
@@ -116,6 +115,19 @@ public class CreditServiceImpl implements CreditService {
             builder.and(Q_CREDIT.rate.eq(params.getRate()));
         }
         return builder;
+
+    }
+
+    private Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
+        return new Credit(null, bank, newCreditDto.getName(), newCreditDto.getProductUrl(),
+                newCreditDto.getIsActive(), currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(),
+                newCreditDto.getTerm(), newCreditDto.getRate());
+    }
+
+    private void updateCredit(Credit credit, CreditDto creditDto) {
+        if (creditDto.getIsActive() != null) {
+            credit.setIsActive(creditDto.getIsActive());
+        }
     }
 
 }

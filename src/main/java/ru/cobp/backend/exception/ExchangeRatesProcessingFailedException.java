@@ -1,4 +1,4 @@
-package ru.cobp.backend.exception.exchange;
+package ru.cobp.backend.exception;
 
 public class ExchangeRatesProcessingFailedException extends RuntimeException {
 

@@ -1,14 +1,14 @@
-package ru.cobp.backend.dto.credit;
+package ru.cobp.backend.dto.deposit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
 
-@Schema(description = "Краткое представление кредита")
+@Schema(description = "Краткое представление вклада")
 @Data
 @NoArgsConstructor
-public class CreditShortResponseDto {
+public class DepositShortResponseDto {
 
     @Schema(description = "Банк")
     private BankShortResponseDto bank;

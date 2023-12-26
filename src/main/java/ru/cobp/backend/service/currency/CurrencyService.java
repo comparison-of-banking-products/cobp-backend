@@ -13,10 +13,8 @@ public interface CurrencyService {
 
     Currency getById(Long currencyId);
 
-    List<CurrencyDto> getAll();
-
     void deleteById(Long currencyId);
 
-    List<Currency> findAll();
+    List<Currency> getAll();
 
 }

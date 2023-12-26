@@ -1,4 +1,4 @@
-package ru.cobp.backend.exception.storage;
+package ru.cobp.backend.exception;
 
 public class LogoFileNotFoundException extends RuntimeException {
 

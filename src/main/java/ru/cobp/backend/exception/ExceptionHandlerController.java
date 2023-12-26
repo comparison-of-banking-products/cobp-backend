@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.cobp.backend.exception.exchange.ExchangeRatesProcessingFailedException;
-import ru.cobp.backend.exception.storage.LogoFileNotFoundException;
 
 import java.time.LocalDateTime;
 

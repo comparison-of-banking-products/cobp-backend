@@ -33,17 +33,12 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public List<CurrencyDto> getAll() {
-        return null;
-    }
-
-    @Override
     public void deleteById(Long currencyId) {
 
     }
 
     @Override
-    public List<Currency> findAll() {
+    public List<Currency> getAll() {
         return currencyRepository.findAll();
     }
 
