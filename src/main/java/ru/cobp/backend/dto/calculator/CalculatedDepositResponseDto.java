@@ -1,6 +1,7 @@
 package ru.cobp.backend.dto.calculator;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.deposit.DepositShortResponseDto;
@@ -8,6 +9,7 @@ import ru.cobp.backend.dto.deposit.DepositShortResponseDto;
 @Schema(description = "Результат расчета вклада")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CalculatedDepositResponseDto {
 
     @Schema(description = "Вклад")

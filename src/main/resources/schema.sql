@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS deposits CASCADE;
 DROP TABLE IF EXISTS credits CASCADE;
 
 CREATE TABLE banks (
-	bic             BIGINT          NOT NULL,
+	bic             VARCHAR(9)      NOT NULL,
 	name            VARCHAR(100)    NOT NULL,
 	legal_entity    VARCHAR(100)    NOT NULL,
 	description     TEXT            NOT NULL,
