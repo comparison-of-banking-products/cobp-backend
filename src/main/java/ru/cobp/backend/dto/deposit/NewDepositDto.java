@@ -6,10 +6,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.cobp.backend.dto.currency.CurrencyDto;
-
-import java.util.List;
 
 @Builder
 @Getter
@@ -74,5 +76,5 @@ public class NewDepositDto {
 
     @NotNull
     private Boolean replenishment;
-    private List<NewRateDto> rates;
+
 }

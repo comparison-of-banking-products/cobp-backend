@@ -8,8 +8,8 @@ import ru.cobp.backend.model.currency.CurrencyRate;
 
 import java.util.List;
 
-@Mapper
 @Component
+@Mapper
 public interface CurrencyRateMapper {
 
     @Mapping(target = "base", source = "currencyRate.base.code")

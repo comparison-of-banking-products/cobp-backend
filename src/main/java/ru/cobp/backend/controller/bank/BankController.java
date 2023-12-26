@@ -21,10 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.cobp.backend.dto.bank.BankMapper;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.NewBankDto;
-import ru.cobp.backend.dto.bank.ResponseBankDto;
+import ru.cobp.backend.mapper.BankMapper;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.service.bank.BankService;
 import ru.cobp.backend.service.storage.StorageService;
@@ -45,6 +44,8 @@ public class BankController {
 
     private final StorageService storageService;
 
+    private final BankMapper bankMapper;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public NewBankDto create(@RequestBody NewBankDto newBankDto) {
@@ -57,8 +58,9 @@ public class BankController {
     }
 
     @GetMapping("/{bic}")
-    public ResponseBankDto getByBic(@PathVariable Long bic) {
-        return BankMapper.toResponseBankDto(bankService.getByBic(bic));
+    public BankResponseDto getByBic(@PathVariable Long bic) {
+        Bank bank = bankService.getByBic(bic);
+        return bankMapper.toBankResponseDto(bank);
     }
 
     @DeleteMapping("/{bic}")
@@ -81,7 +83,7 @@ public class BankController {
     @GetMapping
     public List<BankResponseDto> getAll() {
         List<Bank> banks = bankService.getAll();
-        return BankMapper.toDtos(banks);
+        return bankMapper.toBankResponseDtos(banks);
     }
 
     @Operation(

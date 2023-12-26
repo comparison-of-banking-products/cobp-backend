@@ -11,9 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.cobp.backend.dto.deposit.DepositDto;
-import ru.cobp.backend.dto.deposit.DepositMapper;
 import ru.cobp.backend.dto.deposit.DepositResponseDto;
 import ru.cobp.backend.dto.deposit.NewDepositDto;
+import ru.cobp.backend.mapper.DepositMapper;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.service.deposit.DepositService;
 
@@ -27,32 +27,34 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(path = "/v1/deposits")
 public class DepositController {
+
     private final DepositService depositService;
+
+    private final DepositMapper depositMapper;
 
     @Operation(
             summary = "Получить список депозитов",
             description = "Конечная точка для получения депозитов"
     )
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<DepositResponseDto> getDepositList(
             @Parameter(description = "Минимальная сумма вклада в рублях")
-            @RequestParam(required = false)  @Positive Integer minAmount,
+            @RequestParam(required = false) @Positive Integer minAmount,
 
             @Parameter(description = "Максимальная сумма вклада в рублях")
-            @RequestParam(required = false)  @Positive Integer maxAmount,
+            @RequestParam(required = false) @Positive Integer maxAmount,
 
             @Parameter(description = "Минимальный срок вклада в месяцах")
-            @RequestParam(required = false)  @Positive Integer minTerm,
+            @RequestParam(required = false) @Positive Integer minTerm,
 
             @Parameter(description = "Максимальный срок вклада в месяцах")
-            @RequestParam(required = false)  @Positive Integer maxTerm,
+            @RequestParam(required = false) @Positive Integer maxTerm,
 
             @Parameter(description = "Минимальная доходность вклада")
-            @RequestParam(required = false)  @Positive Double minRate,
+            @RequestParam(required = false) @Positive Double minRate,
 
             @Parameter(description = "Максимальная доходность вклада")
-            @RequestParam(required = false)  @Positive Double maxRate,
+            @RequestParam(required = false) @Positive Double maxRate,
 
             @Parameter(description = "Вклад с капитализацией")
             @RequestParam(required = false) Boolean capitalization,
@@ -75,16 +77,13 @@ public class DepositController {
                 partialWithdrawal, pageable
         );
 
-        return deposits.stream()
-                .map(DepositMapper::toDto)
-                .toList();
+        return depositMapper.toDepositResponseDtos(deposits);
     }
 
     @Operation(
             summary = "Найти депозит",
             description = "Конечная точка для поиска депозита"
     )
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public DepositDto getDeposit(@PathVariable Long id) {
         throw new UnsupportedOperationException("Not implemented yet");
@@ -96,7 +95,6 @@ public class DepositController {
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-
     public void deleteDeposit(@PathVariable Long id) {
         throw new UnsupportedOperationException("Not implemented yet");
     }

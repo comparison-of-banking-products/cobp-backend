@@ -72,7 +72,7 @@ public class CreditServiceImpl implements CreditService {
     public Credit create(NewCreditDto newCreditDto) {
         Bank bank = bankService.getByBic(newCreditDto.getBanksBic());
         Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
-        Credit credit = CreditMapper.toCredit(newCreditDto, bank, currency);
+        Credit credit = toCredit(newCreditDto, bank, currency);
         return creditRepository.save(credit);
     }
 
@@ -116,6 +116,13 @@ public class CreditServiceImpl implements CreditService {
             builder.and(Q_CREDIT.rate.eq(params.getRate()));
         }
         return builder;
+
+    }
+
+    private Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
+        return new Credit(null, bank, newCreditDto.getName(), newCreditDto.getProductUrl(),
+                newCreditDto.getIsActive(), currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(),
+                newCreditDto.getTerm(), newCreditDto.getRate());
     }
 
 }

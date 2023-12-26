@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.currency.CurrencyDto;
-import ru.cobp.backend.dto.currency.CurrencyMapper;
 import ru.cobp.backend.dto.currency.CurrencyRateResponseDto;
+import ru.cobp.backend.dto.currency.CurrencyResponseDto;
+import ru.cobp.backend.mapper.CurrencyMapper;
 import ru.cobp.backend.mapper.CurrencyRateMapper;
+import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.currency.CurrencyRate;
 import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
@@ -44,6 +46,8 @@ public class CurrencyController {
 
     private final CurrencyRatesService currencyRateService;
 
+    private final CurrencyMapper currencyMapper;
+
     private final CurrencyRateMapper currencyRateMapper;
 
     @PostMapping
@@ -58,17 +62,29 @@ public class CurrencyController {
         return new ResponseEntity<>(currencyService.update(id, currencyDto), HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Получить список валют",
+            description = "Конечная точка для получения списка валют"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Получен список валют",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = CurrencyResponseDto.class))
+            )}
+    )})
     @GetMapping
-    public ResponseEntity<List<CurrencyDto>> getAll(@RequestBody CurrencyDto currencyDto) {
-        log.info("Получен GET запрос по эндпоинту /currencies на получение всех существующих Currency.");
-        return new ResponseEntity<>(currencyService.getAll(), HttpStatus.OK);
+    public List<CurrencyResponseDto> getAll() {
+        List<Currency> currencies = currencyService.getAll();
+        return currencyMapper.toCurrencyResponseDtos(currencies);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CurrencyDto> getById(@PathVariable Long id) {
+    public CurrencyResponseDto getById(@PathVariable Long id) {
         log.info("Получен GET запрос по эндпоинту /currencies/{} на обновление Currency с ID {}.", id, id);
-        CurrencyDto currencyDto = CurrencyMapper.toCurrencyDto(currencyService.getById(id));
-        return new ResponseEntity<>(currencyDto, HttpStatus.OK);
+        Currency currency = currencyService.getById(id);
+        return currencyMapper.toCurrencyResponseDto(currency);
     }
 
     @DeleteMapping("/{id}")

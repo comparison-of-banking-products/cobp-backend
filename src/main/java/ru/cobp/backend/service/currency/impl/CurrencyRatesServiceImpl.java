@@ -54,7 +54,7 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
     void getAndSaveExchangeRates() {
         this.deleteAllInBatch();
 
-        Map<String, Currency> codeToCurrency = currencyService.findAll()
+        Map<String, Currency> codeToCurrency = currencyService.getAll()
                 .stream()
                 .collect(Collectors
                         .toMap(Currency::getCode, Function.identity()));
