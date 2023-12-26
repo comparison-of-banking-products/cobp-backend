@@ -2,7 +2,7 @@ package ru.cobp.backend.mapper;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
-import ru.cobp.backend.dto.CreditResponseDto;
+import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.CreditShortResponseDto;
 import ru.cobp.backend.model.credit.Credit;
 

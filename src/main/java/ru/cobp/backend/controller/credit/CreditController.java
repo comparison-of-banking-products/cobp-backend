@@ -15,9 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.cobp.backend.dto.CreditResponseDto;
 import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
+import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.mapper.CreditMapper;
 import ru.cobp.backend.model.credit.Credit;
@@ -42,7 +42,7 @@ public class CreditController {
 
     @Operation(
             summary = "Найти кредиты",
-            description = "Конечная точка для поиска кредитов с различными параметрами"
+            description = "Конечная точка для поиска кредитов по параметрам"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",

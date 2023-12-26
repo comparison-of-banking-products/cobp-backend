@@ -1,4 +1,4 @@
-package ru.cobp.backend.dto.deposit;
+package ru.cobp.backend.dto.credit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.currency.CurrencyResponseDto;
 
-@Schema(description = "Вклад")
+@Schema(description = "Кредит")
 @Data
 @NoArgsConstructor
-public class DepositResponseDto {
+public class CreditResponseDto {
 
     @Schema(description = "Id")
     private Long id;
@@ -35,19 +35,10 @@ public class DepositResponseDto {
     @Schema(description = "Максимальная сумма")
     private Integer amountMax;
 
-    @Schema(description = "Срок")
+    @Schema(description = "Срок кредита")
     private Integer term;
 
     @Schema(description = "Процентная ставка")
     private Double rate;
-
-    @Schema(description = "С капитализацией")
-    private Boolean capitalization;
-
-    @Schema(description = "С пополнением")
-    private Boolean replenishment;
-
-    @Schema(description = "С частичным снятием")
-    private Boolean partialWithdrawal;
 
 }

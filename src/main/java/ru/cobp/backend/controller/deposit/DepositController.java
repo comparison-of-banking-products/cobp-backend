@@ -33,8 +33,8 @@ public class DepositController {
     private final DepositMapper depositMapper;
 
     @Operation(
-            summary = "Получить список депозитов",
-            description = "Конечная точка для получения депозитов"
+            summary = "Найти вклады",
+            description = "Конечная точка для поиска вкладов по параметрам"
     )
     @GetMapping
     public List<DepositResponseDto> getDepositList(

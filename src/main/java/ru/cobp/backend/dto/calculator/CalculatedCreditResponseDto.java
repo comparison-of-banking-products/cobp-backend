@@ -19,7 +19,7 @@ public class CalculatedCreditResponseDto {
     @Schema(description = "Общий размер платежа")
     private Double totalPayments;
 
-    @Schema(description = "Начисленные проценты по истечению срока кредита")
+    @Schema(description = "Начисленные проценты по истечению срока")
     private Double maturityInterest;
 
 }

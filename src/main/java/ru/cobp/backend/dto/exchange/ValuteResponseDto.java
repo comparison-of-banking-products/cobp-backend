@@ -2,10 +2,8 @@ package ru.cobp.backend.dto.exchange;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.extern.jackson.Jacksonized;
 
 @Data
-@Jacksonized
 public class ValuteResponseDto {
 
     @JsonProperty("ID")

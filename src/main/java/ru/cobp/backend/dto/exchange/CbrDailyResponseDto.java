@@ -3,13 +3,11 @@ package ru.cobp.backend.dto.exchange;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
-@Jacksonized
 public class CbrDailyResponseDto {
 
     @JsonProperty("Date")
