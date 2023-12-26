@@ -13,8 +13,10 @@ import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
+import ru.cobp.backend.exception.UnsupportedPaymentTypeException;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.credit.QCredit;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.repository.credit.CreditRepository;
@@ -124,12 +126,41 @@ public class CreditServiceImpl implements CreditService {
     private Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
         return new Credit(null, bank, newCreditDto.getName(), newCreditDto.getProductUrl(),
                 newCreditDto.getIsActive(), currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(),
-                newCreditDto.getTerm(), newCreditDto.getRate());
+                newCreditDto.getTerm(), newCreditDto.getRate(), toPaymentType(newCreditDto.getPaymentType()));
+    }
+
+    private PaymentType toPaymentType(String paymentType) {
+        switch (paymentType) {
+            case "Аннуитетный":
+                return PaymentType.ANNUITY;
+            case "Дифференцированный":
+                return PaymentType.DIFFERENTIAL;
+            default:
+                throw new UnsupportedPaymentTypeException("Incorrect payment type");
+        }
     }
 
     private void updateCredit(Credit credit, CreditDto creditDto) {
         if (creditDto.getIsActive() != null) {
             credit.setIsActive(creditDto.getIsActive());
+        }
+        if (creditDto.getName() != null) {
+            credit.setName(creditDto.getName());
+        }
+        if (creditDto.getProductUrl() != null) {
+            credit.setProductUrl(creditDto.getProductUrl());
+        }
+        if (creditDto.getRate() != null) {
+            credit.setRate(creditDto.getRate());
+        }
+        if (creditDto.getMinAmount() != null) {
+            credit.setAmountMin(creditDto.getMinAmount());
+        }
+        if (creditDto.getMaxAmount() != null) {
+            credit.setAmountMax(credit.getAmountMax());
+        }
+        if (creditDto.getTerm() != null) {
+            credit.setTerm(creditDto.getTerm());
         }
     }
 
