@@ -8,7 +8,7 @@ import ru.cobp.backend.model.deposit.Deposit;
 import java.util.List;
 
 @Component
-@Mapper
+@Mapper(uses = BankMapper.class)
 public interface DepositMapper {
 
     List<DepositResponseDto> toDepositResponseDtos(List<Deposit> deposits);
