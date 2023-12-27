@@ -2,7 +2,11 @@ package ru.cobp.backend.dto.bank;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
 @Getter
@@ -12,7 +16,7 @@ import lombok.*;
 public class NewBankDto {
 
     @NotNull
-    private Long bic;
+    private String bic;
 
     @NotNull
     @Size(max = 100)

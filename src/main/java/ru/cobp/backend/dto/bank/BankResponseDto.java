@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class BankResponseDto {
 
     @Schema(description = "БИК")
-    private Long bic;
+    private String bic;
 
     @Schema(description = "Название")
     private String name;
