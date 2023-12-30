@@ -8,23 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import ru.cobp.backend.dto.bank.BankMapper;
+import org.springframework.web.bind.annotation.*;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.NewBankDto;
-import ru.cobp.backend.dto.bank.ResponseBankDto;
+import ru.cobp.backend.mapper.BankMapper;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.service.bank.BankService;
 import ru.cobp.backend.service.storage.StorageService;
@@ -35,15 +25,17 @@ import java.util.List;
         name = "Банки",
         description = "Контроллер для работы с банками"
 )
-@Slf4j
+@CrossOrigin(origins = "*")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/v1/banks")
+@RequiredArgsConstructor
 public class BankController {
 
     private final BankService bankService;
 
     private final StorageService storageService;
+
+    private final BankMapper bankMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -57,8 +49,9 @@ public class BankController {
     }
 
     @GetMapping("/{bic}")
-    public ResponseBankDto getByBic(@PathVariable Long bic) {
-        return BankMapper.toResponseBankDto(bankService.getByBic(bic));
+    public BankResponseDto getByBic(@PathVariable Long bic) {
+        Bank bank = bankService.getByBic(bic);
+        return bankMapper.toBankResponseDto(bank);
     }
 
     @DeleteMapping("/{bic}")
@@ -81,7 +74,7 @@ public class BankController {
     @GetMapping
     public List<BankResponseDto> getAll() {
         List<Bank> banks = bankService.getAll();
-        return BankMapper.toDtos(banks);
+        return bankMapper.toBankResponseDtos(banks);
     }
 
     @Operation(

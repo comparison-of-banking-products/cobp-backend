@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,14 +13,15 @@ import lombok.ToString;
 @Entity
 @Table(name = "banks")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
 public class Bank {
 
     @Id
-    @Column(name = "bic", nullable = false)
-    private Long bic;
+    @Column(name = "bic", length = 9, nullable = false)
+    private String bic;
 
     @Column(name = "name", length = 100, nullable = false, unique = true)
     private String name;

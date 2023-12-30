@@ -2,9 +2,6 @@ package ru.cobp.backend.exception;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.cobp.backend.exception.deposit.DepositNotFoundException;
-import ru.cobp.backend.exception.exchange.ExchangeRatesProcessingFailedException;
-import ru.cobp.backend.exception.storage.LogoFileNotFoundException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionUtil {

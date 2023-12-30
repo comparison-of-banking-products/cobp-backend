@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.cobp.backend.exception.exchange.ExchangeRatesProcessingFailedException;
-import ru.cobp.backend.exception.storage.LogoFileNotFoundException;
 
 import java.time.LocalDateTime;
 
@@ -31,12 +29,21 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorResponseDto> handle(final NotFoundException e) {
-        log.error("", e);
+    public ResponseEntity<ErrorResponseDto> handle(final NotFoundException ex) {
+        log.error(ex.getMessage(), ex);
         String reason = "The required object was not found.";
         LocalDateTime timestamp = LocalDateTime.now();
         ErrorResponseDto errorResponse = new ErrorResponseDto(timestamp, reason);
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(errorResponse, httpStatus);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponseDto> handle(final UnsupportedPaymentTypeException ex) {
+        log.error(ex.getMessage(), ex);
+        ErrorResponseDto errorResponse = new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(errorResponse, httpStatus);
     }
 

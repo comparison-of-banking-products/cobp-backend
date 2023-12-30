@@ -1,6 +1,7 @@
 package ru.cobp.backend.dto.credit;
 
 import lombok.Value;
+import ru.cobp.backend.model.credit.PaymentType;
 
 @Value
 public class CreditParams {
@@ -19,6 +20,6 @@ public class CreditParams {
 
     Integer maxPeriod;
 
-    String paymentType;
+    PaymentType paymentType;
 
 }

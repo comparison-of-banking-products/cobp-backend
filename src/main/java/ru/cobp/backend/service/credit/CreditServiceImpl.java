@@ -10,12 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
 import ru.cobp.backend.dto.credit.CreditDto;
-import ru.cobp.backend.dto.credit.CreditMapper;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
+import ru.cobp.backend.exception.UnsupportedPaymentTypeException;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.credit.QCredit;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.repository.credit.CreditRepository;
@@ -25,7 +26,7 @@ import ru.cobp.backend.service.currency.CurrencyService;
 import java.util.List;
 
 @Service
-@Transactional()
+@Transactional
 @RequiredArgsConstructor
 public class CreditServiceImpl implements CreditService {
 
@@ -44,24 +45,9 @@ public class CreditServiceImpl implements CreditService {
         return Utils.toList(credits);
     }
 
-    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term) {
-        return new BooleanBuilder()
-                .and(Q_CREDIT.rate.goe(JPAExpressions
-                        .select(Q_CREDIT.rate.min())
-                        .from(Q_CREDIT)
-                ))
-                .and(Q_CREDIT.amountMin.loe(amount))
-                .and(Q_CREDIT.amountMax.goe(amount))
-                .and(Q_CREDIT.term.eq(term));
-    }
-
     @Override
     public List<Credit> getAll(CreditParams params) {
-        Currency currency = new Currency();
-        if (params.getCurrencyNum() != null) {
-            currency = currencyService.getById(params.getCurrencyNum());
-        }
-        Predicate p = buildQCreditPredicateByParams(params, currency);
+        Predicate p = buildQCreditPredicateByParams(params);
         Sort s = Sort.by("rate").ascending();
         return Utils.toList(creditRepository.findAll(p, s));
     }
@@ -76,41 +62,14 @@ public class CreditServiceImpl implements CreditService {
     public Credit create(NewCreditDto newCreditDto) {
         Bank bank = bankService.getByBic(newCreditDto.getBanksBic());
         Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
-        Credit credit = CreditMapper.toCredit(newCreditDto, bank, currency);
+        Credit credit = toCredit(newCreditDto, bank, currency);
         return creditRepository.save(credit);
     }
 
     @Override
     public Credit update(Long id, CreditDto creditDto) {
-        Credit credit = creditRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Credit with id = " + id + " was not found"));
-        if (creditDto.getIsActive() != null) {
-            credit.setIsActive(creditDto.getIsActive());
-        }
-        if (creditDto.getBanksBic() != null) {
-            credit.setBank(bankService.getByBic(creditDto.getBanksBic()));
-        }
-        if (creditDto.getName() != null) {
-            credit.setName(creditDto.getName());
-        }
-        if (creditDto.getProductUrl() != null) {
-            credit.setProductUrl(creditDto.getProductUrl());
-        }
-        if (creditDto.getCurrencyNum() != null) {
-            credit.setCurrency(currencyService.getById(creditDto.getCurrencyNum()));
-        }
-        if (creditDto.getRate() != null) {
-            credit.setRate(creditDto.getRate());
-        }
-        if (creditDto.getMinAmount() != null) {
-            credit.setAmountMin(creditDto.getMinAmount());
-        }
-        if (creditDto.getMaxAmount() != null) {
-            credit.setAmountMax(credit.getAmountMax());
-        }
-        if (creditDto.getTerm() != null) {
-            credit.setTerm(creditDto.getTerm());
-        }
+        Credit credit = getById(id);
+        updateCredit(credit, creditDto);
         return creditRepository.save(credit);
     }
 
@@ -123,13 +82,24 @@ public class CreditServiceImpl implements CreditService {
         }
     }
 
-    private Predicate buildQCreditPredicateByParams(CreditParams params, Currency currency) {
+    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term) {
+        return new BooleanBuilder()
+                .and(Q_CREDIT.rate.goe(JPAExpressions
+                        .select(Q_CREDIT.rate.min())
+                        .from(Q_CREDIT)
+                ))
+                .and(Q_CREDIT.amountMin.loe(amount))
+                .and(Q_CREDIT.amountMax.goe(amount))
+                .and(Q_CREDIT.term.eq(term));
+    }
+
+    private Predicate buildQCreditPredicateByParams(CreditParams params) {
         BooleanBuilder builder = new BooleanBuilder();
         if (params.getIsActive() != null) {
             builder.and(Q_CREDIT.isActive.eq(params.getIsActive()));
         }
         if (params.getCurrencyNum() != null) {
-            builder.and(Q_CREDIT.currency.eq(currency));
+            builder.and(Q_CREDIT.currency.eq(currencyService.getById(params.getCurrencyNum())));
         }
         if (params.getMinAmount() != null) {
             builder.and(Q_CREDIT.amountMin.loe(params.getMinAmount()));
@@ -146,8 +116,52 @@ public class CreditServiceImpl implements CreditService {
         if (params.getRate() != null) {
             builder.and(Q_CREDIT.rate.eq(params.getRate()));
         }
+        if (params.getPaymentType() != null) {
+            builder.and(Q_CREDIT.paymentType.eq(params.getPaymentType()));
+        }
         return builder;
 
+    }
+
+    private Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
+        return new Credit(null, bank, newCreditDto.getName(), newCreditDto.getProductUrl(),
+                newCreditDto.getIsActive(), currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(),
+                newCreditDto.getTerm(), newCreditDto.getRate(), toPaymentType(newCreditDto.getPaymentType()));
+    }
+
+    private PaymentType toPaymentType(String paymentType) {
+        switch (paymentType) {
+            case "Аннуитетный":
+                return PaymentType.ANNUITY;
+            case "Дифференцированный":
+                return PaymentType.DIFFERENTIAL;
+            default:
+                throw new UnsupportedPaymentTypeException("Incorrect payment type");
+        }
+    }
+
+    private void updateCredit(Credit credit, CreditDto creditDto) {
+        if (creditDto.getIsActive() != null) {
+            credit.setIsActive(creditDto.getIsActive());
+        }
+        if (creditDto.getName() != null) {
+            credit.setName(creditDto.getName());
+        }
+        if (creditDto.getProductUrl() != null) {
+            credit.setProductUrl(creditDto.getProductUrl());
+        }
+        if (creditDto.getRate() != null) {
+            credit.setRate(creditDto.getRate());
+        }
+        if (creditDto.getMinAmount() != null) {
+            credit.setAmountMin(creditDto.getMinAmount());
+        }
+        if (creditDto.getMaxAmount() != null) {
+            credit.setAmountMax(credit.getAmountMax());
+        }
+        if (creditDto.getTerm() != null) {
+            credit.setTerm(creditDto.getTerm());
+        }
     }
 
 }

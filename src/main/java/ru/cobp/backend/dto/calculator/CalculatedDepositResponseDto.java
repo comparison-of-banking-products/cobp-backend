@@ -1,25 +1,27 @@
 package ru.cobp.backend.dto.calculator;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.cobp.backend.dto.deposit.DepositResponseDto;
+import ru.cobp.backend.dto.deposit.DepositShortResponseDto;
 
 @Schema(description = "Результат расчета вклада")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CalculatedDepositResponseDto {
 
     @Schema(description = "Вклад")
-    private DepositResponseDto deposit;
+    private DepositShortResponseDto deposit;
 
-    @Schema(description = "Среднегодовой доход вклада")
+    @Schema(description = "Среднегодовой доход")
     private Double annualInterest;
 
-    @Schema(description = "Доход по истечению срока вклада")
+    @Schema(description = "Доход по истечению срока")
     private Double maturityInterest;
 
-    @Schema(description = "Общий размер вклада")
+    @Schema(description = "Общая сумма")
     private Double totalAmount;
 
 }

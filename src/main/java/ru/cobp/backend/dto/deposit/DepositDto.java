@@ -1,12 +1,17 @@
 package ru.cobp.backend.dto.deposit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
-import lombok.*;
-import ru.cobp.backend.dto.bank.ResponseBankDto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.currency.CurrencyDto;
-
-import java.util.List;
 
 @Builder
 @Getter
@@ -15,12 +20,13 @@ import java.util.List;
 @NoArgsConstructor
 @Schema(description = "Сущность депозита")
 public class DepositDto {
+
     @NotNull
     @Positive
     private Long id;
 
     @NotNull
-    private ResponseBankDto bank;
+    private BankResponseDto bank;
 
     @NotBlank
     @Size(max = 100)
@@ -73,5 +79,5 @@ public class DepositDto {
 
     @NotNull
     private Boolean replenishment;
-    private List<RateDto> rates;
+
 }

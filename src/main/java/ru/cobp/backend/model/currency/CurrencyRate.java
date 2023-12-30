@@ -9,15 +9,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "currency_rates")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -48,5 +51,8 @@ public class CurrencyRate {
 
     @Column(name = "previous_date", nullable = false)
     private LocalDateTime previousDate;
+
+    @Formula("actual_rate - previous_rate")
+    private Double ratesDifference;
 
 }
