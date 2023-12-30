@@ -11,6 +11,7 @@ import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.deposit.Deposit;
 
@@ -70,7 +71,8 @@ public class TestUtils {
                 10000,
                 7000000,
                 13,
-                24.40
+                24.40,
+                PaymentType.ANNUITY
         );
     }
 

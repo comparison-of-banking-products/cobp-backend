@@ -41,4 +41,7 @@ public class CreditResponseDto {
     @Schema(description = "Процентная ставка")
     private Double rate;
 
+    @Schema(description = "Тип платежа")
+    private String paymentType;
+
 }
