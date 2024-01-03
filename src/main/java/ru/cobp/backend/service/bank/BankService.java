@@ -9,11 +9,11 @@ public interface BankService {
 
     NewBankDto create(NewBankDto newBank);
 
-    NewBankDto update(Long bic, NewBankDto updBank);
+    NewBankDto update(String bic, NewBankDto updBank);
 
-    Bank getByBic(Long bic);
+    Bank getByBic(String bic);
 
-    void deleteByBic(Long bic);
+    void deleteByBic(String bic);
 
     List<Bank> getAll();
 
