@@ -2,10 +2,15 @@ package ru.cobp.backend.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
+import ru.cobp.backend.dto.credit.CreditDto;
+import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.CreditShortResponseDto;
+import ru.cobp.backend.dto.credit.NewCreditDto;
+import ru.cobp.backend.dto.currency.CurrencyResponseDto;
 import ru.cobp.backend.dto.deposit.DepositShortResponseDto;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
@@ -132,4 +137,78 @@ public class TestUtils {
         return List.of(buildGazprombankDeposit());
     }
 
+    public static NewCreditDto buildNewGazprombankCreditDto() {
+        return new NewCreditDto(
+                "044525823",
+                "Газпромбанк Кредит наличными",
+                Boolean.TRUE,
+                643L,
+                "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
+                10000,
+                7000000,
+                24.4,
+                13,
+                "Аннуитетный"
+        );
+    }
+
+    public static CreditDto buildGazprombankCreditDto() {
+        return new CreditDto(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                25.1,
+                12,
+                null
+        );
+    }
+
+    public static Credit buildGazprombankUpdatedCredit() {
+        return new Credit(
+                1L,
+                buildGazprombank(),
+                "Газпромбанк Кредит наличными",
+                "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
+                true,
+                buildRubCurrency(),
+                10000,
+                7000000,
+                12,
+                25.1,
+                PaymentType.ANNUITY
+        );
+    }
+
+    public static CreditResponseDto toCreditResponseDto(Credit credit) {
+        return new CreditResponseDto(
+                credit.getId(),
+                buildGazprombankResponseDto(),
+                credit.getName(),
+                credit.getProductUrl(),
+                credit.getIsActive(),
+                new CurrencyResponseDto(credit.getCurrency().getNum(), credit.getCurrency().getCurrency(),
+                        credit.getCurrency().getCode()),
+                credit.getAmountMin(),
+                credit.getAmountMax(),
+                credit.getTerm(),
+                credit.getRate(),
+                credit.getPaymentType().getTitle()
+        );
+    }
+
+    private static BankResponseDto buildGazprombankResponseDto() {
+        return new BankResponseDto(
+                "044525823",
+                "Газпромбанк",
+                "АО \"Газпромбанк\"",
+                "Один из крупнейших универсальных финансовых институтов России",
+                "gazprombank-logo.svg",
+                "https://www.gazprombank.ru"
+        );
+    }
 }

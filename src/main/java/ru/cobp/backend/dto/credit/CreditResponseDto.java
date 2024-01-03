@@ -1,6 +1,7 @@
 package ru.cobp.backend.dto.credit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankResponseDto;
@@ -9,6 +10,7 @@ import ru.cobp.backend.dto.currency.CurrencyResponseDto;
 @Schema(description = "Кредит")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreditResponseDto {
 
     @Schema(description = "Id")
