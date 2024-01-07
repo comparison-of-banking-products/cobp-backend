@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
+import ru.cobp.backend.model.deposit.ScrapedDeposit;
 import ru.cobp.backend.repository.deposit.DepositRepository;
+import ru.cobp.backend.repository.deposit.ScrapedDepositRepository;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class DepositServiceImpl implements DepositService {
     private static final QDeposit Q_DEPOSIT = QDeposit.deposit;
 
     private final DepositRepository depositRepository;
+
+    private final ScrapedDepositRepository scrapedDepositRepository;
 
     @Override
     public List<Deposit> findAllDeposits(
@@ -57,6 +61,11 @@ public class DepositServiceImpl implements DepositService {
         );
         Iterable<Deposit> deposits = depositRepository.findAll(p, pageable);
         return Utils.toList(deposits);
+    }
+
+    @Override
+    public List<ScrapedDeposit> getAllScrapedDeposits() {
+        return scrapedDepositRepository.findAll();
     }
 
     private Predicate buildQDepositMaximumRatePredicateBy(

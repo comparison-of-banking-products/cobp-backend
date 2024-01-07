@@ -2,6 +2,11 @@ package ru.cobp.backend.controller.deposit;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -9,12 +14,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.cobp.backend.dto.deposit.DepositDto;
 import ru.cobp.backend.dto.deposit.DepositResponseDto;
 import ru.cobp.backend.dto.deposit.NewDepositDto;
+import ru.cobp.backend.dto.deposit.ScrapedDepositResponseDto;
 import ru.cobp.backend.mapper.DepositMapper;
 import ru.cobp.backend.model.deposit.Deposit;
+import ru.cobp.backend.model.deposit.ScrapedDeposit;
 import ru.cobp.backend.service.deposit.DepositService;
 
 import java.util.List;
@@ -117,6 +125,24 @@ public class DepositController {
     @PutMapping("/{id}")
     public DepositDto updateDeposit(@PathVariable Long id, @RequestBody DepositDto depositDto) {
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Operation(
+            summary = "Найти скрапленные вклады",
+            description = "Конечная точка для поиска вкладов собранных технологией веб-скрапинга"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Найдены скрапленные вклады",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    array = @ArraySchema(schema = @Schema(implementation = ScrapedDepositResponseDto.class))
+            )}
+    )})
+    @GetMapping("/scraped")
+    public List<ScrapedDepositResponseDto> getAllScrapedDeposits() {
+        List<ScrapedDeposit> deposits = depositService.getAllScrapedDeposits();
+        return depositMapper.toScrapedDepositResponseDtos(deposits);
     }
 
 }

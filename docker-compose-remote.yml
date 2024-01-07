@@ -31,3 +31,13 @@ services:
       - "8081:80"
     depends_on:
       - cobp-backend
+
+  cobp-scraper:
+    image: ghcr.io/comparison-of-banking-products/cobp-scraper:dev
+    container_name: cobp-scraper
+    depends_on:
+      - cobp-backend
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cobp-database:5432/cobp
+      - SPRING_DATASOURCE_USERNAME=dev
+      - SPRING_DATASOURCE_PASSWORD=dev
