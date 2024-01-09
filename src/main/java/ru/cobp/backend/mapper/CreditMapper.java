@@ -12,7 +12,7 @@ import ru.cobp.backend.model.credit.PaymentType;
 import java.util.List;
 
 @Component
-@Mapper(uses = BankMapper.class)
+@Mapper(uses = {BankMapper.class, CurrencyMapper.class})
 public interface CreditMapper {
 
     @Mapping(source = "paymentType", target = "paymentType", qualifiedByName = "paymentTypeToString")

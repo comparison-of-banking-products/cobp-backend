@@ -1,12 +1,14 @@
 package ru.cobp.backend.dto.bank;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Schema(description = "Полное представление банка")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class BankResponseDto {
 
     @Schema(description = "БИК")

@@ -44,18 +44,18 @@ public class BankController {
     }
 
     @PutMapping("/{bic}")
-    public NewBankDto update(@PathVariable Long bic, @RequestBody NewBankDto newBankDto) {
+    public NewBankDto update(@PathVariable String bic, @RequestBody NewBankDto newBankDto) {
         return bankService.update(bic, newBankDto);
     }
 
     @GetMapping("/{bic}")
-    public BankResponseDto getByBic(@PathVariable Long bic) {
+    public BankResponseDto getByBic(@PathVariable String bic) {
         Bank bank = bankService.getByBic(bic);
         return bankMapper.toBankResponseDto(bank);
     }
 
     @DeleteMapping("/{bic}")
-    public void delete(@PathVariable Long bic) {
+    public void delete(@PathVariable String bic) {
         bankService.deleteByBic(bic);
     }
 

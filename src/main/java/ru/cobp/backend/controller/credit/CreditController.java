@@ -9,8 +9,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -62,11 +67,14 @@ public class CreditController {
             @RequestParam(required = false) @Parameter(description = "Кредитная ставка") Double rate,
             @RequestParam(required = false) @Parameter(description = "Минимальный срок кредита") Integer minPeriod,
             @RequestParam(required = false) @Parameter(description = "Максимальный срок кредита") Integer maxPeriod,
-            @RequestParam(required = false) @Parameter(description = "Тип платежа") PaymentType paymentType
+            @RequestParam(required = false) @Parameter(description = "Тип платежа") PaymentType paymentType,
+            @RequestParam(defaultValue = "0") @Parameter(description = "Индекс страницы") @PositiveOrZero int page,
+            @RequestParam(defaultValue = "10") @Parameter(description = "Размер страницы") @Positive int size
     ) {
         CreditParams params = new CreditParams(isActive, currencyNum, minAmount, maxAmount, rate, minPeriod,
                 maxPeriod, paymentType);
-        List<Credit> credits = creditService.getAll(params);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("rate").ascending());
+        List<Credit> credits = creditService.getAll(params, pageable);
         return creditMapper.toCreditResponseDtos(credits);
     }
 
@@ -102,7 +110,8 @@ public class CreditController {
     )})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreditResponseDto create(@Valid @RequestBody @Parameter(description = "Новый кредит", required = true) NewCreditDto newCreditDto) {
+    public CreditResponseDto create(@Valid @RequestBody @Parameter(description = "Новый кредит",
+            required = true) NewCreditDto newCreditDto) {
         Credit credit = creditService.create(newCreditDto);
         return creditMapper.toCreditResponseDto(credit);
     }

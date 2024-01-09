@@ -22,17 +22,17 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public NewBankDto update(Long bic, NewBankDto updBank) {
+    public NewBankDto update(String bic, NewBankDto updBank) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public Bank getByBic(Long bic) {
+    public Bank getByBic(String bic) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public void deleteByBic(Long bic) {
+    public void deleteByBic(String bic) {
 
     }
 
