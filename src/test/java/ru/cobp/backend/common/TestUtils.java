@@ -44,7 +44,10 @@ public class TestUtils {
                 "Газпромбанк Вклад \"Копить\", для всех",
                 "https://www.gazprombank.ru/personal/increase/deposits/detail/2491/",
                 1,
-                13.80
+                13.80,
+                false,
+                false,
+                false
         );
     }
 
