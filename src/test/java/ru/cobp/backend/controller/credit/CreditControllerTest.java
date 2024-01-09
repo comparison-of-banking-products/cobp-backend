@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.cobp.backend.common.TestUtils;
@@ -100,7 +101,8 @@ public class CreditControllerTest {
         List<CreditResponseDto> expectedList = List.of(TestUtils
                 .toCreditResponseDto(TestUtils.buildGazprombankCredit()));
 
-        when(creditService.getAll(any(CreditParams.class))).thenReturn(List.of(TestUtils.buildGazprombankCredit()));
+        when(creditService.getAll(any(CreditParams.class), any(Pageable.class)))
+                .thenReturn(List.of(TestUtils.buildGazprombankCredit()));
         when(creditMapper.toCreditResponseDtos(anyList())).thenReturn(expectedList);
 
         String result = mockMvc.perform(get("/v1/credits"))
@@ -111,7 +113,7 @@ public class CreditControllerTest {
                 .getContentAsString(StandardCharsets.UTF_8);
 
         assertEquals(objectMapper.writeValueAsString(expectedList), result);
-        verify(creditService).getAll(any(CreditParams.class));
+        verify(creditService).getAll(any(CreditParams.class), any(Pageable.class));
     }
 
     @SneakyThrows
