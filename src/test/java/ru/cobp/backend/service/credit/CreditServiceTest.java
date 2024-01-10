@@ -91,7 +91,7 @@ public class CreditServiceTest {
         Currency currency = TestUtils.buildRubCurrency();
         Credit expectedCredit = TestUtils.buildGazprombankCredit();
 
-        when(bankService.getByBic(newCreditDto.getBanksBic())).thenReturn(bank);
+        when(bankService.getByBic(newCreditDto.getBankBic())).thenReturn(bank);
         when(currencyService.getById(newCreditDto.getCurrencyNum())).thenReturn(currency);
         when(creditRepository.save(any(Credit.class))).thenReturn(expectedCredit);
 
@@ -109,7 +109,7 @@ public class CreditServiceTest {
     void createCredit_whenBankOrCurrencyNotValid_thenNotFoundExceptionTrown() {
         NewCreditDto newCreditDto = TestUtils.buildNewGazprombankCreditDto();
 
-        when(bankService.getByBic(newCreditDto.getBanksBic())).thenThrow(NotFoundException.class);
+        when(bankService.getByBic(newCreditDto.getBankBic())).thenThrow(NotFoundException.class);
 
         assertThrows(NotFoundException.class, () -> creditService.create(newCreditDto));
 
