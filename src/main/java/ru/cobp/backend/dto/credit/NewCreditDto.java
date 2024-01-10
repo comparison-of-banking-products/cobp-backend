@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class NewCreditDto {
 
     @NotBlank
-    private String banksBic;
+    private String bankBic;
 
     @NotBlank
     @Size(min = 3, max = 100)
