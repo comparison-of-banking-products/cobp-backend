@@ -17,7 +17,7 @@ public class CreditDto {
     private Long id;
 
     @Schema(description = "БИК банка")
-    private String banksBic;
+    private String bankBic;
 
     @Schema(description = "Название кредита")
     private String name;
