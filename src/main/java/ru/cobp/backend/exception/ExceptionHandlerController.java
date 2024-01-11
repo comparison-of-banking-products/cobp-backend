@@ -47,4 +47,11 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(errorResponse, httpStatus);
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handle(DuplicateException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
+    }
+
 }

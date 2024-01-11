@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewBankDto {
+public class BankCreateUpdateDto {
 
     @NotNull
     private String bic;

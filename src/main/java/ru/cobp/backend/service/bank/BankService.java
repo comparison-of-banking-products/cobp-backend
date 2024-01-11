@@ -1,20 +1,19 @@
 package ru.cobp.backend.service.bank;
 
-import ru.cobp.backend.dto.bank.NewBankDto;
+import ru.cobp.backend.dto.bank.BankSort;
 import ru.cobp.backend.model.bank.Bank;
 
 import java.util.List;
 
 public interface BankService {
 
-    NewBankDto create(NewBankDto newBank);
+    Bank create(Bank newBank);
 
-    NewBankDto update(Long bic, NewBankDto updBank);
+    Bank update(String bic, Bank updBank);
 
-    Bank getByBic(Long bic);
+    Bank getBankByBicOrThrowException(String bic);
 
-    void deleteByBic(Long bic);
+    void deleteByBic(String bic);
 
-    List<Bank> getAll();
-
+    List<Bank> getAll(BankSort sort);
 }

@@ -12,4 +12,8 @@ public class ExceptionMessage {
 
     public static final String LOGO_FILE_NOT_FOUND = "Logo file not found";
 
+    public static final String BANK_NOT_FOUND = "Bank with BIC %s not found";
+
+    public static final String DUPLICATE_EXCEPTION = "Object of type %s already exists";
+
 }
