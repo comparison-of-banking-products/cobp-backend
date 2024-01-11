@@ -27,8 +27,8 @@ jobs:
           cd target
           java -jar cobp-backend-0.0.1-SNAPSHOT.jar &
 
-      - name: Sleep for 30 seconds
-        run: sleep 30s
+      - name: Sleep for 3 seconds
+        run: sleep 3s
         shell: bash
 
       - name: Test Backend API with Postman collection
