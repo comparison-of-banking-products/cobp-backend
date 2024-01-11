@@ -10,7 +10,7 @@ import ru.cobp.backend.model.calculator.CalculatedDeposit;
 import java.util.List;
 
 @Component
-@Mapper
+@Mapper(uses = {DepositMapper.class, CreditMapper.class})
 public interface CalculatorMapper {
 
     CalculatedDepositResponseDto toCalculatedDepositResponseDto(CalculatedDeposit calculatedDeposit);

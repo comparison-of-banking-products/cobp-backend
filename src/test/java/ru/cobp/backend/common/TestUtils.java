@@ -18,9 +18,11 @@ import ru.cobp.backend.model.calculator.CalculatedDeposit;
 import ru.cobp.backend.model.credit.Credit;
 import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.currency.Currency;
+import ru.cobp.backend.model.currency.CurrencyRate;
 import ru.cobp.backend.model.deposit.Deposit;
 
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -58,9 +60,13 @@ public class TestUtils {
     }
 
     public static List<CalculatedDeposit> buildGazprombankCalculatedDeposits() {
-        return List.of(new CalculatedDeposit(
+        return List.of(buildGazprombankCalculatedDeposit());
+    }
+
+    public static CalculatedDeposit buildGazprombankCalculatedDeposit() {
+        return new CalculatedDeposit(
                 buildGazprombankDeposit(), 2070.0, 172.5, 15172.5
-        ));
+        );
     }
 
     public static List<CalculatedDepositResponseDto> buildGazprombankCalculatedDepositResponseDtos() {
@@ -96,7 +102,11 @@ public class TestUtils {
     }
 
     public static List<CalculatedCredit> buildGazprombankCalculatedCredits() {
-        return List.of(new CalculatedCredit(
+        return List.of(buildGazprombankCalculatedCredit());
+    }
+
+    public static CalculatedCredit buildGazprombankCalculatedCredit() {
+        return new CalculatedCredit(
                 buildGazprombankCredit(),
                 883.12,
                 11480.57,
@@ -134,7 +144,40 @@ public class TestUtils {
         return new Currency(643L, "RUB", "Российский рубль");
     }
 
-    public static List<Deposit> buildGazprombankDeposits() {
+    public static List<Bank> buildBanks() {
+        return List.of(buildGazprombank());
+    }
+
+    public static List<Credit> buildCredits() {
+        return List.of(buildGazprombankCredit());
+    }
+
+    public static List<Currency> buildCurrencies() {
+        return List.of(buildRubCurrency());
+    }
+
+    public static CurrencyRate buildUsdRubCurrencyRate() {
+        return new CurrencyRate(
+                1L,
+                LocalDateTime.parse("2024-01-10T11:30:00.000"),
+                buildUsdCurrency(),
+                buildRubCurrency(),
+                90.4040,
+                89.6883,
+                LocalDateTime.parse("2023-12-30T11:30:00.000"),
+                90.4040 - 89.6883
+        );
+    }
+
+    public static Currency buildUsdCurrency() {
+        return new Currency(840L, "USD", "Доллар США");
+    }
+
+    public static List<CurrencyRate> buildCurrencyRates() {
+        return List.of(buildUsdRubCurrencyRate());
+    }
+
+    public static List<Deposit> buildDeposits() {
         return List.of(buildGazprombankDeposit());
     }
 
