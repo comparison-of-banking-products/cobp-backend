@@ -57,7 +57,7 @@ public class CreditServiceTest {
                 null, null, null);
         Predicate p = new BooleanBuilder();
 
-        when(creditRepository.findAll(p, page)).thenReturn(new PageImpl<Credit>(expectedList)) ;
+        when(creditRepository.findAll(p, page)).thenReturn(new PageImpl<>(expectedList)) ;
 
         List<Credit> actualList = creditService.getAll(params, page);
         assertEquals(expectedList, actualList);
@@ -76,7 +76,7 @@ public class CreditServiceTest {
     }
 
     @Test
-    void getById_whenNotFound_thenNotFoundExceptionTrown() {
+    void getById_whenNotFound_thenNotFoundExceptionThrown() {
         long creditId = 2L;
 
         when(creditRepository.findById(creditId)).thenReturn(Optional.empty());
@@ -102,11 +102,11 @@ public class CreditServiceTest {
         assertEquals(expectedCredit.getName(), savedCredit.getName());
         assertEquals(expectedCredit.getProductUrl(), savedCredit.getProductUrl());
         assertEquals(expectedCredit.getTerm(), savedCredit.getTerm());
-        assertEquals(expectedCredit.getRate(), savedCredit.getRate());;
+        assertEquals(expectedCredit.getRate(), savedCredit.getRate());
     }
 
     @Test
-    void createCredit_whenBankOrCurrencyNotValid_thenNotFoundExceptionTrown() {
+    void createCredit_whenBankOrCurrencyNotValid_thenNotFoundExceptionThrown() {
         NewCreditDto newCreditDto = TestUtils.buildNewGazprombankCreditDto();
 
         when(bankService.getByBic(newCreditDto.getBankBic())).thenThrow(NotFoundException.class);
@@ -136,7 +136,7 @@ public class CreditServiceTest {
     }
 
     @Test
-    void updateCredit_whenCreditNotFound_thenNotFoundExceptionTrown() {
+    void updateCredit_whenCreditNotFound_thenNotFoundExceptionThrown() {
         Long creditId = 2L;
 
         when(creditRepository.findById(creditId)).thenReturn(Optional.empty());
@@ -156,7 +156,7 @@ public class CreditServiceTest {
     }
 
     @Test
-    void deleteCredit_whenCreditNotFound_thenNotFoundExceptionTrown() {
+    void deleteCredit_whenCreditNotFound_thenNotFoundExceptionThrown() {
         Long creditId = 2L;
 
         when(creditRepository.findById(creditId)).thenReturn(Optional.empty());

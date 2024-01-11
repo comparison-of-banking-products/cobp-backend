@@ -98,8 +98,7 @@ public class CreditControllerTest {
     @SneakyThrows
     @Test
     void getAllCredits() {
-        List<CreditResponseDto> expectedList = List.of(TestUtils
-                .toCreditResponseDto(TestUtils.buildGazprombankCredit()));
+        List<CreditResponseDto> expectedList = TestUtils.buildCreditResponseDtos();
 
         when(creditService.getAll(any(CreditParams.class), any(Pageable.class)))
                 .thenReturn(List.of(TestUtils.buildGazprombankCredit()));

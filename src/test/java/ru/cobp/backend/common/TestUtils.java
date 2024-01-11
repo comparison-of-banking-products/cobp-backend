@@ -20,6 +20,7 @@ import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.deposit.Deposit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -199,6 +200,12 @@ public class TestUtils {
                 credit.getRate(),
                 credit.getPaymentType().getTitle()
         );
+    }
+
+    public static List<CreditResponseDto> buildCreditResponseDtos() {
+        List<CreditResponseDto> creditResponseDtoList = new ArrayList<>();
+        creditResponseDtoList.add(toCreditResponseDto(buildGazprombankCredit()));
+        return creditResponseDtoList;
     }
 
     private static BankResponseDto buildGazprombankResponseDto() {
