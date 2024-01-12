@@ -16,7 +16,6 @@ import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.repository.bank.BankRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -60,7 +59,7 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public Bank getBankByBicOrThrowException(String bic) {
-        return bankRepository.findByBic(bic).orElseThrow(
+        return bankRepository.findById(bic).orElseThrow(
                 () -> new NotFoundException(
                         String.format(ExceptionMessage.BANK_NOT_FOUND, bic)
                 ));
@@ -70,7 +69,7 @@ public class BankServiceImpl implements BankService {
     @Transactional
     public void deleteByBic(String bic) {
         getBankByBicOrThrowException(bic);
-        bankRepository.deleteByBic(bic);
+        bankRepository.deleteById(bic);
     }
 
     @Override
@@ -99,8 +98,7 @@ public class BankServiceImpl implements BankService {
     }
 
     private void checkIfBankExistsByBic(String bic) {
-        Optional<Bank> optionalBank = bankRepository.findByBic(bic);
-        if (optionalBank.isPresent()) {
+        if (bankRepository.findById(bic).isPresent()) {
             throw new DuplicateException(
                     String.format(ExceptionMessage.DUPLICATE_EXCEPTION, Bank.class)
             );
