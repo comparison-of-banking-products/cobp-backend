@@ -112,7 +112,7 @@ public class BankController {
             )}
     )})
     @DeleteMapping("/{bic}")
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String bic) {
         bankService.deleteByBic(bic);
     }
