@@ -60,19 +60,29 @@ public class TestUtils {
     }
 
     public static List<CalculatedDeposit> buildGazprombankCalculatedDeposits() {
-        return List.of(buildGazprombankCalculatedDeposit());
+        return List.of(buildCalculatedDeposit());
     }
 
-    public static CalculatedDeposit buildGazprombankCalculatedDeposit() {
+    public static CalculatedDeposit buildCalculatedDeposit() {
         return new CalculatedDeposit(
-                buildGazprombankDeposit(), 2070.0, 172.5, 15172.5
+                buildGazprombankDeposit(),
+                13800.0,
+                1149.9999999999998,
+                101150.0
         );
     }
 
     public static List<CalculatedDepositResponseDto> buildGazprombankCalculatedDepositResponseDtos() {
-        return List.of(new CalculatedDepositResponseDto(
-                buildGazprombankDepositShortResponseDto(), 2070.0, 172.5, 15172.5
-        ));
+        return List.of(buildCalculatedDepositResponseDto());
+    }
+
+    public static CalculatedDepositResponseDto buildCalculatedDepositResponseDto() {
+        return new CalculatedDepositResponseDto(
+                buildGazprombankDepositShortResponseDto(),
+                13800.0,
+                1149.9999999999998,
+                101150.0
+        );
     }
 
     public static Credit buildGazprombankCredit() {
@@ -108,19 +118,23 @@ public class TestUtils {
     public static CalculatedCredit buildGazprombankCalculatedCredit() {
         return new CalculatedCredit(
                 buildGazprombankCredit(),
-                883.12,
-                11480.57,
-                1480.57
+                8831.207127687578,
+                114805.6926599385,
+                14805.692659938504
         );
     }
 
     public static List<CalculatedCreditResponseDto> buildGazprombankCalculatedCreditResponseDtos() {
-        return List.of(new CalculatedCreditResponseDto(
+        return List.of(buildGazprombankCalculatedCreditResponseDto());
+    }
+
+    public static CalculatedCreditResponseDto buildGazprombankCalculatedCreditResponseDto() {
+        return new CalculatedCreditResponseDto(
                 buildGazprombankCreditShortResponseDto(),
-                883.12,
-                11480.57,
-                1480.57
-        ));
+                8831.207127687578,
+                114805.6926599385,
+                14805.692659938504
+        );
     }
 
     public static Bank buildGazprombank() {
@@ -260,6 +274,10 @@ public class TestUtils {
                 "gazprombank-logo.svg",
                 "https://www.gazprombank.ru"
         );
+    }
+
+    public static List<Credit> buildGazprombankCredits() {
+        return List.of(buildGazprombankCredit());
     }
 
 }
