@@ -21,8 +21,8 @@ import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.currency.CurrencyRate;
 import ru.cobp.backend.model.deposit.Deposit;
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -111,7 +111,7 @@ public class TestUtils {
                 883.12,
                 11480.57,
                 1480.57
-        ));
+        );
     }
 
     public static List<CalculatedCreditResponseDto> buildGazprombankCalculatedCreditResponseDtos() {
