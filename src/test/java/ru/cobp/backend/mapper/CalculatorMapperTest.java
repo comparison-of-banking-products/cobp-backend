@@ -1,8 +1,8 @@
 package ru.cobp.backend.mapper;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.cobp.backend.common.TestUtils;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
@@ -20,14 +20,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest
 class CalculatorMapperTest {
 
-    CalculatorMapper calculatorMapper;
-
-    @BeforeEach
-    void setUp() {
-        calculatorMapper = Mappers.getMapper(CalculatorMapper.class);
-    }
+    @Autowired
+    private CalculatorMapper calculatorMapper;
 
     @Test
     void whenMapCalculatedDeposit_expectCalculatedDepositResponseDto() {
