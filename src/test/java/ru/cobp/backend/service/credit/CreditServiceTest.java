@@ -29,7 +29,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CreditServiceTest {
@@ -57,7 +59,7 @@ public class CreditServiceTest {
                 null, null, null);
         Predicate p = new BooleanBuilder();
 
-        when(creditRepository.findAll(p, page)).thenReturn(new PageImpl<>(expectedList)) ;
+        when(creditRepository.findAll(p, page)).thenReturn(new PageImpl<>(expectedList));
 
         List<Credit> actualList = creditService.getAll(params, page);
         assertEquals(expectedList, actualList);
