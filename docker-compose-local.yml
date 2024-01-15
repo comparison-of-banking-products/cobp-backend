@@ -12,7 +12,8 @@ services:
       - POSTGRES_PASSWORD=dev
 
   cobp-backend:
-    image: ghcr.io/comparison-of-banking-products/cobp-backend:dev
+    build: .
+    image: cobp-backend
     container_name: cobp-backend
     ports:
       - "8080:8080"
@@ -22,12 +23,4 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://cobp-database:5432/cobp
       - SPRING_DATASOURCE_USERNAME=dev
       - SPRING_DATASOURCE_PASSWORD=dev
-      - SPRING_PROFILES_ACTIVE=remote
-
-  cobp-front:
-    image: ghcr.io/comparison-of-banking-products/cobp-frontend:dev
-    container_name: cobp-front
-    ports:
-      - "8081:80"
-    depends_on:
-      - cobp-backend
+      - SPRING_PROFILES_ACTIVE=local

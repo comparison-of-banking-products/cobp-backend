@@ -75,6 +75,9 @@ public class CalculatorController {
             @Parameter(description = "Вклад с частичным снятием")
             @RequestParam(required = false) Boolean partialWithdrawal,
 
+            @Parameter(description = "Список БИК-ов")
+            @RequestParam(defaultValue = "") List<String> bics,
+
             @Parameter(description = "Индекс страницы")
             @RequestParam(defaultValue = "0") @PositiveOrZero int page,
 
@@ -83,7 +86,7 @@ public class CalculatorController {
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.DEPOSIT_RATE).descending());
         List<CalculatedDeposit> deposits = calculatorService.getAllMaximumRateCalculatedDeposits(
-                amount, term, capitalization, replenishment, partialWithdrawal, pageable
+                amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
 
         return calculatorMapper.toCalculatedDepositResponseDtos(deposits);
@@ -110,6 +113,9 @@ public class CalculatorController {
             @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term,
 
+            @Parameter(description = "Список БИК-ов")
+            @RequestParam(defaultValue = "") List<String> bics,
+
             @Parameter(description = "Индекс страницы")
             @RequestParam(defaultValue = "0") @PositiveOrZero int page,
 
@@ -117,7 +123,7 @@ public class CalculatorController {
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.CREDIT_RATE).ascending());
-        List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(amount, term, pageable);
+        List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(amount, term, bics, pageable);
 
         return calculatorMapper.toCalculatedCreditResponseDtos(credits);
     }

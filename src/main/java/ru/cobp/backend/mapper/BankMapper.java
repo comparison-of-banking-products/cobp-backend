@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
+import ru.cobp.backend.dto.bank.BankCreateUpdateDto;
 import ru.cobp.backend.model.bank.Bank;
 
 import java.util.List;
@@ -17,5 +18,7 @@ public interface BankMapper {
     BankResponseDto toBankResponseDto(Bank bank);
 
     BankShortResponseDto toBankShortResponseDto(Bank bank);
+
+    Bank fromBankCreateUpdateDto(BankCreateUpdateDto createUpdateDto);
 
 }
