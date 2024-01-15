@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
+import ru.cobp.backend.model.deposit.ScrapedDeposit;
 import ru.cobp.backend.repository.deposit.DepositRepository;
+import ru.cobp.backend.repository.deposit.ScrapedDepositRepository;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class DepositServiceImpl implements DepositService {
     private static final QDeposit Q_DEPOSIT = QDeposit.deposit;
 
     private final DepositRepository depositRepository;
+
+    private final ScrapedDepositRepository scrapedDepositRepository;
 
     @Override
     public List<Deposit> findAllDeposits(
@@ -50,17 +54,28 @@ public class DepositServiceImpl implements DepositService {
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,
+            List<String> bics,
             Pageable pageable
     ) {
         Predicate p = buildQDepositMaximumRatePredicateBy(
-                amount, term, capitalization, replenishment, partialWithdrawal
+                amount, term, capitalization, replenishment, partialWithdrawal, bics
         );
         Iterable<Deposit> deposits = depositRepository.findAll(p, pageable);
         return Utils.toList(deposits);
     }
 
+    @Override
+    public List<ScrapedDeposit> getAllScrapedDeposits() {
+        return scrapedDepositRepository.findAll();
+    }
+
     private Predicate buildQDepositMaximumRatePredicateBy(
-            int amount, int term, Boolean capitalization, Boolean replenishment, Boolean partialWithdrawal
+            int amount,
+            int term,
+            Boolean capitalization,
+            Boolean replenishment,
+            Boolean partialWithdrawal,
+            List<String> bics
     ) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_DEPOSIT.rate.loe(JPAExpressions
@@ -81,6 +96,10 @@ public class DepositServiceImpl implements DepositService {
 
         if (partialWithdrawal != null) {
             builder.and(Q_DEPOSIT.partialWithdrawal.eq(partialWithdrawal));
+        }
+
+        if (!bics.isEmpty()) {
+            builder.and((Q_DEPOSIT.bank.bic.in(bics)));
         }
 
         return builder;

@@ -14,9 +14,12 @@ public interface CalculatorService {
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,
+            List<String> bics,
             Pageable pageable
     );
 
-    List<CalculatedCredit> getAllMinimumRateCalculatedCredits(int amount, int term, Pageable pageable);
+    List<CalculatedCredit> getAllMinimumRateCalculatedCredits(
+            int amount, int term, List<String> bics, Pageable pageable
+    );
 
 }

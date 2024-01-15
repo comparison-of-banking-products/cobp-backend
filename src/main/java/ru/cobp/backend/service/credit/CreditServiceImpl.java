@@ -5,7 +5,6 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
@@ -39,17 +38,16 @@ public class CreditServiceImpl implements CreditService {
     private final BankService bankService;
 
     @Override
-    public List<Credit> findAllMinimumRateCredits(int amount, int term, Pageable pageable) {
-        Predicate p = buildQDepositMinimumRatePredicateBy(amount, term);
+    public List<Credit> findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable) {
+        Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, bics);
         Iterable<Credit> credits = creditRepository.findAll(p, pageable);
         return Utils.toList(credits);
     }
 
     @Override
-    public List<Credit> getAll(CreditParams params) {
+    public List<Credit> getAll(CreditParams params, Pageable pageable) {
         Predicate p = buildQCreditPredicateByParams(params);
-        Sort s = Sort.by("rate").ascending();
-        return Utils.toList(creditRepository.findAll(p, s));
+        return Utils.toList(creditRepository.findAll(p, pageable));
     }
 
     @Override
@@ -60,7 +58,7 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Credit create(NewCreditDto newCreditDto) {
-        Bank bank = bankService.getByBic(newCreditDto.getBanksBic());
+        Bank bank = bankService.getBankByBicOrThrowException(newCreditDto.getBankBic());
         Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
         Credit credit = toCredit(newCreditDto, bank, currency);
         return creditRepository.save(credit);
@@ -82,8 +80,8 @@ public class CreditServiceImpl implements CreditService {
         }
     }
 
-    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term) {
-        return new BooleanBuilder()
+    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term, List<String> bics) {
+        BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_CREDIT.rate.goe(JPAExpressions
                         .select(Q_CREDIT.rate.min())
                         .from(Q_CREDIT)
@@ -91,6 +89,12 @@ public class CreditServiceImpl implements CreditService {
                 .and(Q_CREDIT.amountMin.loe(amount))
                 .and(Q_CREDIT.amountMax.goe(amount))
                 .and(Q_CREDIT.term.eq(term));
+
+        if (!bics.isEmpty()) {
+            builder.and((Q_CREDIT.bank.bic.in(bics)));
+        }
+
+        return builder;
     }
 
     private Predicate buildQCreditPredicateByParams(CreditParams params) {

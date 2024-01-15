@@ -1,9 +1,11 @@
 package ru.cobp.backend.dto.credit;
 
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import ru.cobp.backend.model.credit.PaymentType;
 
 @Value
+@RequiredArgsConstructor
 public class CreditParams {
 
     Boolean isActive;

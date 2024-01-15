@@ -27,4 +27,13 @@ public class DepositShortResponseDto {
     @Schema(description = "Процентная ставка")
     private Double rate;
 
+    @Schema(description = "С капитализацией")
+    private Boolean capitalization;
+
+    @Schema(description = "С пополнением")
+    private Boolean replenishment;
+
+    @Schema(description = "С частичным снятием")
+    private Boolean partialWithdrawal;
+
 }

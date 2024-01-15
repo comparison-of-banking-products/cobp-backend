@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import ru.cobp.backend.model.bank.Bank;
 
 @Repository
-public interface BankRepository extends JpaRepository<Bank, Long>, QuerydslPredicateExecutor<Bank> {
+public interface BankRepository extends JpaRepository<Bank, String>, QuerydslPredicateExecutor<Bank> {
 }

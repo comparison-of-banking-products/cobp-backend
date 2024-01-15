@@ -1,5 +1,6 @@
 package ru.cobp.backend.controller.calculator;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -9,7 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.cobp.backend.common.TestUtils;
 import ru.cobp.backend.mapper.CalculatorMapper;
+import ru.cobp.backend.model.calculator.CalculatedCredit;
+import ru.cobp.backend.model.calculator.CalculatedDeposit;
 import ru.cobp.backend.service.calculator.CalculatorService;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -33,10 +38,13 @@ class CalculatorControllerTest {
     CalculatorMapper calculatorMapper;
 
     @Test
-    void whenGetCalculatedDeposits_expectActualDeposits() throws Exception {
+    @SneakyThrows
+    void whenGetCalculatedDeposits_expectCalculatedDepositResponseDtos() {
+        List<CalculatedDeposit> expected = TestUtils.buildGazprombankCalculatedDeposits();
+
         when(calculatorService.getAllMaximumRateCalculatedDeposits(
-                anyInt(), anyInt(), anyBoolean(), anyBoolean(), anyBoolean(), any(Pageable.class)
-        )).thenReturn(TestUtils.buildGazprombankCalculatedDeposits());
+                anyInt(), anyInt(), anyBoolean(), anyBoolean(), anyBoolean(), anyList(), any(Pageable.class)
+        )).thenReturn(expected);
 
         when(calculatorMapper.toCalculatedDepositResponseDtos(anyList()))
                 .thenReturn(TestUtils.buildGazprombankCalculatedDepositResponseDtos());
@@ -47,13 +55,16 @@ class CalculatorControllerTest {
                         .queryParam("term", String.valueOf(1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].annualInterest").value(2070.0));
+                .andExpect(jsonPath("$[0].annualInterest").value(expected.get(0).getAnnualInterest()));
     }
 
     @Test
-    void whenGetCalculatedCredits_expectActualCredits() throws Exception {
-        when(calculatorService.getAllMinimumRateCalculatedCredits(anyInt(), anyInt(), any(Pageable.class)))
-                .thenReturn(TestUtils.buildGazprombankCalculatedCredits());
+    @SneakyThrows
+    void whenGetCalculatedCredits_expectCalculatedCreditResponseDtos() {
+        List<CalculatedCredit> expected = TestUtils.buildGazprombankCalculatedCredits();
+
+        when(calculatorService.getAllMinimumRateCalculatedCredits(anyInt(), anyInt(), anyList(), any(Pageable.class)))
+                .thenReturn(expected);
 
         when(calculatorMapper.toCalculatedCreditResponseDtos(anyList()))
                 .thenReturn(TestUtils.buildGazprombankCalculatedCreditResponseDtos());
@@ -64,7 +75,7 @@ class CalculatorControllerTest {
                         .queryParam("term", String.valueOf(13)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].monthlyPayment").value(883.12));
+                .andExpect(jsonPath("$[0].monthlyPayment").value(expected.get(0).getMonthlyPayment()));
     }
 
 }

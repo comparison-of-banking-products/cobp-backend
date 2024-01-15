@@ -1,19 +1,17 @@
 package ru.cobp.backend.model.credit;
 
+import lombok.Getter;
+
+@Getter
 public enum PaymentType {
 
     ANNUITY("Аннуитетный"),
-
     DIFFERENTIAL("Дифференцированный");
 
-    private String title;
+    private final String title;
 
     PaymentType(String title) {
         this.title = title;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     @Override

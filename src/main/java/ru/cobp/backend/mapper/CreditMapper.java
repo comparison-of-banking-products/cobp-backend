@@ -12,16 +12,16 @@ import ru.cobp.backend.model.credit.PaymentType;
 import java.util.List;
 
 @Component
-@Mapper(uses = BankMapper.class)
+@Mapper(uses = {BankMapper.class, CurrencyMapper.class})
 public interface CreditMapper {
+
+    @Named("paymentTypeToString")
+    static String paymentTypeToString(PaymentType paymentType) {
+        return paymentType.getTitle();
+    }
 
     @Mapping(source = "paymentType", target = "paymentType", qualifiedByName = "paymentTypeToString")
     CreditResponseDto toCreditResponseDto(Credit credit);
-
-    @Named("paymentTypeToString")
-    public static String paymentTypeToString(PaymentType paymentType) {
-        return paymentType.getTitle();
-    }
 
     CreditShortResponseDto toCreditShortResponseDto(Credit credit);
 

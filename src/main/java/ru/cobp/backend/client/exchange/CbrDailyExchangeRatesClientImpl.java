@@ -3,7 +3,6 @@ package ru.cobp.backend.client.exchange;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.cobp.backend.dto.exchange.CbrDailyResponseDto;
@@ -21,16 +20,15 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CbrDailyExchangeRatesClientImpl implements ExchangeRatesClient {
 
+    private static final String CBR_DAILY_URL = "https://www.cbr-xml-daily.ru/daily_json.js";
+
     private final RestTemplate restTemplate;
 
     private final ObjectMapper objectMapper;
 
-    @Value("${exchange.rates.cbr-daily-url}")
-    private final String exchangeRatesUrl;
-
     @Override
     public List<ExchangeRate> getExchangeRates(Set<String> currencyCodes) {
-        String json = restTemplate.getForObject(exchangeRatesUrl, String.class);
+        String json = restTemplate.getForObject(CBR_DAILY_URL, String.class);
         try {
             CbrDailyResponseDto dto = objectMapper.readValue(json, CbrDailyResponseDto.class);
 

@@ -2,10 +2,12 @@ package ru.cobp.backend.service.deposit;
 
 import org.springframework.data.domain.Pageable;
 import ru.cobp.backend.model.deposit.Deposit;
+import ru.cobp.backend.model.deposit.ScrapedDeposit;
 
 import java.util.List;
 
 public interface DepositService {
+
     List<Deposit> findAllDeposits(
             Integer minAmount,
             Integer maxAmount,
@@ -25,7 +27,10 @@ public interface DepositService {
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,
+            List<String> bics,
             Pageable pageable
     );
+
+    List<ScrapedDeposit> getAllScrapedDeposits();
 
 }

@@ -31,17 +31,20 @@ public class CalculatorServiceImpl implements CalculatorService {
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,
+            List<String> bics,
             Pageable pageable
     ) {
         List<Deposit> deposits = depositService.findAllMaximumRateDeposits(
-                amount, term, capitalization, replenishment, partialWithdrawal, pageable
+                amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
         return calculateDepositsInterest(deposits, amount, term);
     }
 
     @Override
-    public List<CalculatedCredit> getAllMinimumRateCalculatedCredits(int amount, int term, Pageable pageable) {
-        List<Credit> credits = creditService.findAllMinimumRateCredits(amount, term, pageable);
+    public List<CalculatedCredit> getAllMinimumRateCalculatedCredits(
+            int amount, int term, List<String> bics, Pageable pageable
+    ) {
+        List<Credit> credits = creditService.findAllMinimumRateCredits(amount, term, bics, pageable);
         return calculateCreditsPayments(credits, amount, term);
     }
 
