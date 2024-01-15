@@ -58,7 +58,7 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Credit create(NewCreditDto newCreditDto) {
-        Bank bank = bankService.getByBic(newCreditDto.getBankBic());
+        Bank bank = bankService.getBankByBicOrThrowException(newCreditDto.getBankBic());
         Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
         Credit credit = toCredit(newCreditDto, bank, currency);
         return creditRepository.save(credit);
