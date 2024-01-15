@@ -15,13 +15,13 @@ import java.util.List;
 @Mapper(uses = {BankMapper.class, CurrencyMapper.class})
 public interface CreditMapper {
 
-    @Mapping(source = "paymentType", target = "paymentType", qualifiedByName = "paymentTypeToString")
-    CreditResponseDto toCreditResponseDto(Credit credit);
-
     @Named("paymentTypeToString")
-    public static String paymentTypeToString(PaymentType paymentType) {
+    static String paymentTypeToString(PaymentType paymentType) {
         return paymentType.getTitle();
     }
+
+    @Mapping(source = "paymentType", target = "paymentType", qualifiedByName = "paymentTypeToString")
+    CreditResponseDto toCreditResponseDto(Credit credit);
 
     CreditShortResponseDto toCreditShortResponseDto(Credit credit);
 
