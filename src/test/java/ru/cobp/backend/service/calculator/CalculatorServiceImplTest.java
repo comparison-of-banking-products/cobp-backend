@@ -40,7 +40,7 @@ class CalculatorServiceImplTest {
 
         when(depositService.findAllMaximumRateDeposits(
                 anyInt(), anyInt(), anyBoolean(), anyBoolean(), anyBoolean(), any(Pageable.class)
-        )).thenReturn(TestUtils.buildGazprombankDeposits());
+        )).thenReturn(TestUtils.buildDeposits());
 
         List<CalculatedDeposit> actual = calculatorService.getAllMaximumRateCalculatedDeposits(
                 100_000,
@@ -61,7 +61,7 @@ class CalculatorServiceImplTest {
         List<CalculatedCredit> expected = TestUtils.buildGazprombankCalculatedCredits();
 
         when(creditService.findAllMinimumRateCredits(anyInt(), anyInt(), any(Pageable.class)))
-                .thenReturn(TestUtils.buildGazprombankCredits());
+                .thenReturn(TestUtils.buildCredits());
 
         List<CalculatedCredit> actual = calculatorService.getAllMinimumRateCalculatedCredits(
                 100_000, 13, PageRequest.ofSize(1)

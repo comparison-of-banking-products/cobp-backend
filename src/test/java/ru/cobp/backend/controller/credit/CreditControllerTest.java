@@ -27,7 +27,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,14 +41,14 @@ public class CreditControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @MockBean
     CreditService creditService;
 
     @MockBean
     CreditMapper creditMapper;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @SneakyThrows
     @Test
@@ -82,7 +85,7 @@ public class CreditControllerTest {
                 .thenReturn(updatedCredit);
         when(creditMapper.toCreditResponseDto(updatedCredit)).thenReturn(updatedDto);
 
-        String result =  mockMvc.perform(put("/v1/credits/{id}", creditId)
+        String result = mockMvc.perform(put("/v1/credits/{id}", creditId)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(TestUtils.buildGazprombankCreditDto())))
                 .andDo(print())

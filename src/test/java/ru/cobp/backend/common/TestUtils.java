@@ -60,10 +60,10 @@ public class TestUtils {
     }
 
     public static List<CalculatedDeposit> buildGazprombankCalculatedDeposits() {
-        return List.of(buildCalculatedDeposit());
+        return List.of(buildGazprombankCalculatedDeposit());
     }
 
-    public static CalculatedDeposit buildCalculatedDeposit() {
+    public static CalculatedDeposit buildGazprombankCalculatedDeposit() {
         return new CalculatedDeposit(
                 buildGazprombankDeposit(),
                 13800.0,
@@ -274,10 +274,6 @@ public class TestUtils {
                 "gazprombank-logo.svg",
                 "https://www.gazprombank.ru"
         );
-    }
-
-    public static List<Credit> buildGazprombankCredits() {
-        return List.of(buildGazprombankCredit());
     }
 
 }
