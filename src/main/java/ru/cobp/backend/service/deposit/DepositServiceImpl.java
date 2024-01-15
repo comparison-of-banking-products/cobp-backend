@@ -54,10 +54,11 @@ public class DepositServiceImpl implements DepositService {
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,
+            List<String> bics,
             Pageable pageable
     ) {
         Predicate p = buildQDepositMaximumRatePredicateBy(
-                amount, term, capitalization, replenishment, partialWithdrawal
+                amount, term, capitalization, replenishment, partialWithdrawal, bics
         );
         Iterable<Deposit> deposits = depositRepository.findAll(p, pageable);
         return Utils.toList(deposits);
@@ -69,7 +70,12 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private Predicate buildQDepositMaximumRatePredicateBy(
-            int amount, int term, Boolean capitalization, Boolean replenishment, Boolean partialWithdrawal
+            int amount,
+            int term,
+            Boolean capitalization,
+            Boolean replenishment,
+            Boolean partialWithdrawal,
+            List<String> bics
     ) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_DEPOSIT.rate.loe(JPAExpressions
@@ -90,6 +96,10 @@ public class DepositServiceImpl implements DepositService {
 
         if (partialWithdrawal != null) {
             builder.and(Q_DEPOSIT.partialWithdrawal.eq(partialWithdrawal));
+        }
+
+        if (!bics.isEmpty()) {
+            builder.and((Q_DEPOSIT.bank.bic.in(bics)));
         }
 
         return builder;

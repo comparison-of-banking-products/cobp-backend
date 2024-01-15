@@ -1,6 +1,7 @@
 package ru.cobp.backend.controller.bank;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,8 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankCreateUpdateDto;
+import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankSort;
 import ru.cobp.backend.mapper.BankMapper;
 import ru.cobp.backend.model.bank.Bank;
@@ -130,8 +131,13 @@ public class BankController {
             )}
     )})
     @GetMapping
-    public List<BankResponseDto> getAll(@RequestParam(required = false) BankSort sort) {
-        List<Bank> banks = bankService.getAll(sort);
+    public List<BankResponseDto> getAll(
+            @RequestParam(required = false) BankSort sort,
+
+            @Parameter(description = "Список БИК-ов")
+            @RequestParam(defaultValue = "") List<String> bics
+    ) {
+        List<Bank> banks = bankService.getAll(sort, bics);
         return bankMapper.toBankResponseDtos(banks);
     }
 

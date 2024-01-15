@@ -43,7 +43,7 @@ class CalculatorControllerTest {
         List<CalculatedDeposit> expected = TestUtils.buildGazprombankCalculatedDeposits();
 
         when(calculatorService.getAllMaximumRateCalculatedDeposits(
-                anyInt(), anyInt(), anyBoolean(), anyBoolean(), anyBoolean(), any(Pageable.class)
+                anyInt(), anyInt(), anyBoolean(), anyBoolean(), anyBoolean(), anyList(), any(Pageable.class)
         )).thenReturn(expected);
 
         when(calculatorMapper.toCalculatedDepositResponseDtos(anyList()))
@@ -63,7 +63,7 @@ class CalculatorControllerTest {
     void whenGetCalculatedCredits_expectCalculatedCreditResponseDtos() {
         List<CalculatedCredit> expected = TestUtils.buildGazprombankCalculatedCredits();
 
-        when(calculatorService.getAllMinimumRateCalculatedCredits(anyInt(), anyInt(), any(Pageable.class)))
+        when(calculatorService.getAllMinimumRateCalculatedCredits(anyInt(), anyInt(), anyList(), any(Pageable.class)))
                 .thenReturn(expected);
 
         when(calculatorMapper.toCalculatedCreditResponseDtos(anyList()))

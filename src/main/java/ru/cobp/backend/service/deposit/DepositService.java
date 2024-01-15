@@ -27,6 +27,7 @@ public interface DepositService {
             Boolean capitalization,
             Boolean replenishment,
             Boolean partialWithdrawal,
+            List<String> bics,
             Pageable pageable
     );
 

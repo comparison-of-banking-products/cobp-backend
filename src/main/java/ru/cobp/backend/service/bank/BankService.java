@@ -15,5 +15,6 @@ public interface BankService {
 
     void deleteByBic(String bic);
 
-    List<Bank> getAll(BankSort sort);
+    List<Bank> getAll(BankSort sort, List<String> bics);
+
 }

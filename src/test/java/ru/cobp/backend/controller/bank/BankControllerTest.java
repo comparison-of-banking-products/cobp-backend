@@ -24,21 +24,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BankControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     static BankCreateUpdateDto createUpdateDto;
+
     static List<String> bics = List.of("044525111", "044525187", "044525225", "044525593", "044525823", "044525974");
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     static Stream<Arguments> banksSearchInputsForParameterisedTest() {
         return Stream.of(
@@ -81,8 +88,7 @@ class BankControllerTest {
         mockMvc.perform(post("/v1/banks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUpdateDto)))
-                .andExpect(result -> assertTrue(result.getResolvedException()
-                        instanceof DuplicateException));
+                .andExpect(result -> assertInstanceOf(DuplicateException.class, result.getResolvedException()));
     }
 
     @Test
@@ -108,8 +114,7 @@ class BankControllerTest {
         mockMvc.perform(put("/v1/banks/{bic}", invalidBic)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUpdateDto)))
-                .andExpect(result -> assertTrue(result.getResolvedException()
-                        instanceof NotFoundException));
+                .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
     }
 
     @Test
@@ -121,8 +126,7 @@ class BankControllerTest {
         // then
         mockMvc.perform(get("/v1/banks/{bic}", invalidBic)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(result -> assertTrue(result.getResolvedException()
-                        instanceof NotFoundException));
+                .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
     }
 
     @Test
@@ -134,8 +138,7 @@ class BankControllerTest {
         // then
         mockMvc.perform(delete("/v1/banks/{bic}", invalidBic)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(result -> assertTrue(result.getResolvedException()
-                        instanceof NotFoundException));
+                .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
     }
 
     @ParameterizedTest

@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +40,7 @@ class CalculatorServiceImplTest {
         List<CalculatedDeposit> expected = TestUtils.buildGazprombankCalculatedDeposits();
 
         when(depositService.findAllMaximumRateDeposits(
-                anyInt(), anyInt(), anyBoolean(), anyBoolean(), anyBoolean(), any(Pageable.class)
+                anyInt(), anyInt(), anyBoolean(), anyBoolean(), anyBoolean(), anyList(), any(Pageable.class)
         )).thenReturn(TestUtils.buildDeposits());
 
         List<CalculatedDeposit> actual = calculatorService.getAllMaximumRateCalculatedDeposits(
@@ -48,6 +49,7 @@ class CalculatorServiceImplTest {
                 false,
                 false,
                 false,
+                List.of(),
                 PageRequest.ofSize(1)
         );
 
@@ -60,11 +62,11 @@ class CalculatorServiceImplTest {
     void whenGetAllMinimumRateCalculatedCredits_expectCalculatedCredits() {
         List<CalculatedCredit> expected = TestUtils.buildGazprombankCalculatedCredits();
 
-        when(creditService.findAllMinimumRateCredits(anyInt(), anyInt(), any(Pageable.class)))
+        when(creditService.findAllMinimumRateCredits(anyInt(), anyInt(), anyList(), any(Pageable.class)))
                 .thenReturn(TestUtils.buildCredits());
 
         List<CalculatedCredit> actual = calculatorService.getAllMinimumRateCalculatedCredits(
-                100_000, 13, PageRequest.ofSize(1)
+                100_000, 13, List.of(), PageRequest.ofSize(1)
         );
 
         assertNotNull(actual);
