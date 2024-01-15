@@ -12,7 +12,7 @@ public interface CreditService {
 
     List<Credit> findAllMinimumRateCredits(int amount, int term, Pageable pageable);
 
-    List<Credit> getAll(CreditParams params);
+    List<Credit> getAll(CreditParams params, Pageable pageable);
 
     Credit getById(long id);
 

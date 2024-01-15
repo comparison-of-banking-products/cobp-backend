@@ -2,15 +2,17 @@ package ru.cobp.backend.dto.credit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "Сущность нового кредита")
 public class NewCreditDto {
 
-    @NotNull
+    @NotBlank
     private String bankBic;
 
     @NotBlank
