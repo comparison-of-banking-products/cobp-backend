@@ -1,6 +1,7 @@
 package ru.cobp.backend.service.bank;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -73,28 +74,34 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public List<Bank> getAll(BankSort sort) {
-        if (sort == null) {
-            return bankRepository.findAll();
-        } else {
-            BooleanExpression expression;
-            if (sort.equals(BankSort.CREDITS)) {
-                expression = Q_BANK.in(
-                        JPAExpressions
-                                .select(Q_CREDIT.bank)
-                                .from(Q_CREDIT)
-                                .where(Q_CREDIT.bank.isNotNull())
-                );
-            } else {
-                expression = Q_BANK.in(
-                        JPAExpressions
-                                .select(Q_DEPOSIT.bank)
-                                .from(Q_DEPOSIT)
-                                .where(Q_DEPOSIT.bank.isNotNull())
-                );
-            }
-            return (List<Bank>) bankRepository.findAll(expression);
+    public List<Bank> getAll(BankSort sort, List<String> bics) {
+        Predicate p = buildQBankPredicateBy(sort, bics);
+        return (List<Bank>) bankRepository.findAll(p);
+    }
+
+    private Predicate buildQBankPredicateBy(BankSort sort, List<String> bics) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (sort != null) {
+            Predicate p = switch (sort) {
+                case CREDITS -> Q_BANK.in(JPAExpressions
+                        .select(Q_CREDIT.bank)
+                        .from(Q_CREDIT)
+                        .where(Q_CREDIT.bank.isNotNull()));
+
+                case DEPOSITS -> Q_BANK.in(JPAExpressions
+                        .select(Q_DEPOSIT.bank)
+                        .from(Q_DEPOSIT)
+                        .where(Q_DEPOSIT.bank.isNotNull()));
+            };
+            builder.and(p);
         }
+
+        if (!bics.isEmpty()) {
+            builder.and((Q_BANK.bic.in(bics)));
+        }
+
+        return builder;
     }
 
     private void checkIfBankExistsByBic(String bic) {

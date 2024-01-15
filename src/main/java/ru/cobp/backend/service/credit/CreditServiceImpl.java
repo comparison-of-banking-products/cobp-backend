@@ -38,8 +38,8 @@ public class CreditServiceImpl implements CreditService {
     private final BankService bankService;
 
     @Override
-    public List<Credit> findAllMinimumRateCredits(int amount, int term, Pageable pageable) {
-        Predicate p = buildQDepositMinimumRatePredicateBy(amount, term);
+    public List<Credit> findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable) {
+        Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, bics);
         Iterable<Credit> credits = creditRepository.findAll(p, pageable);
         return Utils.toList(credits);
     }
@@ -80,8 +80,8 @@ public class CreditServiceImpl implements CreditService {
         }
     }
 
-    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term) {
-        return new BooleanBuilder()
+    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term, List<String> bics) {
+        BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_CREDIT.rate.goe(JPAExpressions
                         .select(Q_CREDIT.rate.min())
                         .from(Q_CREDIT)
@@ -89,6 +89,12 @@ public class CreditServiceImpl implements CreditService {
                 .and(Q_CREDIT.amountMin.loe(amount))
                 .and(Q_CREDIT.amountMax.goe(amount))
                 .and(Q_CREDIT.term.eq(term));
+
+        if (!bics.isEmpty()) {
+            builder.and((Q_CREDIT.bank.bic.in(bics)));
+        }
+
+        return builder;
     }
 
     private Predicate buildQCreditPredicateByParams(CreditParams params) {
