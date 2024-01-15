@@ -5,7 +5,6 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
@@ -46,10 +45,9 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
-    public List<Credit> getAll(CreditParams params) {
+    public List<Credit> getAll(CreditParams params, Pageable pageable) {
         Predicate p = buildQCreditPredicateByParams(params);
-        Sort s = Sort.by("rate").ascending();
-        return Utils.toList(creditRepository.findAll(p, s));
+        return Utils.toList(creditRepository.findAll(p, pageable));
     }
 
     @Override
@@ -60,7 +58,7 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Credit create(NewCreditDto newCreditDto) {
-        Bank bank = bankService.getByBic(newCreditDto.getBanksBic());
+        Bank bank = bankService.getByBic(newCreditDto.getBankBic());
         Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
         Credit credit = toCredit(newCreditDto, bank, currency);
         return creditRepository.save(credit);
