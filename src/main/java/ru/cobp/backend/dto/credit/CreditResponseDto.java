@@ -46,4 +46,13 @@ public class CreditResponseDto {
     @Schema(description = "Тип платежа")
     private String paymentType;
 
+    @Schema(description = "Рассмотрение онлайн")
+    private Boolean creditOnline;
+
+    @Schema(description = "Подтверждение онлайн")
+    private Boolean onlineApprove;
+
+    @Schema(description = "Наличие залога")
+    private Boolean collateral;
+
 }

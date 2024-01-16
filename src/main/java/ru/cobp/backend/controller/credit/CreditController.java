@@ -13,9 +13,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -68,13 +65,15 @@ public class CreditController {
             @RequestParam(required = false) @Parameter(description = "Минимальный срок кредита") Integer minPeriod,
             @RequestParam(required = false) @Parameter(description = "Максимальный срок кредита") Integer maxPeriod,
             @RequestParam(required = false) @Parameter(description = "Тип платежа") PaymentType paymentType,
+            @RequestParam(required = false) @Parameter(description = "Рассмотрение онлайн") Boolean creditOnline,
+            @RequestParam(required = false) @Parameter(description = "Подтверждение онлайн") Boolean onlineApprove,
+            @RequestParam(required = false) @Parameter(description = "Наличие залога") Boolean collateral,
             @RequestParam(defaultValue = "0") @Parameter(description = "Индекс страницы") @PositiveOrZero int page,
             @RequestParam(defaultValue = "10") @Parameter(description = "Размер страницы") @Positive int size
     ) {
         CreditParams params = new CreditParams(isActive, currencyNum, minAmount, maxAmount, rate, minPeriod,
-                maxPeriod, paymentType);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("rate").ascending());
-        List<Credit> credits = creditService.getAll(params, pageable);
+                maxPeriod, paymentType, creditOnline, onlineApprove, collateral);
+        List<Credit> credits = creditService.getAll(params, page, size);
         return creditMapper.toCreditResponseDtos(credits);
     }
 

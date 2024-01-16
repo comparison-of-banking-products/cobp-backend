@@ -49,4 +49,16 @@ public class NewCreditDto {
     @Schema(description = "Тип платежа")
     private String paymentType;
 
+    @NotNull
+    @Schema(description = "Рассмотрение онлайн")
+    private Boolean creditOnline;
+
+    @NotNull
+    @Schema(description = "Подтверждение онлайн")
+    private Boolean onlineApprove;
+
+    @NotNull
+    @Schema(description = "Наличие залога")
+    private Boolean collateral;
+
 }
