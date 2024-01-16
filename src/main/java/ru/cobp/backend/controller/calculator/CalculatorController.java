@@ -21,12 +21,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.cobp.backend.common.Constants;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
 import ru.cobp.backend.mapper.CalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
+import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.service.calculator.CalculatorService;
 
 import java.util.List;
@@ -75,7 +76,7 @@ public class CalculatorController {
             @Parameter(description = "Вклад с частичным снятием")
             @RequestParam(required = false) Boolean partialWithdrawal,
 
-            @Parameter(description = "Список БИК-ов")
+            @Parameter(description = "Список БИК номеров")
             @RequestParam(defaultValue = "") List<String> bics,
 
             @Parameter(description = "Индекс страницы")
@@ -84,7 +85,9 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.DEPOSIT_RATE).descending());
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.sort(Deposit.class).by(Deposit::getRate).descending()
+        );
         List<CalculatedDeposit> deposits = calculatorService.getAllMaximumRateCalculatedDeposits(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
@@ -113,7 +116,7 @@ public class CalculatorController {
             @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term,
 
-            @Parameter(description = "Список БИК-ов")
+            @Parameter(description = "Список БИК номеров")
             @RequestParam(defaultValue = "") List<String> bics,
 
             @Parameter(description = "Индекс страницы")
@@ -122,8 +125,12 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.CREDIT_RATE).ascending());
-        List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(amount, term, bics, pageable);
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.sort(Credit.class).by(Credit::getRate).ascending()
+        );
+        List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(
+                amount, term, bics, pageable
+        );
 
         return calculatorMapper.toCalculatedCreditResponseDtos(credits);
     }
