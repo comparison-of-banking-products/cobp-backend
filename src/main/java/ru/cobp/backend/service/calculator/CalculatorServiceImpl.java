@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Constants;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
+import ru.cobp.backend.model.calculator.CalculatedDepositList;
 import ru.cobp.backend.model.credit.Credit;
 import ru.cobp.backend.model.deposit.Deposit;
+import ru.cobp.backend.model.deposit.DepositList;
 import ru.cobp.backend.service.credit.CreditService;
 import ru.cobp.backend.service.deposit.DepositService;
 
@@ -25,7 +27,7 @@ public class CalculatorServiceImpl implements CalculatorService {
     private final CreditService creditService;
 
     @Override
-    public List<CalculatedDeposit> getAllMaximumRateCalculatedDeposits(
+    public CalculatedDepositList getAllMaximumRateCalculatedDeposits(
             int amount,
             int term,
             Boolean capitalization,
@@ -34,10 +36,12 @@ public class CalculatorServiceImpl implements CalculatorService {
             List<String> bics,
             Pageable pageable
     ) {
-        List<Deposit> deposits = depositService.findAllMaximumRateDeposits(
+        DepositList depositList = depositService.findAllMaximumRateDeposits(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
-        return calculateDepositsInterest(deposits, amount, term);
+        List<CalculatedDeposit> calculatedDeposits = calculateDepositsInterest(depositList.getDeposits(), amount, term);
+
+        return new CalculatedDepositList(calculatedDeposits, depositList.getTotalElements());
     }
 
     @Override
