@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.model.deposit.Deposit;
-import ru.cobp.backend.model.deposit.DepositList;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
 import ru.cobp.backend.repository.deposit.DepositRepository;
@@ -49,7 +48,7 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public DepositList findAllMaximumRateDeposits(
+    public Page<Deposit> getAllMaximumRateDepositPage(
             int amount,
             int term,
             Boolean capitalization,
@@ -61,12 +60,7 @@ public class DepositServiceImpl implements DepositService {
         Predicate p = buildQDepositMaximumRatePredicateBy(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics
         );
-        Page<Deposit> depositPage = depositRepository.findAll(p, pageable);
-        List<Deposit> deposits = depositPage.hasContent()
-                ? depositPage.getContent()
-                : List.of();
-
-        return new DepositList(deposits, depositPage.getTotalElements());
+        return depositRepository.findAll(p, pageable);
     }
 
     @Override

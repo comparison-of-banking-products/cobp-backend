@@ -1,6 +1,7 @@
 package ru.cobp.backend.service.calculator;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,9 +11,7 @@ import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
 import ru.cobp.backend.model.calculator.CalculatedDepositList;
 import ru.cobp.backend.model.credit.Credit;
-import ru.cobp.backend.model.credit.CreditList;
 import ru.cobp.backend.model.deposit.Deposit;
-import ru.cobp.backend.model.deposit.DepositList;
 import ru.cobp.backend.service.credit.CreditService;
 import ru.cobp.backend.service.deposit.DepositService;
 
@@ -29,7 +28,7 @@ public class CalculatorServiceImpl implements CalculatorService {
     private final CreditService creditService;
 
     @Override
-    public CalculatedDepositList getAllMaximumRateCalculatedDeposits(
+    public CalculatedDepositList getAllMaximumRateCalculatedDepositList(
             int amount,
             int term,
             Boolean capitalization,
@@ -38,22 +37,20 @@ public class CalculatorServiceImpl implements CalculatorService {
             List<String> bics,
             Pageable pageable
     ) {
-        DepositList depositList = depositService.findAllMaximumRateDeposits(
+        Page<Deposit> depositPage = depositService.getAllMaximumRateDepositPage(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
-        List<CalculatedDeposit> calculatedDeposits = calculateDepositsInterest(depositList.getDeposits(), amount, term);
-
-        return new CalculatedDepositList(calculatedDeposits, depositList.getTotalElements());
+        List<CalculatedDeposit> calculatedDeposits = calculateDepositsInterest(depositPage.getContent(), amount, term);
+        return new CalculatedDepositList(calculatedDeposits, depositPage.getTotalElements());
     }
 
     @Override
-    public CalculatedCreditList getAllMinimumRateCalculatedCredits(
+    public CalculatedCreditList getAllMinimumRateCalculatedCreditList(
             int amount, int term, List<String> bics, Pageable pageable
     ) {
-        CreditList creditList = creditService.findAllMinimumRateCredits(amount, term, bics, pageable);
-        List<CalculatedCredit> calculatedCredits = calculateCreditsPayments(creditList.getCredits(), amount, term);
-
-        return new CalculatedCreditList(calculatedCredits, creditList.getTotalElements());
+        Page<Credit> creditPage = creditService.getAllMinimumRateCreditPage(amount, term, bics, pageable);
+        List<CalculatedCredit> calculatedCredits = calculateCreditsPayments(creditPage.getContent(), amount, term);
+        return new CalculatedCreditList(calculatedCredits, creditPage.getTotalElements());
     }
 
     private List<CalculatedDeposit> calculateDepositsInterest(List<Deposit> deposits, int amount, int term) {

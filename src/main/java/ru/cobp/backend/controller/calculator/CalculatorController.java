@@ -86,7 +86,7 @@ public class CalculatorController {
         Pageable pageable = PageRequest.of(
                 page, size, Sort.sort(Deposit.class).by(Deposit::getRate).descending()
         );
-        CalculatedDepositList calculatedDepositList = calculatorService.getAllMaximumRateCalculatedDeposits(
+        CalculatedDepositList calculatedDepositList = calculatorService.getAllMaximumRateCalculatedDepositList(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
 
@@ -125,7 +125,7 @@ public class CalculatorController {
         Pageable pageable = PageRequest.of(
                 page, size, Sort.sort(Credit.class).by(Credit::getRate).ascending()
         );
-        CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCredits(
+        CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCreditList(
                 amount, term, bics, pageable
         );
 

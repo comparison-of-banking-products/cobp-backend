@@ -16,7 +16,6 @@ import ru.cobp.backend.exception.NotFoundException;
 import ru.cobp.backend.exception.UnsupportedPaymentTypeException;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
-import ru.cobp.backend.model.credit.CreditList;
 import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.credit.QCredit;
 import ru.cobp.backend.model.currency.Currency;
@@ -40,14 +39,9 @@ public class CreditServiceImpl implements CreditService {
     private final BankService bankService;
 
     @Override
-    public CreditList findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable) {
+    public Page<Credit> getAllMinimumRateCreditPage(int amount, int term, List<String> bics, Pageable pageable) {
         Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, bics);
-        Page<Credit> creditPage = creditRepository.findAll(p, pageable);
-        List<Credit> credits = creditPage.hasContent()
-                ? creditPage.getContent()
-                : List.of();
-
-        return new CreditList(credits, creditPage.getTotalElements());
+        return creditRepository.findAll(p, pageable);
     }
 
     @Override
