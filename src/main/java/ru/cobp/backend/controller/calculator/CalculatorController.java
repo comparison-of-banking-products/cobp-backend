@@ -2,7 +2,6 @@ package ru.cobp.backend.controller.calculator;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,10 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
+import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 import ru.cobp.backend.mapper.CalculatorMapper;
-import ru.cobp.backend.model.calculator.CalculatedCredit;
+import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDepositList;
 import ru.cobp.backend.model.credit.Credit;
 import ru.cobp.backend.model.deposit.Deposit;
@@ -103,11 +102,11 @@ public class CalculatorController {
             description = "Кредиты рассчитаны",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = CalculatedCreditResponseDto.class))
+                    schema = @Schema(implementation = CalculatedCreditListResponseDto.class)
             )}
     )})
     @GetMapping("/credits")
-    public List<CalculatedCreditResponseDto> getAllCalculatedCredits(
+    public CalculatedCreditListResponseDto getAllCalculatedCredits(
             @Parameter(description = "Сумма кредита в рублях")
             @RequestParam @Positive int amount,
 
@@ -126,11 +125,11 @@ public class CalculatorController {
         Pageable pageable = PageRequest.of(
                 page, size, Sort.sort(Credit.class).by(Credit::getRate).ascending()
         );
-        List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(
+        CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCredits(
                 amount, term, bics, pageable
         );
 
-        return calculatorMapper.toCalculatedCreditResponseDtos(credits);
+        return calculatorMapper.toCalculatedCreditListResponseDto(calculatedCreditList);
     }
 
 }
