@@ -77,8 +77,10 @@ public class BankController {
     @PutMapping("/{bic}")
     public BankResponseDto update(@PathVariable String bic,
                                   @RequestBody @Valid BankCreateUpdateDto updateBankDto) {
+        Bank oldBank = bankService.getBankByBicOrThrowException(bic);
         Bank updateBank = bankMapper.fromBankCreateUpdateDto(updateBankDto);
-        Bank response = bankService.update(bic, updateBank);
+        oldBank = bankMapper.updateBank(oldBank, updateBank);
+        Bank response = bankService.update(oldBank);
         return bankMapper.toBankResponseDto(response);
     }
 

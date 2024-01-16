@@ -21,4 +21,23 @@ public interface BankMapper {
 
     Bank fromBankCreateUpdateDto(BankCreateUpdateDto createUpdateDto);
 
+    default Bank updateBank(Bank oldBank, Bank updateBank) {
+        if (updateBank.getName() != null) {
+            oldBank.setName(updateBank.getName());
+        }
+        if (updateBank.getLegalEntity() != null) {
+            oldBank.setLegalEntity(updateBank.getLegalEntity());
+        }
+        if (updateBank.getDescription() != null) {
+            oldBank.setDescription(updateBank.getDescription());
+        }
+        if (updateBank.getLogo() != null) {
+            oldBank.setLogo(updateBank.getLogo());
+        }
+        if (updateBank.getUrl() != null) {
+            oldBank.setUrl(updateBank.getUrl());
+        }
+        return oldBank;
+    }
+
 }
