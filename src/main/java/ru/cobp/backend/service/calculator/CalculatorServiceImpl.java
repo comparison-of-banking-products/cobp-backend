@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Constants;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
+import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
 import ru.cobp.backend.model.calculator.CalculatedDepositList;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.CreditList;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.DepositList;
 import ru.cobp.backend.service.credit.CreditService;
@@ -45,11 +47,13 @@ public class CalculatorServiceImpl implements CalculatorService {
     }
 
     @Override
-    public List<CalculatedCredit> getAllMinimumRateCalculatedCredits(
+    public CalculatedCreditList getAllMinimumRateCalculatedCredits(
             int amount, int term, List<String> bics, Pageable pageable
     ) {
-        List<Credit> credits = creditService.findAllMinimumRateCredits(amount, term, bics, pageable);
-        return calculateCreditsPayments(credits, amount, term);
+        CreditList creditList = creditService.findAllMinimumRateCredits(amount, term, bics, pageable);
+        List<CalculatedCredit> calculatedCredits = calculateCreditsPayments(creditList.getCredits(), amount, term);
+
+        return new CalculatedCreditList(calculatedCredits, creditList.getTotalElements());
     }
 
     private List<CalculatedDeposit> calculateDepositsInterest(List<Deposit> deposits, int amount, int term) {

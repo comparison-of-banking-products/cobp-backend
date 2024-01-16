@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import ru.cobp.backend.exception.NotFoundException;
 import ru.cobp.backend.exception.UnsupportedPaymentTypeException;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.CreditList;
 import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.credit.QCredit;
 import ru.cobp.backend.model.currency.Currency;
@@ -38,10 +40,14 @@ public class CreditServiceImpl implements CreditService {
     private final BankService bankService;
 
     @Override
-    public List<Credit> findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable) {
+    public CreditList findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable) {
         Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, bics);
-        Iterable<Credit> credits = creditRepository.findAll(p, pageable);
-        return Utils.toList(credits);
+        Page<Credit> creditPage = creditRepository.findAll(p, pageable);
+        List<Credit> credits = creditPage.hasContent()
+                ? creditPage.getContent()
+                : List.of();
+
+        return new CreditList(credits, creditPage.getTotalElements());
     }
 
     @Override

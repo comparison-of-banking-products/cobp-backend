@@ -5,12 +5,13 @@ import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.credit.CreditList;
 
 import java.util.List;
 
 public interface CreditService {
 
-    List<Credit> findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable);
+    CreditList findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable);
 
     List<Credit> getAll(CreditParams params, Pageable pageable);
 

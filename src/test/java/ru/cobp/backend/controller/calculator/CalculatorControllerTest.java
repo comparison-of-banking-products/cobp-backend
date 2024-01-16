@@ -9,9 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.cobp.backend.client.exchange.ExchangeRatesClient;
 import ru.cobp.backend.common.TestUtils;
+import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 
 import java.nio.charset.StandardCharsets;
@@ -20,11 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class CalculatorControllerTest {
+
+    private static final String GAZPROMBANK_BIC = "044525823";
 
     @Autowired
     MockMvc mockMvc;
@@ -32,6 +36,7 @@ class CalculatorControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @SuppressWarnings("unused")
     @MockBean
     ExchangeRatesClient exchangeRatesClient;
 
@@ -45,6 +50,7 @@ class CalculatorControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .queryParam("amount", String.valueOf(100_000))
                         .queryParam("term", String.valueOf(1))
+                        .queryParam("bics", GAZPROMBANK_BIC)
                         .queryParam("size", String.valueOf(1)))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -59,21 +65,23 @@ class CalculatorControllerTest {
     @Test
     @SneakyThrows
     void whenGetCalculatedCredits_expectCalculatedCreditResponseDtos() {
-//        List<CalculatedCredit> expected = TestUtils.buildGazprombankCalculatedCredits();
-//
-//        when(calculatorService.getAllMinimumRateCalculatedCredits(anyInt(), anyInt(), anyList(), any(Pageable.class)))
-//                .thenReturn(expected);
-//
-//        when(calculatorMapper.toCalculatedCreditResponseDtos(anyList()))
-//                .thenReturn(TestUtils.buildGazprombankCalculatedCreditResponseDtos());
-//
-//        mockMvc.perform(get("/v1/calculators/credits")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .queryParam("amount", String.valueOf(100000))
-//                        .queryParam("term", String.valueOf(13)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$").isArray())
-//                .andExpect(jsonPath("$[0].monthlyPayment").value(expected.get(0).getMonthlyPayment()));
+        var expected = TestUtils.buildGazprombankCalculatedCreditListResponseDto();
+
+        String contentAsString = mockMvc.perform(get("/v1/calculators/credits")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .queryParam("amount", String.valueOf(100_000))
+                        .queryParam("term", String.valueOf(13))
+                        .queryParam("bics", GAZPROMBANK_BIC)
+                        .queryParam("size", String.valueOf(1)))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString(StandardCharsets.UTF_8);
+
+        var actual = objectMapper.readValue(contentAsString, CalculatedCreditListResponseDto.class);
+
+        assertEquals(expected, actual);
     }
 
 }
