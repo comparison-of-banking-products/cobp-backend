@@ -3,7 +3,6 @@ package ru.cobp.backend.service.currency.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.cobp.backend.dto.currency.CurrencyDto;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.repository.currency.CurrencyRepository;
 import ru.cobp.backend.service.currency.CurrencyService;
@@ -18,12 +17,12 @@ public class CurrencyServiceImpl implements CurrencyService {
     private final CurrencyRepository currencyRepository;
 
     @Override
-    public CurrencyDto create(CurrencyDto newCurrency) {
+    public Currency create(Currency newCurrency) {
         return null;
     }
 
     @Override
-    public CurrencyDto update(Long currencyId, CurrencyDto updCurrency) {
+    public Currency update(Long currencyId, Currency updCurrency) {
         return null;
     }
 

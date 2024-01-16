@@ -1,5 +1,6 @@
 package ru.cobp.backend.dto.bank;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,25 +16,31 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BankCreateUpdateDto {
 
-    @NotNull
+    @Schema(description = "БИК")
+    @NotNull(message = "Необходимо указать БИК банка")
     private String bic;
 
-    @NotNull
+    @Schema(description = "Название")
+    @NotNull(message = "Необходимо указать название банка")
     @Size(max = 100)
     private String name;
 
-    @NotNull
+    @Schema(description = "Юридическое лицо")
+    @NotNull(message = "Необходимо указать полное юридическое лицо")
     @Size(max = 100)
     private String legalEntity;
 
-    @NotNull
+    @Schema(description = "Описание")
+    @NotNull(message = "Необходимо указать описание банка")
     private String description;
 
-    @NotNull
+    @Schema(description = "Лого")
+    @NotNull(message = "Необходимо указать лого банка")
     @Size(max = 100)
     private String logo;
 
-    @NotNull
+    @Schema(description = "Онлайн-адрес")
+    @NotNull(message = "Необходимо указать онлайн-адрес банка")
     @Size(max = 100)
     private String url;
 }
