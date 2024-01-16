@@ -97,7 +97,10 @@ public class TestUtils {
                 7000000,
                 13,
                 24.40,
-                PaymentType.ANNUITY
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
         );
     }
 
@@ -206,7 +209,10 @@ public class TestUtils {
                 7000000,
                 24.4,
                 13,
-                "Аннуитетный"
+                "Аннуитетный",
+                true,
+                true,
+                false
         );
     }
 
@@ -222,6 +228,9 @@ public class TestUtils {
                 null,
                 25.1,
                 12,
+                null,
+                null,
+                null,
                 null
         );
     }
@@ -238,7 +247,10 @@ public class TestUtils {
                 7000000,
                 12,
                 25.1,
-                PaymentType.ANNUITY
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
         );
     }
 
@@ -255,7 +267,10 @@ public class TestUtils {
                 credit.getAmountMax(),
                 credit.getTerm(),
                 credit.getRate(),
-                credit.getPaymentType().getTitle()
+                credit.getPaymentType().getTitle(),
+                credit.getCreditOnline(),
+                credit.getOnlineApprove(),
+                credit.getCollateral()
         );
     }
 

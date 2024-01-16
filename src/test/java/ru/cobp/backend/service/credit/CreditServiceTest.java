@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import ru.cobp.backend.common.TestUtils;
 import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
@@ -54,14 +55,14 @@ public class CreditServiceTest {
     @Test
     void getAll_whenValid_thenReturnedCredits() {
         List<Credit> expectedList = List.of(TestUtils.buildGazprombankCredit());
-        Pageable page = PageRequest.of(0, 10);
+        Pageable page = PageRequest.of(0, 10, Sort.by("rate").ascending());
         CreditParams params = new CreditParams(null, null, null, null, null,
-                null, null, null);
+                null, null, null, null, null, null);
         Predicate p = new BooleanBuilder();
 
         when(creditRepository.findAll(p, page)).thenReturn(new PageImpl<>(expectedList));
 
-        List<Credit> actualList = creditService.getAll(params, page);
+        List<Credit> actualList = creditService.getAll(params, 0, 10);
         assertEquals(expectedList, actualList);
     }
 

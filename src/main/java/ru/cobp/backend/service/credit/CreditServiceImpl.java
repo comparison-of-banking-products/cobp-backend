@@ -4,7 +4,9 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
@@ -45,8 +47,9 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
-    public List<Credit> getAll(CreditParams params, Pageable pageable) {
+    public List<Credit> getAll(CreditParams params, int page, int size) {
         Predicate p = buildQCreditPredicateByParams(params);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("rate").ascending());
         return Utils.toList(creditRepository.findAll(p, pageable));
     }
 
@@ -123,6 +126,15 @@ public class CreditServiceImpl implements CreditService {
         if (params.getPaymentType() != null) {
             builder.and(Q_CREDIT.paymentType.eq(params.getPaymentType()));
         }
+        if (params.getCreditOnline() != null) {
+            builder.and(Q_CREDIT.creditOnline.eq(params.getCreditOnline()));
+        }
+        if (params.getOnlineApprove() != null) {
+            builder.and(Q_CREDIT.onlineApprove.eq(params.getOnlineApprove()));
+        }
+        if (params.getCollateral() != null) {
+            builder.and(Q_CREDIT.collateral.eq(params.getCollateral()));
+        }
         return builder;
 
     }
@@ -130,7 +142,8 @@ public class CreditServiceImpl implements CreditService {
     private Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
         return new Credit(null, bank, newCreditDto.getName(), newCreditDto.getProductUrl(),
                 newCreditDto.getIsActive(), currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(),
-                newCreditDto.getTerm(), newCreditDto.getRate(), toPaymentType(newCreditDto.getPaymentType()));
+                newCreditDto.getTerm(), newCreditDto.getRate(), toPaymentType(newCreditDto.getPaymentType()),
+                newCreditDto.getCreditOnline(), newCreditDto.getOnlineApprove(), newCreditDto.getCollateral());
     }
 
     private PaymentType toPaymentType(String paymentType) {
