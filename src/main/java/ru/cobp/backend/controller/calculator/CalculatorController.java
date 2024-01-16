@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
-import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
+import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 import ru.cobp.backend.mapper.CalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
-import ru.cobp.backend.model.calculator.CalculatedDeposit;
+import ru.cobp.backend.model.calculator.CalculatedDepositList;
 import ru.cobp.backend.model.credit.Credit;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.service.calculator.CalculatorService;
@@ -36,6 +36,7 @@ import java.util.List;
         description = "Контроллер для работы с калькуляторами вклада и кредита"
 )
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = "/v1/calculators")
 @Validated
 @RequiredArgsConstructor
@@ -54,11 +55,11 @@ public class CalculatorController {
             description = "Вклады рассчитаны",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = CalculatedDepositResponseDto.class))
+                    schema = @Schema(implementation = CalculatedDepositListResponseDto.class)
             )}
     )})
     @GetMapping("/deposits")
-    public List<CalculatedDepositResponseDto> getAllCalculatedDeposits(
+    public CalculatedDepositListResponseDto getAllCalculatedDeposits(
             @Parameter(description = "Сумма вклада в рублях")
             @RequestParam @Positive int amount,
 
@@ -86,11 +87,11 @@ public class CalculatorController {
         Pageable pageable = PageRequest.of(
                 page, size, Sort.sort(Deposit.class).by(Deposit::getRate).descending()
         );
-        List<CalculatedDeposit> deposits = calculatorService.getAllMaximumRateCalculatedDeposits(
+        CalculatedDepositList calculatedDepositList = calculatorService.getAllMaximumRateCalculatedDeposits(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
 
-        return calculatorMapper.toCalculatedDepositResponseDtos(deposits);
+        return calculatorMapper.toCalculatedDepositListResponseDto(calculatedDepositList);
     }
 
     @Operation(
