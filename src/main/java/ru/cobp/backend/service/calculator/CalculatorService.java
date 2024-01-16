@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CalculatorService {
 
-    CalculatedDepositList getAllMaximumRateCalculatedDeposits(
+    CalculatedDepositList getAllMaximumRateCalculatedDepositList(
             int amount,
             int term,
             Boolean capitalization,
@@ -18,7 +18,7 @@ public interface CalculatorService {
             Pageable pageable
     );
 
-    CalculatedCreditList getAllMinimumRateCalculatedCredits(
+    CalculatedCreditList getAllMinimumRateCalculatedCreditList(
             int amount, int term, List<String> bics, Pageable pageable
     );
 
