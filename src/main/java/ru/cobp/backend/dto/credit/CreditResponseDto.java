@@ -46,7 +46,7 @@ public class CreditResponseDto {
     @Schema(description = "Тип платежа")
     private String paymentType;
 
-    @Schema(description = "Рассмотрение онлайн")
+    @Schema(description = "Получение без посещения банка")
     private Boolean creditOnline;
 
     @Schema(description = "Подтверждение онлайн")

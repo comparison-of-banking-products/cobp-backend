@@ -50,7 +50,7 @@ public class NewCreditDto {
     private String paymentType;
 
     @NotNull
-    @Schema(description = "Рассмотрение онлайн")
+    @Schema(description = "Получение без посещения банка")
     private Boolean creditOnline;
 
     @NotNull
