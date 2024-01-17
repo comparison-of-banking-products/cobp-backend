@@ -1,6 +1,5 @@
 package ru.cobp.backend.service.deposit;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
@@ -22,7 +21,7 @@ public interface DepositService {
             Pageable pageable
     );
 
-    Page<Deposit> getAllMaximumRateDepositPage(
+    List<Deposit> findAllMaximumRateDeposits(
             int amount,
             int term,
             Boolean capitalization,
