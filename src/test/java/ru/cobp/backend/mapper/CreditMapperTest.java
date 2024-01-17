@@ -8,6 +8,7 @@ import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
 import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.CreditShortResponseDto;
+import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.dto.currency.CurrencyResponseDto;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
@@ -15,8 +16,7 @@ import ru.cobp.backend.model.currency.Currency;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CreditMapperTest {
@@ -40,7 +40,7 @@ class CreditMapperTest {
         assertEquals(credit.getAmountMax(), creditResponseDto.getAmountMax());
         assertEquals(credit.getTerm(), creditResponseDto.getTerm());
         assertEquals(credit.getRate(), creditResponseDto.getRate());
-        assertEquals(credit.getPaymentType().getTitle(), creditResponseDto.getPaymentType());
+        assertEquals(credit.getPaymentType(), creditResponseDto.getPaymentType());
 
         BankResponseDto bankResponseDto = creditResponseDto.getBank();
         assertNotNull(bankResponseDto);
@@ -76,6 +76,24 @@ class CreditMapperTest {
         assertNotNull(dtos);
         assertEquals(credits.size(), dtos.size());
         assertEquals(credits.get(0).getId(), dtos.get(0).getId());
+    }
+
+    @Test
+    void whenMapNewCreditDto_expectCredit() {
+        NewCreditDto newCreditDto = TestUtils.buildNewGazprombankCreditDto();
+
+        Credit credit = creditMapper.toCredit(newCreditDto);
+        assertNotNull(credit);
+        assertEquals(newCreditDto.getName(), credit.getName());
+        assertEquals(newCreditDto.getProductUrl(), credit.getProductUrl());
+        assertEquals(newCreditDto.getIsActive(), credit.getIsActive());
+        assertEquals(newCreditDto.getAmountMin(), credit.getAmountMin());
+        assertEquals(newCreditDto.getAmountMax(), credit.getAmountMax());
+        assertEquals(newCreditDto.getTerm(), credit.getTerm());
+        assertEquals(newCreditDto.getRate(), credit.getRate());
+        assertEquals(newCreditDto.getPaymentType(), credit.getPaymentType());
+        assertNull(credit.getBank());
+        assertNull(credit.getCurrency());
     }
 
 }

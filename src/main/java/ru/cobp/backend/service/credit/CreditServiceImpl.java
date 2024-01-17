@@ -14,10 +14,9 @@ import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
-import ru.cobp.backend.exception.UnsupportedPaymentTypeException;
+import ru.cobp.backend.mapper.CreditMapper;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
-import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.credit.QCredit;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.repository.credit.CreditRepository;
@@ -38,6 +37,8 @@ public class CreditServiceImpl implements CreditService {
     private final CurrencyService currencyService;
 
     private final BankService bankService;
+
+    private final CreditMapper creditMapper;
 
     @Override
     public List<Credit> findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable) {
@@ -63,7 +64,9 @@ public class CreditServiceImpl implements CreditService {
     public Credit create(NewCreditDto newCreditDto) {
         Bank bank = bankService.getBankByBicOrThrowException(newCreditDto.getBankBic());
         Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
-        Credit credit = toCredit(newCreditDto, bank, currency);
+        Credit credit = creditMapper.toCredit(newCreditDto);
+        credit.setBank(bank);
+        credit.setCurrency(currency);
         return creditRepository.save(credit);
     }
 
@@ -137,24 +140,6 @@ public class CreditServiceImpl implements CreditService {
         }
         return builder;
 
-    }
-
-    private Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
-        return new Credit(null, bank, newCreditDto.getName(), newCreditDto.getProductUrl(),
-                newCreditDto.getIsActive(), currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(),
-                newCreditDto.getTerm(), newCreditDto.getRate(), toPaymentType(newCreditDto.getPaymentType()),
-                newCreditDto.getCreditOnline(), newCreditDto.getOnlineApprove(), newCreditDto.getCollateral());
-    }
-
-    private PaymentType toPaymentType(String paymentType) {
-        switch (paymentType) {
-            case "Аннуитетный":
-                return PaymentType.ANNUITY;
-            case "Дифференцированный":
-                return PaymentType.DIFFERENTIAL;
-            default:
-                throw new UnsupportedPaymentTypeException("Incorrect payment type");
-        }
     }
 
     private void updateCredit(Credit credit, CreditDto creditDto) {

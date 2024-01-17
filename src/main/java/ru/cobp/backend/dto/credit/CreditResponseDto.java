@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.currency.CurrencyResponseDto;
+import ru.cobp.backend.model.credit.PaymentType;
 
 @Schema(description = "Кредит")
 @Data
@@ -44,7 +45,7 @@ public class CreditResponseDto {
     private Double rate;
 
     @Schema(description = "Тип платежа")
-    private String paymentType;
+    private PaymentType paymentType;
 
     @Schema(description = "Получение без посещения банка")
     private Boolean creditOnline;

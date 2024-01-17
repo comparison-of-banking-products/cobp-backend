@@ -18,6 +18,7 @@ import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
+import ru.cobp.backend.mapper.CreditMapper;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
 import ru.cobp.backend.model.currency.Currency;
@@ -45,6 +46,9 @@ public class CreditServiceTest {
 
     @Mock
     private BankService bankService;
+
+    @Mock
+    private CreditMapper creditMapper;
 
     @InjectMocks
     private CreditServiceImpl creditService;
@@ -92,10 +96,12 @@ public class CreditServiceTest {
         NewCreditDto newCreditDto = TestUtils.buildNewGazprombankCreditDto();
         Bank bank = TestUtils.buildGazprombank();
         Currency currency = TestUtils.buildRubCurrency();
+        Credit creditWithoutBankAndCurrency = TestUtils.buildCreditWithoutBankAndCurrency();
         Credit expectedCredit = TestUtils.buildGazprombankCredit();
 
         when(bankService.getBankByBicOrThrowException(newCreditDto.getBankBic())).thenReturn(bank);
         when(currencyService.getById(newCreditDto.getCurrencyNum())).thenReturn(currency);
+        when(creditMapper.toCredit(newCreditDto)).thenReturn(creditWithoutBankAndCurrency);
         when(creditRepository.save(any(Credit.class))).thenReturn(expectedCredit);
 
         Credit actualCredit = creditService.create(newCreditDto);
