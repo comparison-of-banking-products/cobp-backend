@@ -35,7 +35,6 @@ import java.util.List;
         description = "Контроллер для работы с калькуляторами вклада и кредита"
 )
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping(path = "/v1/calculators")
 @Validated
 @RequiredArgsConstructor
