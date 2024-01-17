@@ -87,12 +87,12 @@ public class CurrencyController {
                     schema = @Schema(implementation = CurrencyResponseDto.class)
             )}
     )})
-    @PutMapping("/{id}")
-    public CurrencyResponseDto update(@PathVariable Long id,
+    @PutMapping("/{num}")
+    public CurrencyResponseDto update(@PathVariable Long num,
                                       @RequestBody @Valid CurrencyCreateUpdateDto updateCurrencyDto) {
-        log.info("Получен PUT запрос по эндпоинту /currencies/{} на обновление Currency {}.", id, updateCurrencyDto);
+        log.info("Получен PUT запрос по эндпоинту /currencies/{} на обновление Currency {}.", num, updateCurrencyDto);
 
-        Currency oldCurrency = currencyService.getById(id);
+        Currency oldCurrency = currencyService.getById(num);
         Currency updateCurrency = currencyMapper.fromCurrencyCreateUpdateDto(updateCurrencyDto);
         oldCurrency = currencyMapper.updateCurrency(oldCurrency, updateCurrency);
         Currency response = currencyService.update(oldCurrency);
@@ -131,11 +131,11 @@ public class CurrencyController {
                     schema = @Schema(implementation = CurrencyResponseDto.class)
             )}
     )})
-    @GetMapping("/{id}")
-    public CurrencyResponseDto getById(@PathVariable Long id) {
-        log.info("Получен GET запрос по эндпоинту /currencies/{} на получение Currency с ID {}.", id, id);
+    @GetMapping("/{num}")
+    public CurrencyResponseDto getById(@PathVariable Long num) {
+        log.info("Получен GET запрос по эндпоинту /currencies/{} на получение Currency с ID {}.", num, num);
 
-        Currency response = currencyService.getById(id);
+        Currency response = currencyService.getById(num);
         return currencyMapper.toCurrencyResponseDto(response);
     }
 
@@ -147,12 +147,12 @@ public class CurrencyController {
             responseCode = "204",
             description = "Удалена валюта по ID"
     )})
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{num}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        log.info("Получен DELETE запрос по эндпоинту /currencies/{} на удаление Currency с ID {}.", id, id);
+    public void delete(@PathVariable Long num) {
+        log.info("Получен DELETE запрос по эндпоинту /currencies/{} на удаление Currency с ID {}.", num, num);
 
-        currencyService.deleteById(id);
+        currencyService.deleteById(num);
     }
 
     @Operation(

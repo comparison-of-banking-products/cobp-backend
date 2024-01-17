@@ -31,16 +31,16 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public Currency getById(Long currencyId) {
-        return currencyRepository.findById(currencyId).orElseThrow(
+    public Currency getById(Long currencyNum) {
+        return currencyRepository.findById(currencyNum).orElseThrow(
                 () -> new NotFoundException(ExceptionMessage.CURRENCY_NOT_FOUND)
         );
     }
 
     @Override
     @Transactional
-    public void deleteById(Long currencyId) {
-        currencyRepository.deleteById(currencyId);
+    public void deleteById(Long currencyNum) {
+        currencyRepository.deleteById(currencyNum);
     }
 
     @Override
