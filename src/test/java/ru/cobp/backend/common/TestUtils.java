@@ -211,7 +211,7 @@ public class TestUtils {
                 7000000,
                 24.4,
                 13,
-                "Аннуитетный",
+                PaymentType.ANNUITY,
                 true,
                 true,
                 false
@@ -269,7 +269,7 @@ public class TestUtils {
                 credit.getAmountMax(),
                 credit.getTerm(),
                 credit.getRate(),
-                credit.getPaymentType().getTitle(),
+                credit.getPaymentType(),
                 credit.getCreditOnline(),
                 credit.getOnlineApprove(),
                 credit.getCollateral()
@@ -280,6 +280,25 @@ public class TestUtils {
         List<CreditResponseDto> creditResponseDtoList = new ArrayList<>();
         creditResponseDtoList.add(toCreditResponseDto(buildGazprombankCredit()));
         return creditResponseDtoList;
+    }
+
+    public static Credit buildCreditWithoutBankAndCurrency() {
+        return new Credit(
+                1L,
+                null,
+                "Газпромбанк Кредит наличными",
+                "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
+                true,
+                null,
+                10000,
+                7000000,
+                13,
+                24.40,
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
+        );
     }
 
     private static BankResponseDto buildGazprombankResponseDto() {
