@@ -2,7 +2,6 @@ package ru.cobp.backend.controller.calculator;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,12 +19,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.cobp.backend.common.Constants;
-import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
-import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
+import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
+import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 import ru.cobp.backend.mapper.CalculatorMapper;
-import ru.cobp.backend.model.calculator.CalculatedCredit;
-import ru.cobp.backend.model.calculator.CalculatedDeposit;
+import ru.cobp.backend.model.calculator.CalculatedCreditList;
+import ru.cobp.backend.model.calculator.CalculatedDepositList;
+import ru.cobp.backend.model.credit.Credit;
+import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.service.calculator.CalculatorService;
 
 import java.util.List;
@@ -53,11 +53,11 @@ public class CalculatorController {
             description = "Вклады рассчитаны",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = CalculatedDepositResponseDto.class))
+                    schema = @Schema(implementation = CalculatedDepositListResponseDto.class)
             )}
     )})
     @GetMapping("/deposits")
-    public List<CalculatedDepositResponseDto> getAllCalculatedDeposits(
+    public CalculatedDepositListResponseDto getAllCalculatedDeposits(
             @Parameter(description = "Сумма вклада в рублях")
             @RequestParam @Positive int amount,
 
@@ -73,7 +73,7 @@ public class CalculatorController {
             @Parameter(description = "Вклад с частичным снятием")
             @RequestParam(required = false) Boolean partialWithdrawal,
 
-            @Parameter(description = "Список БИК-ов")
+            @Parameter(description = "Список БИК номеров")
             @RequestParam(defaultValue = "") List<String> bics,
 
             @Parameter(description = "Индекс страницы")
@@ -82,12 +82,14 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.DEPOSIT_RATE).descending());
-        List<CalculatedDeposit> deposits = calculatorService.getAllMaximumRateCalculatedDeposits(
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.sort(Deposit.class).by(Deposit::getRate).descending()
+        );
+        CalculatedDepositList calculatedDepositList = calculatorService.getAllMaximumRateCalculatedDepositList(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
 
-        return calculatorMapper.toCalculatedDepositResponseDtos(deposits);
+        return calculatorMapper.toCalculatedDepositListResponseDto(calculatedDepositList);
     }
 
     @Operation(
@@ -99,18 +101,18 @@ public class CalculatorController {
             description = "Кредиты рассчитаны",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    array = @ArraySchema(schema = @Schema(implementation = CalculatedCreditResponseDto.class))
+                    schema = @Schema(implementation = CalculatedCreditListResponseDto.class)
             )}
     )})
     @GetMapping("/credits")
-    public List<CalculatedCreditResponseDto> getAllCalculatedCredits(
+    public CalculatedCreditListResponseDto getAllCalculatedCredits(
             @Parameter(description = "Сумма кредита в рублях")
             @RequestParam @Positive int amount,
 
             @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term,
 
-            @Parameter(description = "Список БИК-ов")
+            @Parameter(description = "Список БИК номеров")
             @RequestParam(defaultValue = "") List<String> bics,
 
             @Parameter(description = "Индекс страницы")
@@ -119,10 +121,14 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Constants.CREDIT_RATE).ascending());
-        List<CalculatedCredit> credits = calculatorService.getAllMinimumRateCalculatedCredits(amount, term, bics, pageable);
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.sort(Credit.class).by(Credit::getRate).ascending()
+        );
+        CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCreditList(
+                amount, term, bics, pageable
+        );
 
-        return calculatorMapper.toCalculatedCreditResponseDtos(credits);
+        return calculatorMapper.toCalculatedCreditListResponseDto(calculatedCreditList);
     }
 
 }
