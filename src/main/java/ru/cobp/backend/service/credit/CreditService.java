@@ -1,5 +1,6 @@
 package ru.cobp.backend.service.credit;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface CreditService {
 
-    List<Credit> findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable);
+    Page<Credit> getAllMinimumRateCreditPage(int amount, int term, List<String> bics, Pageable pageable);
 
     List<Credit> getAll(CreditParams params, Pageable pageable);
 

@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +39,9 @@ public class CreditServiceImpl implements CreditService {
     private final BankService bankService;
 
     @Override
-    public List<Credit> findAllMinimumRateCredits(int amount, int term, List<String> bics, Pageable pageable) {
+    public Page<Credit> getAllMinimumRateCreditPage(int amount, int term, List<String> bics, Pageable pageable) {
         Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, bics);
-        Iterable<Credit> credits = creditRepository.findAll(p, pageable);
-        return Utils.toList(credits);
+        return creditRepository.findAll(p, pageable);
     }
 
     @Override

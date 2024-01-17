@@ -4,10 +4,10 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.cobp.backend.common.Utils;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
@@ -48,7 +48,7 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public List<Deposit> findAllMaximumRateDeposits(
+    public Page<Deposit> getAllMaximumRateDepositPage(
             int amount,
             int term,
             Boolean capitalization,
@@ -60,8 +60,7 @@ public class DepositServiceImpl implements DepositService {
         Predicate p = buildQDepositMaximumRatePredicateBy(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics
         );
-        Iterable<Deposit> deposits = depositRepository.findAll(p, pageable);
-        return Utils.toList(deposits);
+        return depositRepository.findAll(p, pageable);
     }
 
     @Override
