@@ -4,9 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
-import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
-import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
 import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditResponseDto;
@@ -276,14 +274,6 @@ public class TestUtils {
                 "gazprombank-logo.svg",
                 "https://www.gazprombank.ru"
         );
-    }
-
-    public static CalculatedDepositListResponseDto buildGazprombankCalculatedDepositListResponseDto() {
-        return new CalculatedDepositListResponseDto(buildGazprombankCalculatedDepositResponseDtos(), 4L);
-    }
-
-    public static CalculatedCreditListResponseDto buildGazprombankCalculatedCreditListResponseDto() {
-        return new CalculatedCreditListResponseDto(buildGazprombankCalculatedCreditResponseDtos(), 1L);
     }
 
 }
