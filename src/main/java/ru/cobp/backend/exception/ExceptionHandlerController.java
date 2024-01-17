@@ -39,15 +39,6 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponseDto> handle(final UnsupportedPaymentTypeException ex) {
-        log.error(ex.getMessage(), ex);
-        ErrorResponseDto errorResponse = new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        return new ResponseEntity<>(errorResponse, httpStatus);
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponseDto handle(DuplicateException ex) {
         log.error(ex.getMessage(), ex);

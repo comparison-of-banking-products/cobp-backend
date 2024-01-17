@@ -5,7 +5,9 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
@@ -13,10 +15,9 @@ import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
-import ru.cobp.backend.exception.UnsupportedPaymentTypeException;
+import ru.cobp.backend.mapper.CreditMapper;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
-import ru.cobp.backend.model.credit.PaymentType;
 import ru.cobp.backend.model.credit.QCredit;
 import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.repository.credit.CreditRepository;
@@ -38,6 +39,8 @@ public class CreditServiceImpl implements CreditService {
 
     private final BankService bankService;
 
+    private final CreditMapper creditMapper;
+
     @Override
     public Page<Credit> getAllMinimumRateCreditPage(int amount, int term, List<String> bics, Pageable pageable) {
         Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, bics);
@@ -45,8 +48,9 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
-    public List<Credit> getAll(CreditParams params, Pageable pageable) {
+    public List<Credit> getAll(CreditParams params, int page, int size) {
         Predicate p = buildQCreditPredicateByParams(params);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("rate").ascending());
         return Utils.toList(creditRepository.findAll(p, pageable));
     }
 
@@ -60,7 +64,9 @@ public class CreditServiceImpl implements CreditService {
     public Credit create(NewCreditDto newCreditDto) {
         Bank bank = bankService.getBankByBicOrThrowException(newCreditDto.getBankBic());
         Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
-        Credit credit = toCredit(newCreditDto, bank, currency);
+        Credit credit = creditMapper.toCredit(newCreditDto);
+        credit.setBank(bank);
+        credit.setCurrency(currency);
         return creditRepository.save(credit);
     }
 
@@ -123,25 +129,17 @@ public class CreditServiceImpl implements CreditService {
         if (params.getPaymentType() != null) {
             builder.and(Q_CREDIT.paymentType.eq(params.getPaymentType()));
         }
+        if (params.getCreditOnline() != null) {
+            builder.and(Q_CREDIT.creditOnline.eq(params.getCreditOnline()));
+        }
+        if (params.getOnlineApprove() != null) {
+            builder.and(Q_CREDIT.onlineApprove.eq(params.getOnlineApprove()));
+        }
+        if (params.getCollateral() != null) {
+            builder.and(Q_CREDIT.collateral.eq(params.getCollateral()));
+        }
         return builder;
 
-    }
-
-    private Credit toCredit(NewCreditDto newCreditDto, Bank bank, Currency currency) {
-        return new Credit(null, bank, newCreditDto.getName(), newCreditDto.getProductUrl(),
-                newCreditDto.getIsActive(), currency, newCreditDto.getMinAmount(), newCreditDto.getMaxAmount(),
-                newCreditDto.getTerm(), newCreditDto.getRate(), toPaymentType(newCreditDto.getPaymentType()));
-    }
-
-    private PaymentType toPaymentType(String paymentType) {
-        switch (paymentType) {
-            case "Аннуитетный":
-                return PaymentType.ANNUITY;
-            case "Дифференцированный":
-                return PaymentType.DIFFERENTIAL;
-            default:
-                throw new UnsupportedPaymentTypeException("Incorrect payment type");
-        }
     }
 
     private void updateCredit(Credit credit, CreditDto creditDto) {
@@ -165,6 +163,15 @@ public class CreditServiceImpl implements CreditService {
         }
         if (creditDto.getTerm() != null) {
             credit.setTerm(creditDto.getTerm());
+        }
+        if (creditDto.getCreditOnline() != null) {
+            credit.setCreditOnline(creditDto.getCreditOnline());
+        }
+        if (creditDto.getOnlineApprove() != null) {
+            credit.setOnlineApprove(creditDto.getOnlineApprove());
+        }
+        if (creditDto.getCollateral() != null) {
+            credit.setCollateral(creditDto.getCollateral());
         }
     }
 
