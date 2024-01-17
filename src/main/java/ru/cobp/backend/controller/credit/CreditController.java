@@ -65,7 +65,7 @@ public class CreditController {
             @RequestParam(required = false) @Parameter(description = "Минимальный срок кредита") Integer minPeriod,
             @RequestParam(required = false) @Parameter(description = "Максимальный срок кредита") Integer maxPeriod,
             @RequestParam(required = false) @Parameter(description = "Тип платежа") PaymentType paymentType,
-            @RequestParam(required = false) @Parameter(description = "Рассмотрение онлайн") Boolean creditOnline,
+            @RequestParam(required = false) @Parameter(description = "Получение без посещения банка") Boolean creditOnline,
             @RequestParam(required = false) @Parameter(description = "Подтверждение онлайн") Boolean onlineApprove,
             @RequestParam(required = false) @Parameter(description = "Наличие залога") Boolean collateral,
             @RequestParam(defaultValue = "0") @Parameter(description = "Индекс страницы") @PositiveOrZero int page,
