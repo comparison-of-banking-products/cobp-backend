@@ -14,6 +14,8 @@ public class ExceptionMessage {
 
     public static final String BANK_NOT_FOUND = "Bank with BIC %s not found";
 
+    public static final String CURRENCY_NOT_FOUND = "Currency not found";
+
     public static final String DUPLICATE_EXCEPTION = "Object of type %s already exists";
 
 }

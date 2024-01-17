@@ -8,7 +8,7 @@ public interface CurrencyService {
 
     Currency create(Currency newCurrency);
 
-    Currency update(Long currencyId, Currency updCurrency);
+    Currency update(Currency updCurrency);
 
     Currency getById(Long currencyId);
 

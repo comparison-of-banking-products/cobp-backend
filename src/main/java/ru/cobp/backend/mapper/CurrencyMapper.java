@@ -19,7 +19,16 @@ public interface CurrencyMapper {
     Currency fromCurrencyCreateUpdateDto(CurrencyCreateUpdateDto createUpdateDto);
 
     default Currency updateCurrency(Currency oldCurrency, Currency updateCurrency) {
-        return null;
+        if (updateCurrency.getNum() != null) {
+            oldCurrency.setNum(updateCurrency.getNum());
+        }
+        if (updateCurrency.getCode() != null) {
+            oldCurrency.setCode(updateCurrency.getCode());
+        }
+        if (updateCurrency.getCurrency() != null) {
+            oldCurrency.setCurrency(updateCurrency.getCurrency());
+        }
+        return oldCurrency;
     }
 
 }

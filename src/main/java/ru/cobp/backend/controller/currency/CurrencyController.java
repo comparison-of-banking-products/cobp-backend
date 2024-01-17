@@ -95,7 +95,7 @@ public class CurrencyController {
         Currency oldCurrency = currencyService.getById(id);
         Currency updateCurrency = currencyMapper.fromCurrencyCreateUpdateDto(updateCurrencyDto);
         oldCurrency = currencyMapper.updateCurrency(oldCurrency, updateCurrency);
-        Currency response = currencyService.update(id, oldCurrency);
+        Currency response = currencyService.update(oldCurrency);
         return currencyMapper.toCurrencyResponseDto(response);
     }
 
