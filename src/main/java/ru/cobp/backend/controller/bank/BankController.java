@@ -29,7 +29,6 @@ import java.util.List;
         name = "Банки",
         description = "Контроллер для работы с банками"
 )
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/banks")
 @RequiredArgsConstructor

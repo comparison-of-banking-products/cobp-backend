@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,7 +56,6 @@ public class CalculatorController {
                     array = @ArraySchema(schema = @Schema(implementation = CalculatedDepositResponseDto.class))
             )}
     )})
-    @CrossOrigin(origins = "*")
     @GetMapping("/deposits")
     public List<CalculatedDepositResponseDto> getAllCalculatedDeposits(
             @Parameter(description = "Сумма вклада в рублях")
@@ -104,7 +102,6 @@ public class CalculatorController {
                     array = @ArraySchema(schema = @Schema(implementation = CalculatedCreditResponseDto.class))
             )}
     )})
-    @CrossOrigin(origins = "*")
     @GetMapping("/credits")
     public List<CalculatedCreditResponseDto> getAllCalculatedCredits(
             @Parameter(description = "Сумма кредита в рублях")
