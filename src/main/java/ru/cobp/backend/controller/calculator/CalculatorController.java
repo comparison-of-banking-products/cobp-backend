@@ -57,7 +57,6 @@ public class CalculatorController {
                     array = @ArraySchema(schema = @Schema(implementation = CalculatedDepositResponseDto.class))
             )}
     )})
-    @CrossOrigin(origins = "*")
     @GetMapping("/deposits")
     public List<CalculatedDepositResponseDto> getAllCalculatedDeposits(
             @Parameter(description = "Сумма вклада в рублях")
@@ -104,7 +103,6 @@ public class CalculatorController {
                     array = @ArraySchema(schema = @Schema(implementation = CalculatedCreditResponseDto.class))
             )}
     )})
-    @CrossOrigin(origins = "*")
     @GetMapping("/credits")
     public List<CalculatedCreditResponseDto> getAllCalculatedCredits(
             @Parameter(description = "Сумма кредита в рублях")
