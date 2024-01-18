@@ -9,7 +9,7 @@ public interface BankService {
 
     Bank create(Bank newBank);
 
-    Bank update(String bic, Bank updBank);
+    Bank update(Bank updBank);
 
     Bank getBankByBicOrThrowException(String bic);
 

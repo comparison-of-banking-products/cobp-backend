@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.cobp.backend.dto.bank.BankResponseDto;
-import ru.cobp.backend.dto.currency.CurrencyDto;
+import ru.cobp.backend.dto.currency.CurrencyCreateUpdateDto;
 
 @Builder
 @Getter
@@ -42,7 +42,7 @@ public class DepositDto {
     private Boolean isActive;
 
     @NotNull
-    private CurrencyDto currency;
+    private CurrencyCreateUpdateDto currency;
 
     @Positive
     @NotNull

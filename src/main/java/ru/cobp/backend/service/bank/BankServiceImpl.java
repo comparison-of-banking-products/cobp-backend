@@ -36,26 +36,8 @@ public class BankServiceImpl implements BankService {
 
     @Override
     @Transactional
-    public Bank update(String bic, Bank updateBank) {
-        Bank bank = getBankByBicOrThrowException(bic);
-
-        if (updateBank.getName() != null) {
-            bank.setName(updateBank.getName());
-        }
-        if (updateBank.getLegalEntity() != null) {
-            bank.setLegalEntity(updateBank.getLegalEntity());
-        }
-        if (updateBank.getDescription() != null) {
-            bank.setDescription(updateBank.getDescription());
-        }
-        if (updateBank.getLogo() != null) {
-            bank.setLogo(updateBank.getLogo());
-        }
-        if (updateBank.getUrl() != null) {
-            bank.setUrl(updateBank.getUrl());
-        }
-
-        return bankRepository.save(bank);
+    public Bank update(Bank updateBank) {
+        return bankRepository.save(updateBank);
     }
 
     @Override
@@ -69,7 +51,11 @@ public class BankServiceImpl implements BankService {
     @Override
     @Transactional
     public void deleteByBic(String bic) {
-        getBankByBicOrThrowException(bic);
+        if (bankRepository.findById(bic).isEmpty()) {
+            throw new NotFoundException(
+                    String.format(ExceptionMessage.BANK_NOT_FOUND, bic)
+            );
+        }
         bankRepository.deleteById(bic);
     }
 
