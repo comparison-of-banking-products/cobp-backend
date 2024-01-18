@@ -11,7 +11,15 @@ import java.util.List;
 
 public interface CreditService {
 
-    Page<Credit> getAllMinimumRateCreditPage(int amount, int term, List<String> bics, Pageable pageable);
+    Page<Credit> getAllMinimumRateCreditPage(
+            int amount,
+            int term,
+            Boolean creditOnline,
+            Boolean onlineApprove,
+            Boolean collateral,
+            List<String> bics,
+            Pageable pageable
+    );
 
     List<Credit> getAll(CreditParams params, int page, int size);
 

@@ -112,7 +112,11 @@ public class TestUtils {
                 "Газпромбанк Кредит наличными",
                 "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
                 13,
-                24.40
+                24.40,
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
         );
     }
 

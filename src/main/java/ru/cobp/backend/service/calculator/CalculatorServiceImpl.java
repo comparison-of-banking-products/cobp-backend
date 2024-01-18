@@ -41,15 +41,25 @@ public class CalculatorServiceImpl implements CalculatorService {
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
         );
         List<CalculatedDeposit> calculatedDeposits = calculateDepositsInterest(depositPage.getContent(), amount, term);
+
         return new CalculatedDepositList(calculatedDeposits, depositPage.getTotalElements());
     }
 
     @Override
     public CalculatedCreditList getAllMinimumRateCalculatedCreditList(
-            int amount, int term, List<String> bics, Pageable pageable
+            int amount,
+            int term,
+            Boolean creditOnline,
+            Boolean onlineApprove,
+            Boolean collateral,
+            List<String> bics,
+            Pageable pageable
     ) {
-        Page<Credit> creditPage = creditService.getAllMinimumRateCreditPage(amount, term, bics, pageable);
+        Page<Credit> creditPage = creditService.getAllMinimumRateCreditPage(
+                amount, term, creditOnline, onlineApprove, collateral, bics, pageable
+        );
         List<CalculatedCredit> calculatedCredits = calculateCreditsPayments(creditPage.getContent(), amount, term);
+
         return new CalculatedCreditList(calculatedCredits, creditPage.getTotalElements());
     }
 

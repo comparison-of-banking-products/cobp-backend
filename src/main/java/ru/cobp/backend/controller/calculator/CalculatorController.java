@@ -112,6 +112,15 @@ public class CalculatorController {
             @Parameter(description = "Срок кредита в месяцах")
             @RequestParam @Positive int term,
 
+            @Parameter(description = "Получение без посещения банка")
+            @RequestParam(required = false) Boolean creditOnline,
+
+            @Parameter(description = "Подтверждение онлайн")
+            @RequestParam(required = false) Boolean onlineApprove,
+
+            @Parameter(description = "Наличие залога")
+            @RequestParam(required = false) Boolean collateral,
+
             @Parameter(description = "Список БИК номеров")
             @RequestParam(defaultValue = "") List<String> bics,
 
@@ -125,7 +134,7 @@ public class CalculatorController {
                 page, size, Sort.sort(Credit.class).by(Credit::getRate).ascending()
         );
         CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCreditList(
-                amount, term, bics, pageable
+                amount, term, creditOnline, onlineApprove, collateral, bics, pageable
         );
 
         return calculatorMapper.toCalculatedCreditListResponseDto(calculatedCreditList);
