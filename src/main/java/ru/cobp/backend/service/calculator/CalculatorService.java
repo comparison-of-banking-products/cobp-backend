@@ -19,7 +19,13 @@ public interface CalculatorService {
     );
 
     CalculatedCreditList getAllMinimumRateCalculatedCreditList(
-            int amount, int term, List<String> bics, Pageable pageable
+            int amount,
+            int term,
+            Boolean creditOnline,
+            Boolean onlineApprove,
+            Boolean collateral,
+            List<String> bics,
+            Pageable pageable
     );
 
 }

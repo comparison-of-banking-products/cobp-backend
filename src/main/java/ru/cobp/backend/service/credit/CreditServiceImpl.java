@@ -42,8 +42,16 @@ public class CreditServiceImpl implements CreditService {
     private final CreditMapper creditMapper;
 
     @Override
-    public Page<Credit> getAllMinimumRateCreditPage(int amount, int term, List<String> bics, Pageable pageable) {
-        Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, bics);
+    public Page<Credit> getAllMinimumRateCreditPage(
+            int amount,
+            int term,
+            Boolean creditOnline,
+            Boolean onlineApprove,
+            Boolean collateral,
+            List<String> bics,
+            Pageable pageable
+    ) {
+        Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, creditOnline, onlineApprove, collateral, bics);
         return creditRepository.findAll(p, pageable);
     }
 
@@ -86,7 +94,9 @@ public class CreditServiceImpl implements CreditService {
         }
     }
 
-    private Predicate buildQDepositMinimumRatePredicateBy(int amount, int term, List<String> bics) {
+    private Predicate buildQDepositMinimumRatePredicateBy(
+            int amount, int term, Boolean creditOnline, Boolean onlineApprove, Boolean collateral, List<String> bics
+    ) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_CREDIT.rate.goe(JPAExpressions
                         .select(Q_CREDIT.rate.min())
@@ -95,6 +105,18 @@ public class CreditServiceImpl implements CreditService {
                 .and(Q_CREDIT.amountMin.loe(amount))
                 .and(Q_CREDIT.amountMax.goe(amount))
                 .and(Q_CREDIT.term.eq(term));
+
+        if (creditOnline != null) {
+            builder.and((Q_CREDIT.creditOnline.eq(creditOnline)));
+        }
+
+        if (onlineApprove != null) {
+            builder.and((Q_CREDIT.onlineApprove.eq(onlineApprove)));
+        }
+
+        if (collateral != null) {
+            builder.and((Q_CREDIT.collateral.eq(collateral)));
+        }
 
         if (!bics.isEmpty()) {
             builder.and((Q_CREDIT.bank.bic.in(bics)));
