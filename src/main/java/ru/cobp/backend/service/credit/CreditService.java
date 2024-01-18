@@ -13,7 +13,7 @@ public interface CreditService {
 
     Page<Credit> getAllMinimumRateCreditPage(int amount, int term, List<String> bics, Pageable pageable);
 
-    List<Credit> getAll(CreditParams params, Pageable pageable);
+    List<Credit> getAll(CreditParams params, int page, int size);
 
     Credit getById(long id);
 

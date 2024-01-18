@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.cobp.backend.model.credit.PaymentType;
 
 @Data
 @Builder
@@ -44,6 +45,15 @@ public class CreditDto {
     private Integer term;
 
     @Schema(description = "Тип платежа")
-    private String paymentType;
+    private PaymentType paymentType;
+
+    @Schema(description = "Получение без посещения банка")
+    private Boolean creditOnline;
+
+    @Schema(description = "Подтверждение онлайн")
+    private Boolean onlineApprove;
+
+    @Schema(description = "Наличие залога")
+    private Boolean collateral;
 
 }

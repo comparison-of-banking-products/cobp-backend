@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.cobp.backend.model.credit.PaymentType;
 
 @Data
 @NoArgsConstructor
@@ -31,11 +32,11 @@ public class NewCreditDto {
 
     @NotNull
     @Positive
-    private Integer minAmount;
+    private Integer amountMin;
 
     @NotNull
     @Positive
-    private Integer maxAmount;
+    private Integer amountMax;
 
     @NotNull
     @Positive
@@ -45,8 +46,20 @@ public class NewCreditDto {
     @Positive
     private Integer term;
 
-    @NotBlank
+    @NotNull
     @Schema(description = "Тип платежа")
-    private String paymentType;
+    private PaymentType paymentType;
+
+    @NotNull
+    @Schema(description = "Получение без посещения банка")
+    private Boolean creditOnline;
+
+    @NotNull
+    @Schema(description = "Подтверждение онлайн")
+    private Boolean onlineApprove;
+
+    @NotNull
+    @Schema(description = "Наличие залога")
+    private Boolean collateral;
 
 }

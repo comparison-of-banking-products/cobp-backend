@@ -12,11 +12,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import ru.cobp.backend.common.TestUtils;
 import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
+import ru.cobp.backend.mapper.CreditMapper;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
 import ru.cobp.backend.model.currency.Currency;
@@ -45,6 +47,9 @@ public class CreditServiceTest {
     @Mock
     private BankService bankService;
 
+    @Mock
+    private CreditMapper creditMapper;
+
     @InjectMocks
     private CreditServiceImpl creditService;
 
@@ -54,14 +59,14 @@ public class CreditServiceTest {
     @Test
     void getAll_whenValid_thenReturnedCredits() {
         List<Credit> expectedList = List.of(TestUtils.buildGazprombankCredit());
-        Pageable page = PageRequest.of(0, 10);
+        Pageable page = PageRequest.of(0, 10, Sort.by("rate").ascending());
         CreditParams params = new CreditParams(null, null, null, null, null,
-                null, null, null);
+                null, null, null, null, null, null);
         Predicate p = new BooleanBuilder();
 
         when(creditRepository.findAll(p, page)).thenReturn(new PageImpl<>(expectedList));
 
-        List<Credit> actualList = creditService.getAll(params, page);
+        List<Credit> actualList = creditService.getAll(params, 0, 10);
         assertEquals(expectedList, actualList);
     }
 
@@ -91,10 +96,12 @@ public class CreditServiceTest {
         NewCreditDto newCreditDto = TestUtils.buildNewGazprombankCreditDto();
         Bank bank = TestUtils.buildGazprombank();
         Currency currency = TestUtils.buildRubCurrency();
+        Credit creditWithoutBankAndCurrency = TestUtils.buildCreditWithoutBankAndCurrency();
         Credit expectedCredit = TestUtils.buildGazprombankCredit();
 
         when(bankService.getBankByBicOrThrowException(newCreditDto.getBankBic())).thenReturn(bank);
         when(currencyService.getById(newCreditDto.getCurrencyNum())).thenReturn(currency);
+        when(creditMapper.toCredit(newCreditDto)).thenReturn(creditWithoutBankAndCurrency);
         when(creditRepository.save(any(Credit.class))).thenReturn(expectedCredit);
 
         Credit actualCredit = creditService.create(newCreditDto);
