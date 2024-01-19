@@ -57,7 +57,7 @@ class CurrencyControllerTest {
 
     @Test
     @SneakyThrows
-    void create() {
+    void create_whenValidCurrency_thenReturnCurrencyResponseDto() {
         mockMvc.perform(post("/v1/currencies")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUpdateDto)))
@@ -70,7 +70,7 @@ class CurrencyControllerTest {
 
     @Test
     @SneakyThrows
-    void update() {
+    void update_whenValidCurrency_thenReturnUpdatedCurrencyResponseDto() {
         mockMvc.perform(put("/v1/currencies/{num}", 643L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUpdateDto)))
@@ -81,7 +81,7 @@ class CurrencyControllerTest {
 
     @Test
     @SneakyThrows
-    void getAll() {
+    void getAll_whenCalled_thenReturnFullListOfCurrencyResponseDtos() {
         MvcResult result = mockMvc.perform(get("/v1/currencies")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
@@ -98,7 +98,7 @@ class CurrencyControllerTest {
 
     @Test
     @SneakyThrows
-    void getById() {
+    void getById_whenCalled_thenReturnCurrencyResponseDtoById() {
         mockMvc.perform(get("/v1/currencies/{num}", 643L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUpdateDto)))
@@ -109,7 +109,7 @@ class CurrencyControllerTest {
 
     @Test
     @SneakyThrows
-    void deleteById() {
+    void deleteById_whenCalled_thenDeleteCurrencyAndReturnStatusNoContent() {
         mockMvc.perform(delete("/v1/currencies/{num}", 643L))
                 .andExpect(status().isNoContent());
     }

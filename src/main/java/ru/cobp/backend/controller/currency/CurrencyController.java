@@ -9,10 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,10 +36,8 @@ import java.util.List;
         name = "Валюты",
         description = "Контроллер для работы с валютами"
 )
-@Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 @RequestMapping(path = "/v1/currencies")
 public class CurrencyController {
 
@@ -68,8 +64,6 @@ public class CurrencyController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CurrencyResponseDto create(@RequestBody @Valid CurrencyCreateUpdateDto newCurrencyDto) {
-        log.info("Получен POST запрос по эндпоинту /currencies на добавление Currency {}.", newCurrencyDto);
-
         Currency newCurrency = currencyMapper.fromCurrencyCreateUpdateDto(newCurrencyDto);
         Currency response = currencyService.create(newCurrency);
         return currencyMapper.toCurrencyResponseDto(response);
@@ -90,8 +84,6 @@ public class CurrencyController {
     @PutMapping("/{num}")
     public CurrencyResponseDto update(@PathVariable Long num,
                                       @RequestBody @Valid CurrencyCreateUpdateDto updateCurrencyDto) {
-        log.info("Получен PUT запрос по эндпоинту /currencies/{} на обновление Currency {}.", num, updateCurrencyDto);
-
         Currency oldCurrency = currencyService.getById(num);
         Currency updateCurrency = currencyMapper.fromCurrencyCreateUpdateDto(updateCurrencyDto);
         oldCurrency = currencyMapper.updateCurrency(oldCurrency, updateCurrency);
@@ -113,8 +105,6 @@ public class CurrencyController {
     )})
     @GetMapping
     public List<CurrencyResponseDto> getAll() {
-        log.info("Получен GET запрос по эндпоинту /currencies на получение списка всех валют.");
-
         List<Currency> response = currencyService.getAll();
         return currencyMapper.toCurrencyResponseDtos(response);
     }
@@ -133,8 +123,6 @@ public class CurrencyController {
     )})
     @GetMapping("/{num}")
     public CurrencyResponseDto getById(@PathVariable Long num) {
-        log.info("Получен GET запрос по эндпоинту /currencies/{} на получение Currency с ID {}.", num, num);
-
         Currency response = currencyService.getById(num);
         return currencyMapper.toCurrencyResponseDto(response);
     }
@@ -150,8 +138,6 @@ public class CurrencyController {
     @DeleteMapping("/{num}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long num) {
-        log.info("Получен DELETE запрос по эндпоинту /currencies/{} на удаление Currency с ID {}.", num, num);
-
         currencyService.deleteById(num);
     }
 
@@ -169,8 +155,6 @@ public class CurrencyController {
     )})
     @GetMapping("/rates")
     public List<CurrencyRateResponseDto> getCurrencyRates() {
-        log.info("Получен GET запрос по эндпоинту /currencies/rates на получение актуальных валютных котировок.");
-
         List<CurrencyRate> response = currencyRateService.getCurrencyRates();
         return currencyRateMapper.toCurrencyRateResponseDtos(response);
     }

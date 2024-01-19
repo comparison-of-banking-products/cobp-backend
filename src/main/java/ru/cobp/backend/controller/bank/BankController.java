@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,11 +29,9 @@ import java.util.List;
         name = "Банки",
         description = "Контроллер для работы с банками"
 )
-@Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 @RequestMapping("/v1/banks")
 public class BankController {
 
@@ -59,8 +56,6 @@ public class BankController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BankResponseDto create(@RequestBody @Valid BankCreateUpdateDto newBankDto) {
-        log.info("Получен POST запрос по эндпоинту /banks на добавление Bank {}.", newBankDto);
-
         Bank newBank = bankMapper.fromBankCreateUpdateDto(newBankDto);
         Bank response = bankService.create(newBank);
         return bankMapper.toBankResponseDto(response);
@@ -81,8 +76,6 @@ public class BankController {
     @PutMapping("/{bic}")
     public BankResponseDto update(@PathVariable String bic,
                                   @RequestBody @Valid BankCreateUpdateDto updateBankDto) {
-        log.info("Получен PUT запрос по эндпоинту /banks/{} на обновление Bank {}.", bic, updateBankDto);
-
         Bank oldBank = bankService.getBankByBicOrThrowException(bic);
         Bank updateBank = bankMapper.fromBankCreateUpdateDto(updateBankDto);
         oldBank = bankMapper.updateBank(oldBank, updateBank);
@@ -104,8 +97,6 @@ public class BankController {
     )})
     @GetMapping("/{bic}")
     public BankResponseDto getByBic(@PathVariable String bic) {
-        log.info("Получен GET запрос по эндпоинту /banks/{bic} на получение Bank с БИК {}.", bic);
-
         Bank bank = bankService.getBankByBicOrThrowException(bic);
         return bankMapper.toBankResponseDto(bank);
     }
@@ -121,8 +112,6 @@ public class BankController {
     @DeleteMapping("/{bic}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String bic) {
-        log.info("Получен DELETE запрос по эндпоинту /banks на удаление Bank с БИК {}.", bic);
-
         bankService.deleteByBic(bic);
     }
 
@@ -145,8 +134,6 @@ public class BankController {
             @Parameter(description = "Список БИК-ов")
             @RequestParam(defaultValue = "") List<String> bics
     ) {
-        log.info("Получен GET запрос по эндпоинту /banks на получение списка всех банков.");
-
         List<Bank> banks = bankService.getAll(sort, bics);
         return bankMapper.toBankResponseDtos(banks);
     }
@@ -164,8 +151,6 @@ public class BankController {
     public Resource getBankLogo(
             @PathVariable String logoName
     ) {
-        log.info("Получен GET запрос по эндпоинту /banks/logo/{logoName} на получение лого банка {}.", logoName);
-
         return storageService.getFileAsResource(logoName);
     }
 
