@@ -10,10 +10,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import ru.cobp.backend.client.exchange.ExchangeRatesClient;
 import ru.cobp.backend.dto.bank.BankCreateUpdateDto;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankSort;
@@ -46,6 +48,9 @@ class BankControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private ExchangeRatesClient exchangeRatesClient;
 
     static Stream<Arguments> banksSearchInputsForParameterisedTest() {
         return Stream.of(
