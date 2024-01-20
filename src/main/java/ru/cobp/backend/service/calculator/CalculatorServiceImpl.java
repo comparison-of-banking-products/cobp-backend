@@ -2,10 +2,11 @@ package ru.cobp.backend.service.calculator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Constants;
+import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
+import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
 import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
@@ -28,38 +29,20 @@ public class CalculatorServiceImpl implements CalculatorService {
     private final CreditService creditService;
 
     @Override
-    public CalculatedDepositList getAllMaximumRateCalculatedDepositList(
-            int amount,
-            int term,
-            Boolean capitalization,
-            Boolean replenishment,
-            Boolean partialWithdrawal,
-            List<String> bics,
-            Pageable pageable
-    ) {
-        Page<Deposit> depositPage = depositService.getAllMaximumRateDepositPage(
-                amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
+    public CalculatedDepositList getAllMaximumRateCalculatedDepositList(DepositCalculatorParams params) {
+        Page<Deposit> depositPage = depositService.getAllMaximumRateDepositPage(params);
+        List<CalculatedDeposit> calculatedDeposits = calculateDepositsInterest(
+                depositPage.getContent(), params.amount(), params.term()
         );
-        List<CalculatedDeposit> calculatedDeposits = calculateDepositsInterest(depositPage.getContent(), amount, term);
-
         return new CalculatedDepositList(calculatedDeposits, depositPage.getTotalElements());
     }
 
     @Override
-    public CalculatedCreditList getAllMinimumRateCalculatedCreditList(
-            int amount,
-            int term,
-            Boolean creditOnline,
-            Boolean onlineApprove,
-            Boolean collateral,
-            List<String> bics,
-            Pageable pageable
-    ) {
-        Page<Credit> creditPage = creditService.getAllMinimumRateCreditPage(
-                amount, term, creditOnline, onlineApprove, collateral, bics, pageable
+    public CalculatedCreditList getAllMinimumRateCalculatedCreditList(CreditCalculatorParams params) {
+        Page<Credit> creditPage = creditService.getAllMinimumRateCreditPage(params);
+        List<CalculatedCredit> calculatedCredits = calculateCreditsPayments(
+                creditPage.getContent(), params.amount(), params.term()
         );
-        List<CalculatedCredit> calculatedCredits = calculateCreditsPayments(creditPage.getContent(), amount, term);
-
         return new CalculatedCreditList(calculatedCredits, creditPage.getTotalElements());
     }
 

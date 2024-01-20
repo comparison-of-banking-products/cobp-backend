@@ -10,9 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
+import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
+import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
 import ru.cobp.backend.mapper.CalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDepositList;
-import ru.cobp.backend.model.credit.Credit;
-import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.service.calculator.CalculatorService;
 
 import java.util.List;
@@ -82,13 +79,10 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = PageRequest.of(
-                page, size, Sort.sort(Deposit.class).by(Deposit::getRate).descending()
+        DepositCalculatorParams params = new DepositCalculatorParams(
+                amount, term, capitalization, replenishment, partialWithdrawal, bics, page, size
         );
-        CalculatedDepositList calculatedDepositList = calculatorService.getAllMaximumRateCalculatedDepositList(
-                amount, term, capitalization, replenishment, partialWithdrawal, bics, pageable
-        );
-
+        CalculatedDepositList calculatedDepositList = calculatorService.getAllMaximumRateCalculatedDepositList(params);
         return calculatorMapper.toCalculatedDepositListResponseDto(calculatedDepositList);
     }
 
@@ -130,13 +124,10 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        Pageable pageable = PageRequest.of(
-                page, size, Sort.sort(Credit.class).by(Credit::getRate).ascending()
+        CreditCalculatorParams params = new CreditCalculatorParams(
+                amount, term, creditOnline, onlineApprove, collateral, bics, page, size
         );
-        CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCreditList(
-                amount, term, creditOnline, onlineApprove, collateral, bics, pageable
-        );
-
+        CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCreditList(params);
         return calculatorMapper.toCalculatedCreditListResponseDto(calculatedCreditList);
     }
 
