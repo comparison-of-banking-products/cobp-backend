@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
+import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
 import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
@@ -40,20 +41,6 @@ public class CreditServiceImpl implements CreditService {
     private final BankService bankService;
 
     private final CreditMapper creditMapper;
-
-    @Override
-    public Page<Credit> getAllMinimumRateCreditPage(
-            int amount,
-            int term,
-            Boolean creditOnline,
-            Boolean onlineApprove,
-            Boolean collateral,
-            List<String> bics,
-            Pageable pageable
-    ) {
-        Predicate p = buildQDepositMinimumRatePredicateBy(amount, term, creditOnline, onlineApprove, collateral, bics);
-        return creditRepository.findAll(p, pageable);
-    }
 
     @Override
     public List<Credit> getAll(CreditParams params, int page, int size) {
@@ -94,32 +81,39 @@ public class CreditServiceImpl implements CreditService {
         }
     }
 
-    private Predicate buildQDepositMinimumRatePredicateBy(
-            int amount, int term, Boolean creditOnline, Boolean onlineApprove, Boolean collateral, List<String> bics
-    ) {
+    @Override
+    public Page<Credit> getAllMinimumRateCreditPage(CreditCalculatorParams params) {
+        Predicate p = buildQCreditMinimumRatePredicateBy(params);
+        Pageable pageable = PageRequest.of(
+                params.page(), params.size(), Sort.sort(Credit.class).by(Credit::getRate).ascending()
+        );
+        return creditRepository.findAll(p, pageable);
+    }
+
+    private Predicate buildQCreditMinimumRatePredicateBy(CreditCalculatorParams params) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_CREDIT.rate.goe(JPAExpressions
                         .select(Q_CREDIT.rate.min())
                         .from(Q_CREDIT)
                 ))
-                .and(Q_CREDIT.amountMin.loe(amount))
-                .and(Q_CREDIT.amountMax.goe(amount))
-                .and(Q_CREDIT.term.eq(term));
+                .and(Q_CREDIT.amountMin.loe(params.amount()))
+                .and(Q_CREDIT.amountMax.goe(params.amount()))
+                .and(Q_CREDIT.term.eq(params.term()));
 
-        if (creditOnline != null) {
-            builder.and((Q_CREDIT.creditOnline.eq(creditOnline)));
+        if (params.creditOnline() != null) {
+            builder.and((Q_CREDIT.creditOnline.eq(params.creditOnline())));
         }
 
-        if (onlineApprove != null) {
-            builder.and((Q_CREDIT.onlineApprove.eq(onlineApprove)));
+        if (params.onlineApprove() != null) {
+            builder.and((Q_CREDIT.onlineApprove.eq(params.onlineApprove())));
         }
 
-        if (collateral != null) {
-            builder.and((Q_CREDIT.collateral.eq(collateral)));
+        if (params.collateral() != null) {
+            builder.and((Q_CREDIT.collateral.eq(params.collateral())));
         }
 
-        if (!bics.isEmpty()) {
-            builder.and((Q_CREDIT.bank.bic.in(bics)));
+        if (!params.bics().isEmpty()) {
+            builder.and((Q_CREDIT.bank.bic.in(params.bics())));
         }
 
         return builder;
