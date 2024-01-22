@@ -24,4 +24,10 @@ public class CreditParams {
 
     PaymentType paymentType;
 
+    Boolean creditOnline;
+
+    Boolean onlineApprove;
+
+    Boolean collateral;
+
 }

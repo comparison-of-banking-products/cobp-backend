@@ -4,10 +4,13 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.JPAExpressions;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.cobp.backend.common.Utils;
+import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
@@ -48,20 +51,12 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public List<Deposit> findAllMaximumRateDeposits(
-            int amount,
-            int term,
-            Boolean capitalization,
-            Boolean replenishment,
-            Boolean partialWithdrawal,
-            List<String> bics,
-            Pageable pageable
-    ) {
-        Predicate p = buildQDepositMaximumRatePredicateBy(
-                amount, term, capitalization, replenishment, partialWithdrawal, bics
+    public Page<Deposit> getAllMaximumRateDepositPage(DepositCalculatorParams params) {
+        Predicate p = buildQDepositMaximumRatePredicateBy(params);
+        Pageable pageable = PageRequest.of(
+                params.page(), params.size(), Sort.sort(Deposit.class).by(Deposit::getRate).descending()
         );
-        Iterable<Deposit> deposits = depositRepository.findAll(p, pageable);
-        return Utils.toList(deposits);
+        return depositRepository.findAll(p, pageable);
     }
 
     @Override
@@ -69,37 +64,30 @@ public class DepositServiceImpl implements DepositService {
         return scrapedDepositRepository.findAll();
     }
 
-    private Predicate buildQDepositMaximumRatePredicateBy(
-            int amount,
-            int term,
-            Boolean capitalization,
-            Boolean replenishment,
-            Boolean partialWithdrawal,
-            List<String> bics
-    ) {
+    private Predicate buildQDepositMaximumRatePredicateBy(DepositCalculatorParams params) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_DEPOSIT.rate.loe(JPAExpressions
                         .select(Q_DEPOSIT.rate.max())
                         .from(Q_DEPOSIT)
                 ))
-                .and(Q_DEPOSIT.amountMin.loe(amount))
-                .and(Q_DEPOSIT.amountMax.goe(amount))
-                .and(Q_DEPOSIT.term.eq(term));
+                .and(Q_DEPOSIT.amountMin.loe(params.amount()))
+                .and(Q_DEPOSIT.amountMax.goe(params.amount()))
+                .and(Q_DEPOSIT.term.eq(params.term()));
 
-        if (capitalization != null) {
-            builder.and(Q_DEPOSIT.capitalization.eq(capitalization));
+        if (params.capitalization() != null) {
+            builder.and(Q_DEPOSIT.capitalization.eq(params.capitalization()));
         }
 
-        if (replenishment != null) {
-            builder.and(Q_DEPOSIT.replenishment.eq(replenishment));
+        if (params.replenishment() != null) {
+            builder.and(Q_DEPOSIT.replenishment.eq(params.replenishment()));
         }
 
-        if (partialWithdrawal != null) {
-            builder.and(Q_DEPOSIT.partialWithdrawal.eq(partialWithdrawal));
+        if (params.partialWithdrawal() != null) {
+            builder.and(Q_DEPOSIT.partialWithdrawal.eq(params.partialWithdrawal()));
         }
 
-        if (!bics.isEmpty()) {
-            builder.and((Q_DEPOSIT.bank.bic.in(bics)));
+        if (!params.bics().isEmpty()) {
+            builder.and((Q_DEPOSIT.bank.bic.in(params.bics())));
         }
 
         return builder;

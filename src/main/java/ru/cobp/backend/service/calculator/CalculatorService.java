@@ -1,25 +1,14 @@
 package ru.cobp.backend.service.calculator;
 
-import org.springframework.data.domain.Pageable;
-import ru.cobp.backend.model.calculator.CalculatedCredit;
-import ru.cobp.backend.model.calculator.CalculatedDeposit;
-
-import java.util.List;
+import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
+import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
+import ru.cobp.backend.model.calculator.CalculatedCreditList;
+import ru.cobp.backend.model.calculator.CalculatedDepositList;
 
 public interface CalculatorService {
 
-    List<CalculatedDeposit> getAllMaximumRateCalculatedDeposits(
-            int amount,
-            int term,
-            Boolean capitalization,
-            Boolean replenishment,
-            Boolean partialWithdrawal,
-            List<String> bics,
-            Pageable pageable
-    );
+    CalculatedDepositList getAllMaximumRateCalculatedDepositList(DepositCalculatorParams params);
 
-    List<CalculatedCredit> getAllMinimumRateCalculatedCredits(
-            int amount, int term, List<String> bics, Pageable pageable
-    );
+    CalculatedCreditList getAllMinimumRateCalculatedCreditList(CreditCalculatorParams params);
 
 }

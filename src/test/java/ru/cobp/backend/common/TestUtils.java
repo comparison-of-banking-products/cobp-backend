@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
+import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
+import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
 import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditResponseDto;
@@ -97,7 +99,10 @@ public class TestUtils {
                 7000000,
                 13,
                 24.40,
-                PaymentType.ANNUITY
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
         );
     }
 
@@ -107,7 +112,11 @@ public class TestUtils {
                 "Газпромбанк Кредит наличными",
                 "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
                 13,
-                24.40
+                24.40,
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
         );
     }
 
@@ -206,7 +215,10 @@ public class TestUtils {
                 7000000,
                 24.4,
                 13,
-                "Аннуитетный"
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
         );
     }
 
@@ -222,6 +234,9 @@ public class TestUtils {
                 null,
                 25.1,
                 12,
+                null,
+                null,
+                null,
                 null
         );
     }
@@ -238,7 +253,10 @@ public class TestUtils {
                 7000000,
                 12,
                 25.1,
-                PaymentType.ANNUITY
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
         );
     }
 
@@ -255,7 +273,10 @@ public class TestUtils {
                 credit.getAmountMax(),
                 credit.getTerm(),
                 credit.getRate(),
-                credit.getPaymentType().getTitle()
+                credit.getPaymentType(),
+                credit.getCreditOnline(),
+                credit.getOnlineApprove(),
+                credit.getCollateral()
         );
     }
 
@@ -263,6 +284,25 @@ public class TestUtils {
         List<CreditResponseDto> creditResponseDtoList = new ArrayList<>();
         creditResponseDtoList.add(toCreditResponseDto(buildGazprombankCredit()));
         return creditResponseDtoList;
+    }
+
+    public static Credit buildCreditWithoutBankAndCurrency() {
+        return new Credit(
+                1L,
+                null,
+                "Газпромбанк Кредит наличными",
+                "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
+                true,
+                null,
+                10000,
+                7000000,
+                13,
+                24.40,
+                PaymentType.ANNUITY,
+                true,
+                true,
+                false
+        );
     }
 
     private static BankResponseDto buildGazprombankResponseDto() {
@@ -274,6 +314,14 @@ public class TestUtils {
                 "gazprombank-logo.svg",
                 "https://www.gazprombank.ru"
         );
+    }
+
+    public static CalculatedDepositListResponseDto buildGazprombankCalculatedDepositListResponseDto() {
+        return new CalculatedDepositListResponseDto(buildGazprombankCalculatedDepositResponseDtos(), 4L);
+    }
+
+    public static CalculatedCreditListResponseDto buildGazprombankCalculatedCreditListResponseDto() {
+        return new CalculatedCreditListResponseDto(buildGazprombankCalculatedCreditResponseDtos(), 1L);
     }
 
 }

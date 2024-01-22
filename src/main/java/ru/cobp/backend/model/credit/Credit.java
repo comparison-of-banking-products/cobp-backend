@@ -51,4 +51,13 @@ public class Credit {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
+    @Column(name = "credit_online", nullable = false)
+    private Boolean creditOnline;
+
+    @Column(name = "online_approve", nullable = false)
+    private Boolean onlineApprove;
+
+    @Column(name = "collateral", nullable = false)
+    private Boolean collateral;
+
 }

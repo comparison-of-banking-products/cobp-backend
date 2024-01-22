@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
+import ru.cobp.backend.model.credit.PaymentType;
 
 @Schema(description = "Краткое представление кредита")
 @Data
@@ -26,5 +27,17 @@ public class CreditShortResponseDto {
 
     @Schema(description = "Процентная ставка")
     private Double rate;
+
+    @Schema(description = "Тип платежа")
+    private PaymentType paymentType;
+
+    @Schema(description = "Получение без посещения банка")
+    private Boolean creditOnline;
+
+    @Schema(description = "Подтверждение онлайн")
+    private Boolean onlineApprove;
+
+    @Schema(description = "Наличие залога")
+    private Boolean collateral;
 
 }

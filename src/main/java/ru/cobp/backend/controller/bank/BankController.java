@@ -29,11 +29,10 @@ import java.util.List;
         name = "Банки",
         description = "Контроллер для работы с банками"
 )
-@CrossOrigin(origins = "*")
-@RestController
-@RequestMapping("/v1/banks")
-@RequiredArgsConstructor
 @Validated
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/v1/banks")
 public class BankController {
 
     private final BankService bankService;
@@ -77,8 +76,10 @@ public class BankController {
     @PutMapping("/{bic}")
     public BankResponseDto update(@PathVariable String bic,
                                   @RequestBody @Valid BankCreateUpdateDto updateBankDto) {
+        Bank oldBank = bankService.getBankByBicOrThrowException(bic);
         Bank updateBank = bankMapper.fromBankCreateUpdateDto(updateBankDto);
-        Bank response = bankService.update(bic, updateBank);
+        oldBank = bankMapper.updateBank(oldBank, updateBank);
+        Bank response = bankService.update(oldBank);
         return bankMapper.toBankResponseDto(response);
     }
 
@@ -106,11 +107,7 @@ public class BankController {
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "204",
-            description = "Удален банк по БИК номеру",
-            content = {@Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = BankResponseDto.class)
-            )}
+            description = "Удален банк по БИК номеру"
     )})
     @DeleteMapping("/{bic}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

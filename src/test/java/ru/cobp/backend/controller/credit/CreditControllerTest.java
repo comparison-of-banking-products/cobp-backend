@@ -8,7 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.cobp.backend.common.TestUtils;
@@ -23,8 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -52,7 +50,7 @@ public class CreditControllerTest {
 
     @SneakyThrows
     @Test
-    void createCredit() {
+    void shouldCreateCreditWhenValid() {
         NewCreditDto newCreditDto = TestUtils.buildNewGazprombankCreditDto();
         Credit credit = TestUtils.buildGazprombankCredit();
 
@@ -76,7 +74,7 @@ public class CreditControllerTest {
 
     @SneakyThrows
     @Test
-    void changeCredit() {
+    void shouldChangeCreditWhenValid() {
         Long creditId = 1L;
         Credit updatedCredit = TestUtils.buildGazprombankUpdatedCredit();
         CreditResponseDto updatedDto = TestUtils.toCreditResponseDto(updatedCredit);
@@ -100,10 +98,10 @@ public class CreditControllerTest {
 
     @SneakyThrows
     @Test
-    void getAllCredits() {
+    void shouldGetAllCreditsWhenValid() {
         List<CreditResponseDto> expectedList = TestUtils.buildCreditResponseDtos();
 
-        when(creditService.getAll(any(CreditParams.class), any(Pageable.class)))
+        when(creditService.getAll(any(CreditParams.class), anyInt(), anyInt()))
                 .thenReturn(List.of(TestUtils.buildGazprombankCredit()));
         when(creditMapper.toCreditResponseDtos(anyList())).thenReturn(expectedList);
 
@@ -115,12 +113,12 @@ public class CreditControllerTest {
                 .getContentAsString(StandardCharsets.UTF_8);
 
         assertEquals(objectMapper.writeValueAsString(expectedList), result);
-        verify(creditService).getAll(any(CreditParams.class), any(Pageable.class));
+        verify(creditService).getAll(any(CreditParams.class), anyInt(), anyInt());
     }
 
     @SneakyThrows
     @Test
-    void getCreditById() {
+    void shouldGetCreditByIdWhenFound() {
         Long creditId = 1L;
         Credit credit = TestUtils.buildGazprombankCredit();
         CreditResponseDto expectedResponseDto = TestUtils.toCreditResponseDto(credit);
@@ -141,7 +139,7 @@ public class CreditControllerTest {
 
     @SneakyThrows
     @Test
-    void deleteCredit() {
+    void shouldDeleteCreditWhenValid() {
         Long creditId = 1L;
 
         mockMvc.perform(delete("/v1/credits/{creditId}", creditId))
