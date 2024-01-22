@@ -41,6 +41,8 @@ class BankControllerTest {
 
     static BankCreateUpdateDto createUpdateDto;
 
+    static String jsonPayload;
+
     static List<String> bics = List.of("044525111", "044525187", "044525225", "044525593", "044525823", "044525974");
 
     @Autowired
@@ -69,12 +71,14 @@ class BankControllerTest {
                 .logo("logo.svg")
                 .url("https://url.com")
                 .build();
+
+        jsonPayload = createJsonPayload(createUpdateDto);
     }
 
     @Test
     void create_whenValidCreateDto_shouldAddNewBank() {
         // given
-        BankResponseDto expect = createBank(createUpdateDto);
+        BankResponseDto expect = createBank(jsonPayload);
 
         // when
         BankResponseDto actual = getBankByBic(createUpdateDto.getBic());
@@ -88,11 +92,12 @@ class BankControllerTest {
     void create_whenBicNotUnique_throwDuplicateException() {
         // given
         createUpdateDto.setBic("044525111");
+        jsonPayload = jsonPayload.replace("123456789", "044525111");
 
         // then
         mockMvc.perform(post("/v1/banks")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUpdateDto)))
+                        .content(jsonPayload))
                 .andExpect(result -> assertInstanceOf(DuplicateException.class, result.getResolvedException()));
     }
 
@@ -100,7 +105,7 @@ class BankControllerTest {
     void update_whenValidUpdateDto_thenReturnUpdatedResponse() {
         // given
         createUpdateDto.setBic("044525111");
-        BankResponseDto expect = updateBank(createUpdateDto.getBic(), createUpdateDto);
+        BankResponseDto expect = updateBank(createUpdateDto.getBic(), jsonPayload);
 
         // when
         BankResponseDto actual = getBankByBic(createUpdateDto.getBic());
@@ -118,7 +123,7 @@ class BankControllerTest {
         // then
         mockMvc.perform(put("/v1/banks/{bic}", invalidBic)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUpdateDto)))
+                        .content(jsonPayload))
                 .andExpect(result -> assertInstanceOf(NotFoundException.class, result.getResolvedException()));
     }
 
@@ -211,10 +216,10 @@ class BankControllerTest {
     }
 
     @SneakyThrows
-    BankResponseDto createBank(BankCreateUpdateDto createUpdateDto) {
+    BankResponseDto createBank(String jsonPayload) {
         MvcResult result = mockMvc.perform(post("/v1/banks")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUpdateDto)))
+                        .content(jsonPayload))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -224,15 +229,26 @@ class BankControllerTest {
     }
 
     @SneakyThrows
-    BankResponseDto updateBank(String bic, BankCreateUpdateDto createUpdateDto) {
+    BankResponseDto updateBank(String bic, String jsonPayload) {
         MvcResult result = mockMvc.perform(put("/v1/banks/{bic}", bic)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUpdateDto)))
+                        .content(jsonPayload))
                 .andExpect(status().isOk())
                 .andReturn();
 
         return objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 BankResponseDto.class);
+    }
+
+    private static String createJsonPayload(BankCreateUpdateDto createUpdateDto) {
+        return String.format("{\"bic\": \"%s\", \"name\": \"%s\", \"description\": \"%s\", " +
+                        "\"legalEntity\": \"%s\", \"logo\": \"%s\", \"url\": \"%s\"}",
+                createUpdateDto.getBic(),
+                createUpdateDto.getName(),
+                createUpdateDto.getDescription(),
+                createUpdateDto.getLegalEntity(),
+                createUpdateDto.getLogo(),
+                createUpdateDto.getUrl());
     }
 }

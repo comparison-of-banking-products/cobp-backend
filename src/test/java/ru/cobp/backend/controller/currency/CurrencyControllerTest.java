@@ -34,6 +34,8 @@ class CurrencyControllerTest {
 
     static CurrencyCreateUpdateDto createUpdateDto;
 
+    static String jsonPayload;
+
     @Autowired
     MockMvc mockMvc;
 
@@ -53,6 +55,8 @@ class CurrencyControllerTest {
                 .code("CAD")
                 .currency("Канадский доллар")
                 .build();
+
+        jsonPayload = createJsonPayload(createUpdateDto);
     }
 
     @Test
@@ -60,7 +64,7 @@ class CurrencyControllerTest {
     void create_whenValidCurrency_thenReturnCurrencyResponseDto() {
         mockMvc.perform(post("/v1/currencies")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUpdateDto)))
+                        .content(jsonPayload))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.num").value(createUpdateDto.getNum()))
                 .andExpect(jsonPath("$.code").value(createUpdateDto.getCode()))
@@ -73,7 +77,7 @@ class CurrencyControllerTest {
     void update_whenValidCurrency_thenReturnUpdatedCurrencyResponseDto() {
         mockMvc.perform(put("/v1/currencies/{num}", 643L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUpdateDto)))
+                        .content(jsonPayload))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(createUpdateDto.getCode()))
                 .andExpect(jsonPath("$.currency").value(createUpdateDto.getCurrency()));
@@ -101,7 +105,7 @@ class CurrencyControllerTest {
     void getById_whenCalled_thenReturnCurrencyResponseDtoById() {
         mockMvc.perform(get("/v1/currencies/{num}", 643L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUpdateDto)))
+                        .content(jsonPayload))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("RUB"))
                 .andExpect(jsonPath("$.currency").value("Российский рубль"));
@@ -112,5 +116,10 @@ class CurrencyControllerTest {
     void deleteById_whenCalled_thenDeleteCurrencyAndReturnStatusNoContent() {
         mockMvc.perform(delete("/v1/currencies/{num}", 643L))
                 .andExpect(status().isNoContent());
+    }
+
+    private static String createJsonPayload(CurrencyCreateUpdateDto createUpdateDto) {
+        return String.format("{\"num\": \"%s\", \"code\": \"%s\", \"currency\": \"%s\"}"
+                , createUpdateDto.getNum().toString(), createUpdateDto.getCode(), createUpdateDto.getCurrency());
     }
 }
