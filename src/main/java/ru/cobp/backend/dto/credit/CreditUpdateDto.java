@@ -12,13 +12,7 @@ import ru.cobp.backend.model.credit.PaymentType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Сущность кредита")
-public class CreditDto {
-
-    @Schema(description = "Id кредита")
-    private Long id;
-
-    @Schema(description = "БИК банка")
-    private String bankBic;
+public class CreditUpdateDto {
 
     @Schema(description = "Название кредита")
     private String name;
@@ -26,17 +20,14 @@ public class CreditDto {
     @Schema(description = "Доступность кредита")
     private Boolean isActive;
 
-    @Schema(description = "Код валюты")
-    private Long currencyNum;
-
     @Schema(description = "Ссылка на кредит")
     private String productUrl;
 
     @Schema(description = "Минимальная сумма кредита")
-    private Integer minAmount;
+    private Integer amountMin;
 
     @Schema(description = "Максимальная сумма кредита")
-    private Integer maxAmount;
+    private Integer amountMax;
 
     @Schema(description = "Процентная ставка кредита")
     private Double rate;

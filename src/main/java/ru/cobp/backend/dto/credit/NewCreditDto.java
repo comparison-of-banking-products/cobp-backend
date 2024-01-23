@@ -14,36 +14,45 @@ import ru.cobp.backend.model.credit.PaymentType;
 public class NewCreditDto {
 
     @NotBlank
+    @Schema(description = "БИК банка")
     private String bankBic;
 
     @NotBlank
     @Size(min = 3, max = 100)
+    @Schema(description = "Название кредита")
     private String name;
 
     @NotNull
+    @Schema(description = "Доступность кредита")
     private Boolean isActive;
 
     @NotNull
+    @Schema(description = "Код валюты")
     private Long currencyNum;
 
     @NotBlank
     @Size(min = 3, max = 100)
+    @Schema(description = "Ссылка на кредит")
     private String productUrl;
 
     @NotNull
     @Positive
+    @Schema(description = "Минимальная сумма кредита")
     private Integer amountMin;
 
     @NotNull
     @Positive
+    @Schema(description = "Максимальная сумма кредита")
     private Integer amountMax;
 
     @NotNull
     @Positive
+    @Schema(description = "Процентная ставка кредита")
     private Double rate;
 
     @NotNull
     @Positive
+    @Schema(description = "Срок кредита")
     private Integer term;
 
     @NotNull

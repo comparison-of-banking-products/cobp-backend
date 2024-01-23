@@ -14,7 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import ru.cobp.backend.common.TestUtils;
-import ru.cobp.backend.dto.credit.CreditDto;
+import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
@@ -127,14 +127,14 @@ public class CreditServiceTest {
     @Test
     void updateCredit_whenValid_thenReturnedCredit() {
         Long creditId = 1L;
-        CreditDto creditDto = TestUtils.buildGazprombankCreditDto();
+        CreditUpdateDto creditUpdateDto = TestUtils.buildGazprombankCreditDto();
         Credit credit = TestUtils.buildGazprombankCredit();
         Credit expectedCredit = TestUtils.buildGazprombankUpdatedCredit();
 
         when(creditRepository.findById(creditId)).thenReturn(Optional.of(credit));
         when(creditRepository.save(any(Credit.class))).thenReturn(expectedCredit);
 
-        Credit actualCredit = creditService.update(creditId, creditDto);
+        Credit actualCredit = creditService.update(creditId, creditUpdateDto);
         assertEquals(expectedCredit, actualCredit);
         verify(creditRepository).save(creditCapture.capture());
         Credit savedCredit = creditCapture.getValue();
@@ -150,7 +150,7 @@ public class CreditServiceTest {
 
         when(creditRepository.findById(creditId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> creditService.update(creditId, any(CreditDto.class)));
+        assertThrows(NotFoundException.class, () -> creditService.update(creditId, any(CreditUpdateDto.class)));
     }
 
     @Test

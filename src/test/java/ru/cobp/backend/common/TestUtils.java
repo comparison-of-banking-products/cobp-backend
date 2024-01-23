@@ -8,7 +8,7 @@ import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
-import ru.cobp.backend.dto.credit.CreditDto;
+import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.CreditShortResponseDto;
 import ru.cobp.backend.dto.credit.NewCreditDto;
@@ -222,11 +222,8 @@ public class TestUtils {
         );
     }
 
-    public static CreditDto buildGazprombankCreditDto() {
-        return new CreditDto(
-                null,
-                null,
-                null,
+    public static CreditUpdateDto buildGazprombankCreditDto() {
+        return new CreditUpdateDto(
                 null,
                 null,
                 null,

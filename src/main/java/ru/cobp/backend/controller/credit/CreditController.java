@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.cobp.backend.dto.credit.CreditDto;
+import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.NewCreditDto;
@@ -130,9 +130,9 @@ public class CreditController {
     @PutMapping("/{id}")
     public CreditResponseDto update(
             @PathVariable @Parameter(description = "Идентификатор кредита", required = true) Long id,
-            @RequestBody @Parameter(description = "Обновленный кредит", required = true) CreditDto creditDto
+            @RequestBody @Parameter(description = "Обновленный кредит", required = true) CreditUpdateDto creditUpdateDto
     ) {
-        Credit credit = creditService.update(id, creditDto);
+        Credit credit = creditService.update(id, creditUpdateDto);
         return creditMapper.toCreditResponseDto(credit);
     }
 
