@@ -21,8 +21,8 @@ public interface DepositService {
 
     Page<Deposit> findAllMaximumRateDepositPage(MaximumRateDepositParams params);
 
-    List<ScrapedDeposit> findAllScrapedDeposits();
-
     void deleteById(long id);
+
+    List<ScrapedDeposit> findAllScrapedDeposits();
 
 }

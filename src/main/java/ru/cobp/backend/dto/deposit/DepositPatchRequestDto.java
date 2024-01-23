@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "Новый вклад")
+@Schema(description = "Обновление вклада")
 @Data
 @NoArgsConstructor
 public class DepositPatchRequestDto {

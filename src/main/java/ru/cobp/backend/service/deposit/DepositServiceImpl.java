@@ -84,15 +84,15 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public List<ScrapedDeposit> findAllScrapedDeposits() {
-        return scrapedDepositRepository.findAll();
-    }
-
-    @Override
     @Transactional
     public void deleteById(long id) {
         checkDepositExistsOrThrow(id);
         depositRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ScrapedDeposit> findAllScrapedDeposits() {
+        return scrapedDepositRepository.findAll();
     }
 
     private Bank getBank(String bic) {
