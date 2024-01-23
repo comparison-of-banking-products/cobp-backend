@@ -44,11 +44,11 @@ public class DepositController {
 
     @Operation(
             summary = "Добавить вклад",
-            description = "Конечная точка для добавления нового вклада"
+            description = "Конечная точка для добавления вклада"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "201",
-            description = "Добавлен новый вклад",
+            description = "Вклад добавлен",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DepositResponseDto.class)
@@ -66,11 +66,11 @@ public class DepositController {
 
     @Operation(
             summary = "Изменить вклад",
-            description = "Конечная точка для изменения существующего вклада"
+            description = "Конечная точка для изменения вклада"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
-            description = "Существующий вклад изменен",
+            description = "Вклад изменен",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DepositResponseDto.class)
@@ -89,12 +89,12 @@ public class DepositController {
     }
 
     @Operation(
-            summary = "Найти вклад по Id",
-            description = "Конечная точка для поиска вклада по Id"
+            summary = "Найти вклад",
+            description = "Конечная точка для поиска вклада"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
-            description = "Найден вклад по Id",
+            description = "Вклад найден",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DepositResponseDto.class)
@@ -115,7 +115,7 @@ public class DepositController {
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
-            description = "Найдены вклады",
+            description = "Вклады найдены",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DepositListResponseDto.class)
@@ -182,16 +182,21 @@ public class DepositController {
         return new DepositListResponseDto(depositResponseDtos, depositPage.getTotalElements());
     }
 
-
-    //todo
     @Operation(
-            summary = "Удалить депозит",
-            description = "Конечная точка для удаления депозита"
+            summary = "Удалить вклад",
+            description = "Конечная точка для удаления вклада"
     )
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "204",
+            description = "Вклад удален"
+    )})
     @DeleteMapping("/{id}")
-    public void deleteDeposit(@PathVariable Long id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDeposit(
+            @Parameter(description = "Идентификатор вклада")
+            @PathVariable long id
+    ) {
+        depositService.deleteById(id);
     }
 
     @Operation(

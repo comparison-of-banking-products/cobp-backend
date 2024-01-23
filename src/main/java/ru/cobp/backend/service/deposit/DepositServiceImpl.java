@@ -89,16 +89,24 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
-
+        checkDepositExistsOrThrow(id);
+        depositRepository.deleteById(id);
     }
 
     private Bank getBank(String bic) {
         return bankService.getBankByBicOrThrowException(bic);
     }
 
-    private Currency getCurrency(Long num) {
+    private Currency getCurrency(long num) {
         return currencyService.getById(num);
+    }
+
+    private void checkDepositExistsOrThrow(long id) {
+        if (!depositRepository.existsById(id)) {
+            throw ExceptionUtil.getDepositNotFoundException(id);
+        }
     }
 
     private Predicate buildQDepositMaximumRatePredicateBy(MaximumRateDepositParams params) {
