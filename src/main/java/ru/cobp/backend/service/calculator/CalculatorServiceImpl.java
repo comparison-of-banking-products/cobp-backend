@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Constants;
-import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
-import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
+import ru.cobp.backend.dto.calculator.MinimumRateCreditParams;
+import ru.cobp.backend.dto.calculator.MaximumRateDepositParams;
 import ru.cobp.backend.model.calculator.CalculatedCredit;
 import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDeposit;
@@ -29,7 +29,7 @@ public class CalculatorServiceImpl implements CalculatorService {
     private final CreditService creditService;
 
     @Override
-    public CalculatedDepositList getAllMaximumRateCalculatedDepositList(DepositCalculatorParams params) {
+    public CalculatedDepositList getAllMaximumRateCalculatedDepositList(MaximumRateDepositParams params) {
         Page<Deposit> depositPage = depositService.getAllMaximumRateDepositPage(params);
         List<CalculatedDeposit> calculatedDeposits = calculateDepositsInterest(
                 depositPage.getContent(), params.amount(), params.term()
@@ -38,7 +38,7 @@ public class CalculatorServiceImpl implements CalculatorService {
     }
 
     @Override
-    public CalculatedCreditList getAllMinimumRateCalculatedCreditList(CreditCalculatorParams params) {
+    public CalculatedCreditList getAllMinimumRateCalculatedCreditList(MinimumRateCreditParams params) {
         Page<Credit> creditPage = creditService.getAllMinimumRateCreditPage(params);
         List<CalculatedCredit> calculatedCredits = calculateCreditsPayments(
                 creditPage.getContent(), params.amount(), params.term()

@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
+import ru.cobp.backend.dto.calculator.MaximumRateDepositParams;
 import ru.cobp.backend.dto.deposit.DepositParams;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
@@ -39,7 +39,7 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public Page<Deposit> getAllMaximumRateDepositPage(DepositCalculatorParams params) {
+    public Page<Deposit> getAllMaximumRateDepositPage(MaximumRateDepositParams params) {
         Predicate p = buildQDepositMaximumRatePredicateBy(params);
         Pageable pageable = PageRequest.of(
                 params.page(), params.size(), Sort.sort(Deposit.class).by(Deposit::getRate).descending()
@@ -52,7 +52,7 @@ public class DepositServiceImpl implements DepositService {
         return scrapedDepositRepository.findAll();
     }
 
-    private Predicate buildQDepositMaximumRatePredicateBy(DepositCalculatorParams params) {
+    private Predicate buildQDepositMaximumRatePredicateBy(MaximumRateDepositParams params) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_DEPOSIT.rate.loe(JPAExpressions
                         .select(Q_DEPOSIT.rate.max())
