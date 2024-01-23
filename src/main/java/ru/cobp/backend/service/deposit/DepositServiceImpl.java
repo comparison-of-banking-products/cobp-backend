@@ -13,11 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.dto.calculator.MaximumRateDepositParams;
 import ru.cobp.backend.dto.deposit.DepositParams;
 import ru.cobp.backend.exception.ExceptionUtil;
+import ru.cobp.backend.mapper.DepositMapper;
+import ru.cobp.backend.model.bank.Bank;
+import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.deposit.Deposit;
+import ru.cobp.backend.model.deposit.DepositPatch;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
 import ru.cobp.backend.repository.deposit.DepositRepository;
 import ru.cobp.backend.repository.deposit.ScrapedDepositRepository;
+import ru.cobp.backend.service.bank.BankService;
+import ru.cobp.backend.service.currency.CurrencyService;
 
 import java.util.List;
 
@@ -32,15 +38,44 @@ public class DepositServiceImpl implements DepositService {
 
     private final ScrapedDepositRepository scrapedDepositRepository;
 
+    private final BankService bankService;
+
+    private final CurrencyService currencyService;
+
+    private final DepositMapper depositMapper;
+
     @Override
-    public Page<Deposit> getAllDepositPage(DepositParams params) {
+    @Transactional
+    public Deposit save(Deposit deposit) {
+        deposit.setBank(getBank(deposit.getBank().getBic()));
+        deposit.setCurrency(getCurrency(deposit.getCurrency().getNum()));
+        return depositRepository.save(deposit);
+    }
+
+    @Override
+    @Transactional
+    public Deposit update(long id, DepositPatch patch) {
+        Deposit deposit = findById(id);
+        depositMapper.patchDeposit(deposit, patch);
+        return depositRepository.save(deposit);
+    }
+
+    @Override
+    public Deposit findById(long id) {
+        return depositRepository
+                .findById(id)
+                .orElseThrow(() -> ExceptionUtil.getDepositNotFoundException(id));
+    }
+
+    @Override
+    public Page<Deposit> findAllDepositPage(DepositParams params) {
         Predicate p = buildQDepositPredicateBy(params);
         Pageable pageable = PageRequest.of(params.page(), params.size());
         return depositRepository.findAll(p, pageable);
     }
 
     @Override
-    public Page<Deposit> getAllMaximumRateDepositPage(MaximumRateDepositParams params) {
+    public Page<Deposit> findAllMaximumRateDepositPage(MaximumRateDepositParams params) {
         Predicate p = buildQDepositMaximumRatePredicateBy(params);
         Pageable pageable = PageRequest.of(
                 params.page(), params.size(), Sort.sort(Deposit.class).by(Deposit::getRate).descending()
@@ -49,15 +84,21 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public List<ScrapedDeposit> getAllScrapedDeposits() {
+    public List<ScrapedDeposit> findAllScrapedDeposits() {
         return scrapedDepositRepository.findAll();
     }
 
     @Override
-    public Deposit getById(long id) {
-        return depositRepository
-                .findById(id)
-                .orElseThrow(() -> ExceptionUtil.getDepositNotFoundException(id));
+    public void deleteById(long id) {
+
+    }
+
+    private Bank getBank(String bic) {
+        return bankService.getBankByBicOrThrowException(bic);
+    }
+
+    private Currency getCurrency(Long num) {
+        return currencyService.getById(num);
     }
 
     private Predicate buildQDepositMaximumRatePredicateBy(MaximumRateDepositParams params) {

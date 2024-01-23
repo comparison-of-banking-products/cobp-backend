@@ -15,14 +15,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.cobp.backend.dto.deposit.DepositDto;
 import ru.cobp.backend.dto.deposit.DepositListResponseDto;
 import ru.cobp.backend.dto.deposit.DepositParams;
+import ru.cobp.backend.dto.deposit.DepositPatchRequestDto;
+import ru.cobp.backend.dto.deposit.DepositPostRequestDto;
 import ru.cobp.backend.dto.deposit.DepositResponseDto;
-import ru.cobp.backend.dto.deposit.NewDepositDto;
 import ru.cobp.backend.dto.deposit.ScrapedDepositResponseDto;
 import ru.cobp.backend.mapper.DepositMapper;
 import ru.cobp.backend.model.deposit.Deposit;
+import ru.cobp.backend.model.deposit.DepositPatch;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
 import ru.cobp.backend.service.deposit.DepositService;
 
@@ -42,12 +43,79 @@ public class DepositController {
     private final DepositMapper depositMapper;
 
     @Operation(
+            summary = "Добавить вклад",
+            description = "Конечная точка для добавления нового вклада"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "201",
+            description = "Добавлен новый вклад",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DepositResponseDto.class)
+            )}
+    )})
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public DepositResponseDto postDeposit(
+            @RequestBody DepositPostRequestDto depositDto
+    ) {
+        Deposit deposit = depositMapper.toDepositPatch(depositDto);
+        Deposit saved = depositService.save(deposit);
+        return depositMapper.toDepositResponseDto(saved);
+    }
+
+    @Operation(
+            summary = "Изменить вклад",
+            description = "Конечная точка для изменения существующего вклада"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Существующий вклад изменен",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DepositResponseDto.class)
+            )}
+    )})
+    @PatchMapping("/{id}")
+    public DepositResponseDto patchDeposit(
+            @Parameter(description = "Идентификатор вклада")
+            @PathVariable long id,
+
+            @RequestBody DepositPatchRequestDto depositDto
+    ) {
+        DepositPatch patch = depositMapper.toDepositPatch(depositDto);
+        Deposit updated = depositService.update(id, patch);
+        return depositMapper.toDepositResponseDto(updated);
+    }
+
+    @Operation(
+            summary = "Найти вклад по Id",
+            description = "Конечная точка для поиска вклада по Id"
+    )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Найден вклад по Id",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DepositResponseDto.class)
+            )}
+    )})
+    @GetMapping("/{id}")
+    public DepositResponseDto getDepositById(
+            @Parameter(description = "Идентификатор вклада")
+            @PathVariable long id
+    ) {
+        Deposit deposit = depositService.findById(id);
+        return depositMapper.toDepositResponseDto(deposit);
+    }
+
+    @Operation(
             summary = "Найти вклады",
             description = "Конечная точка для поиска вкладов по параметрам"
     )
     @ApiResponses(value = {@ApiResponse(
             responseCode = "200",
-            description = "Вклады найдены",
+            description = "Найдены вклады",
             content = {@Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = DepositListResponseDto.class)
@@ -109,32 +177,13 @@ public class DepositController {
                 page,
                 size
         );
-        Page<Deposit> depositPage = depositService.getAllDepositPage(params);
+        Page<Deposit> depositPage = depositService.findAllDepositPage(params);
         List<DepositResponseDto> depositResponseDtos = depositMapper.toDepositResponseDtos(depositPage.getContent());
         return new DepositListResponseDto(depositResponseDtos, depositPage.getTotalElements());
     }
 
-    @Operation(
-            summary = "Найти вклад по Id",
-            description = "Конечная точка для поиска вклада по Id"
-    )
-    @ApiResponses(value = {@ApiResponse(
-            responseCode = "200",
-            description = "Найден вклад по Id",
-            content = {@Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = DepositResponseDto.class)
-            )}
-    )})
-    @GetMapping("/{id}")
-    public DepositResponseDto getDepositById(
-            @Parameter(description = "Идентификатор вклада")
-            @PathVariable long id
-    ) {
-        Deposit deposit = depositService.getById(id);
-        return depositMapper.toDepositResponseDto(deposit);
-    }
 
+    //todo
     @Operation(
             summary = "Удалить депозит",
             description = "Конечная точка для удаления депозита"
@@ -142,26 +191,6 @@ public class DepositController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteDeposit(@PathVariable Long id) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @Operation(
-            summary = "Добавить депозит",
-            description = "Конечная точка для добавления депозита"
-    )
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping()
-    public DepositDto addDeposit(@RequestBody NewDepositDto newDepositDto) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @Operation(
-            summary = "Изменить депозит",
-            description = "Конечная точка для изменения депозита"
-    )
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/{id}")
-    public DepositDto updateDeposit(@PathVariable Long id, @RequestBody DepositDto depositDto) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
@@ -179,7 +208,7 @@ public class DepositController {
     )})
     @GetMapping("/scraped")
     public List<ScrapedDepositResponseDto> getAllScrapedDeposits() {
-        List<ScrapedDeposit> deposits = depositService.getAllScrapedDeposits();
+        List<ScrapedDeposit> deposits = depositService.findAllScrapedDeposits();
         return depositMapper.toScrapedDepositResponseDtos(deposits);
     }
 

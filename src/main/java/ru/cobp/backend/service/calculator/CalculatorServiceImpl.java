@@ -30,7 +30,7 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     @Override
     public CalculatedDepositList getAllMaximumRateCalculatedDepositList(MaximumRateDepositParams params) {
-        Page<Deposit> depositPage = depositService.getAllMaximumRateDepositPage(params);
+        Page<Deposit> depositPage = depositService.findAllMaximumRateDepositPage(params);
         List<CalculatedDeposit> calculatedDeposits = calculateDepositsInterest(
                 depositPage.getContent(), params.amount(), params.term()
         );

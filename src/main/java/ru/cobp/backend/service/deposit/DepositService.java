@@ -4,18 +4,25 @@ import org.springframework.data.domain.Page;
 import ru.cobp.backend.dto.calculator.MaximumRateDepositParams;
 import ru.cobp.backend.dto.deposit.DepositParams;
 import ru.cobp.backend.model.deposit.Deposit;
+import ru.cobp.backend.model.deposit.DepositPatch;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
 
 import java.util.List;
 
 public interface DepositService {
 
-    Page<Deposit> getAllDepositPage(DepositParams depositParams);
+    Deposit save(Deposit deposit);
 
-    Page<Deposit> getAllMaximumRateDepositPage(MaximumRateDepositParams params);
+    Deposit update(long id, DepositPatch patch);
 
-    List<ScrapedDeposit> getAllScrapedDeposits();
+    Deposit findById(long id);
 
-    Deposit getById(long id);
+    Page<Deposit> findAllDepositPage(DepositParams params);
+
+    Page<Deposit> findAllMaximumRateDepositPage(MaximumRateDepositParams params);
+
+    List<ScrapedDeposit> findAllScrapedDeposits();
+
+    void deleteById(long id);
 
 }
