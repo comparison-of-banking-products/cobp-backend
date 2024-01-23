@@ -16,4 +16,6 @@ public interface DepositService {
 
     List<ScrapedDeposit> getAllScrapedDeposits();
 
+    Deposit getById(long id);
+
 }

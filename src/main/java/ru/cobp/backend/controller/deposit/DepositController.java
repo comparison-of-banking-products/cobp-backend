@@ -54,7 +54,7 @@ public class DepositController {
             )}
     )})
     @GetMapping
-    public DepositListResponseDto getDepositList(
+    public DepositListResponseDto getAllDepositList(
             @Parameter(description = "Список БИК номеров")
             @RequestParam(defaultValue = "") List<String> bics,
 
@@ -115,12 +115,24 @@ public class DepositController {
     }
 
     @Operation(
-            summary = "Найти депозит",
-            description = "Конечная точка для поиска депозита"
+            summary = "Найти вклад по Id",
+            description = "Конечная точка для поиска вклада по Id"
     )
+    @ApiResponses(value = {@ApiResponse(
+            responseCode = "200",
+            description = "Найден вклад по Id",
+            content = {@Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = DepositResponseDto.class)
+            )}
+    )})
     @GetMapping("/{id}")
-    public DepositDto getDeposit(@PathVariable Long id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public DepositResponseDto getDepositById(
+            @Parameter(description = "Идентификатор вклада")
+            @PathVariable long id
+    ) {
+        Deposit deposit = depositService.getById(id);
+        return depositMapper.toDepositResponseDto(deposit);
     }
 
     @Operation(

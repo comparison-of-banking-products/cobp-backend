@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.dto.calculator.MaximumRateDepositParams;
 import ru.cobp.backend.dto.deposit.DepositParams;
+import ru.cobp.backend.exception.ExceptionUtil;
 import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
@@ -50,6 +51,13 @@ public class DepositServiceImpl implements DepositService {
     @Override
     public List<ScrapedDeposit> getAllScrapedDeposits() {
         return scrapedDepositRepository.findAll();
+    }
+
+    @Override
+    public Deposit getById(long id) {
+        return depositRepository
+                .findById(id)
+                .orElseThrow(() -> ExceptionUtil.getDepositNotFoundException(id));
     }
 
     private Predicate buildQDepositMaximumRatePredicateBy(MaximumRateDepositParams params) {
