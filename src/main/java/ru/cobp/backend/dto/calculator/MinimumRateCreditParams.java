@@ -2,12 +2,12 @@ package ru.cobp.backend.dto.calculator;
 
 import java.util.List;
 
-public record DepositCalculatorParams(
+public record MinimumRateCreditParams(
         int amount,
         int term,
-        Boolean capitalization,
-        Boolean replenishment,
-        Boolean partialWithdrawal,
+        Boolean creditOnline,
+        Boolean onlineApprove,
+        Boolean collateral,
         List<String> bics,
         int page,
         int size

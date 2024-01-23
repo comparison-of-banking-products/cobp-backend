@@ -10,12 +10,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
+import ru.cobp.backend.dto.calculator.MaximumRateDepositParams;
+import ru.cobp.backend.dto.deposit.DepositParams;
+import ru.cobp.backend.exception.ExceptionUtil;
+import ru.cobp.backend.mapper.DepositMapper;
+import ru.cobp.backend.model.bank.Bank;
+import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.deposit.Deposit;
+import ru.cobp.backend.model.deposit.DepositPatch;
 import ru.cobp.backend.model.deposit.QDeposit;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
 import ru.cobp.backend.repository.deposit.DepositRepository;
 import ru.cobp.backend.repository.deposit.ScrapedDepositRepository;
+import ru.cobp.backend.service.bank.BankService;
+import ru.cobp.backend.service.currency.CurrencyService;
 
 import java.util.List;
 
@@ -30,28 +38,44 @@ public class DepositServiceImpl implements DepositService {
 
     private final ScrapedDepositRepository scrapedDepositRepository;
 
+    private final BankService bankService;
+
+    private final CurrencyService currencyService;
+
+    private final DepositMapper depositMapper;
+
     @Override
-    public List<Deposit> findAllDeposits(
-            Integer minAmount,
-            Integer maxAmount,
-            Integer minTerm,
-            Integer maxTerm,
-            Double minRate,
-            Double maxRate,
-            Boolean capitalization,
-            Boolean replenishment,
-            Boolean partialWithdrawal,
-            Pageable pageable
-    ) {
-        Predicate p = buildQDepositPredicateBy(
-                minAmount, maxAmount, minTerm, maxTerm, minRate, maxRate, capitalization, replenishment,
-                partialWithdrawal
-        );
-        return depositRepository.findAll(p, pageable).toList();
+    @Transactional
+    public Deposit save(Deposit deposit) {
+        deposit.setBank(getBank(deposit.getBank().getBic()));
+        deposit.setCurrency(getCurrency(deposit.getCurrency().getNum()));
+        return depositRepository.save(deposit);
     }
 
     @Override
-    public Page<Deposit> getAllMaximumRateDepositPage(DepositCalculatorParams params) {
+    @Transactional
+    public Deposit update(long id, DepositPatch patch) {
+        Deposit deposit = findById(id);
+        depositMapper.patchDeposit(deposit, patch);
+        return depositRepository.save(deposit);
+    }
+
+    @Override
+    public Deposit findById(long id) {
+        return depositRepository
+                .findById(id)
+                .orElseThrow(() -> ExceptionUtil.getDepositNotFoundException(id));
+    }
+
+    @Override
+    public Page<Deposit> findAllDepositPage(DepositParams params) {
+        Predicate p = buildQDepositPredicateBy(params);
+        Pageable pageable = PageRequest.of(params.page(), params.size());
+        return depositRepository.findAll(p, pageable);
+    }
+
+    @Override
+    public Page<Deposit> findAllMaximumRateDepositPage(MaximumRateDepositParams params) {
         Predicate p = buildQDepositMaximumRatePredicateBy(params);
         Pageable pageable = PageRequest.of(
                 params.page(), params.size(), Sort.sort(Deposit.class).by(Deposit::getRate).descending()
@@ -60,11 +84,32 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
-    public List<ScrapedDeposit> getAllScrapedDeposits() {
+    @Transactional
+    public void deleteById(long id) {
+        checkDepositExistsOrThrow(id);
+        depositRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ScrapedDeposit> findAllScrapedDeposits() {
         return scrapedDepositRepository.findAll();
     }
 
-    private Predicate buildQDepositMaximumRatePredicateBy(DepositCalculatorParams params) {
+    private Bank getBank(String bic) {
+        return bankService.getBankByBicOrThrowException(bic);
+    }
+
+    private Currency getCurrency(long num) {
+        return currencyService.getById(num);
+    }
+
+    private void checkDepositExistsOrThrow(long id) {
+        if (!depositRepository.existsById(id)) {
+            throw ExceptionUtil.getDepositNotFoundException(id);
+        }
+    }
+
+    private Predicate buildQDepositMaximumRatePredicateBy(MaximumRateDepositParams params) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_DEPOSIT.rate.loe(JPAExpressions
                         .select(Q_DEPOSIT.rate.max())
@@ -93,46 +138,51 @@ public class DepositServiceImpl implements DepositService {
         return builder;
     }
 
-    private Predicate buildQDepositPredicateBy(
-            Integer minAmount, Integer maxAmount, Integer minTerm, Integer maxTerm, Double minRate, Double maxRate,
-            Boolean capitalization, Boolean replenishment, Boolean partialWithdrawal
-    ) {
+    private Predicate buildQDepositPredicateBy(DepositParams params) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        if (minAmount != null) {
-            builder.and(Q_DEPOSIT.amountMin.loe(minAmount));
+        if (!params.bics().isEmpty()) {
+            builder.and((Q_DEPOSIT.bank.bic.in(params.bics())));
         }
 
-        if (maxAmount != null) {
-            builder.and(Q_DEPOSIT.amountMax.goe(maxAmount));
+        if (params.isActive() != null) {
+            builder.and(Q_DEPOSIT.isActive.eq(params.isActive()));
         }
 
-        if (minTerm != null) {
-            builder.and(Q_DEPOSIT.term.goe(minTerm));
+        if (params.amountMin() != null) {
+            builder.and(Q_DEPOSIT.amountMin.goe(params.amountMin()));
         }
 
-        if (maxTerm != null) {
-            builder.and(Q_DEPOSIT.term.loe(maxTerm));
+        if (params.amountMax() != null) {
+            builder.and(Q_DEPOSIT.amountMax.loe(params.amountMax()));
         }
 
-        if (minRate != null) {
-            builder.and(Q_DEPOSIT.rate.goe(minRate));
+        if (params.termMin() != null) {
+            builder.and(Q_DEPOSIT.term.goe(params.termMin()));
         }
 
-        if (maxRate != null) {
-            builder.and(Q_DEPOSIT.rate.loe(maxRate));
+        if (params.termMax() != null) {
+            builder.and(Q_DEPOSIT.term.loe(params.termMax()));
         }
 
-        if (capitalization != null) {
-            builder.and(Q_DEPOSIT.capitalization.eq(capitalization));
+        if (params.rateMin() != null) {
+            builder.and(Q_DEPOSIT.rate.goe(params.rateMin()));
         }
 
-        if (replenishment != null) {
-            builder.and(Q_DEPOSIT.replenishment.eq(replenishment));
+        if (params.rateMax() != null) {
+            builder.and(Q_DEPOSIT.rate.loe(params.rateMax()));
         }
 
-        if (partialWithdrawal != null) {
-            builder.and(Q_DEPOSIT.partialWithdrawal.eq(partialWithdrawal));
+        if (params.capitalization() != null) {
+            builder.and(Q_DEPOSIT.capitalization.eq(params.capitalization()));
+        }
+
+        if (params.replenishment() != null) {
+            builder.and(Q_DEPOSIT.replenishment.eq(params.replenishment()));
+        }
+
+        if (params.partialWithdrawal() != null) {
+            builder.and(Q_DEPOSIT.partialWithdrawal.eq(params.partialWithdrawal()));
         }
 
         return builder;

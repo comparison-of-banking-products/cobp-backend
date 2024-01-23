@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
-import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
-import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
+import ru.cobp.backend.dto.calculator.MaximumRateDepositParams;
+import ru.cobp.backend.dto.calculator.MinimumRateCreditParams;
 import ru.cobp.backend.mapper.CalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDepositList;
@@ -79,7 +79,7 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        DepositCalculatorParams params = new DepositCalculatorParams(
+        MaximumRateDepositParams params = new MaximumRateDepositParams(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, page, size
         );
         CalculatedDepositList calculatedDepositList = calculatorService.getAllMaximumRateCalculatedDepositList(params);
@@ -124,7 +124,7 @@ public class CalculatorController {
             @Parameter(description = "Размер страницы")
             @RequestParam(defaultValue = "10") @Positive int size
     ) {
-        CreditCalculatorParams params = new CreditCalculatorParams(
+        MinimumRateCreditParams params = new MinimumRateCreditParams(
                 amount, term, creditOnline, onlineApprove, collateral, bics, page, size
         );
         CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCreditList(params);

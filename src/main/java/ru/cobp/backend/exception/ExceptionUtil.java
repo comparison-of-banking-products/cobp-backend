@@ -26,4 +26,10 @@ public class ExceptionUtil {
         );
     }
 
+    public static DepositNotFoundException getDepositNotFoundException(long depositId) {
+        return new DepositNotFoundException(
+                String.format("%s [depositId = %d]", ExceptionMessage.DEPOSIT_NOT_FOUND, depositId)
+        );
+    }
+
 }

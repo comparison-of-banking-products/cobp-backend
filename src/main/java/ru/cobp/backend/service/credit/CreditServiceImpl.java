@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
-import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
+import ru.cobp.backend.dto.calculator.MinimumRateCreditParams;
 import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
@@ -82,7 +82,7 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
-    public Page<Credit> getAllMinimumRateCreditPage(CreditCalculatorParams params) {
+    public Page<Credit> getAllMinimumRateCreditPage(MinimumRateCreditParams params) {
         Predicate p = buildQCreditMinimumRatePredicateBy(params);
         Pageable pageable = PageRequest.of(
                 params.page(), params.size(), Sort.sort(Credit.class).by(Credit::getRate).ascending()
@@ -90,7 +90,7 @@ public class CreditServiceImpl implements CreditService {
         return creditRepository.findAll(p, pageable);
     }
 
-    private Predicate buildQCreditMinimumRatePredicateBy(CreditCalculatorParams params) {
+    private Predicate buildQCreditMinimumRatePredicateBy(MinimumRateCreditParams params) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_CREDIT.rate.goe(JPAExpressions
                         .select(Q_CREDIT.rate.min())
