@@ -59,7 +59,7 @@ public class DepositController {
     public DepositResponseDto postDeposit(
             @RequestBody DepositPostRequestDto depositDto
     ) {
-        Deposit deposit = depositMapper.toDepositPatch(depositDto);
+        Deposit deposit = depositMapper.toDeposit(depositDto);
         Deposit saved = depositService.save(deposit);
         return depositMapper.toDepositResponseDto(saved);
     }
