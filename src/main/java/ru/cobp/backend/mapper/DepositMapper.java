@@ -32,7 +32,7 @@ public interface DepositMapper {
 
     @Mapping(target = "bank.bic", source = "bic")
     @Mapping(target = "currency.num", source = "currencyNum")
-    Deposit toDepositPatch(DepositPostRequestDto dto);
+    Deposit toDeposit(DepositPostRequestDto dto);
 
     DepositPatch toDepositPatch(DepositPatchRequestDto dto);
 
