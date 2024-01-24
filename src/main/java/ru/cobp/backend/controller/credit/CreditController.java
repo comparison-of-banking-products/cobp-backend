@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -59,8 +60,8 @@ public class CreditController {
     public List<CreditResponseDto> getAll(
             @RequestParam(required = false) @Parameter(description = "Доступность предложения") Boolean isActive,
             @RequestParam(required = false) @Parameter(description = "Код валюты") Long currencyNum,
-            @RequestParam(required = false) @Parameter(description = "Минимальная сумма кредита") Integer minAmount,
-            @RequestParam(required = false) @Parameter(description = "Максимальная сумма кредита") Integer maxAmount,
+            @RequestParam(required = false) @Parameter(description = "Минимальная сумма кредита") Integer amountMin,
+            @RequestParam(required = false) @Parameter(description = "Максимальная сумма кредита") Integer amountMax,
             @RequestParam(required = false) @Parameter(description = "Кредитная ставка") Double rate,
             @RequestParam(required = false) @Parameter(description = "Минимальный срок кредита") Integer minPeriod,
             @RequestParam(required = false) @Parameter(description = "Максимальный срок кредита") Integer maxPeriod,
@@ -68,11 +69,12 @@ public class CreditController {
             @RequestParam(required = false) @Parameter(description = "Получение без посещения банка") Boolean creditOnline,
             @RequestParam(required = false) @Parameter(description = "Подтверждение онлайн") Boolean onlineApprove,
             @RequestParam(required = false) @Parameter(description = "Наличие залога") Boolean collateral,
+            @RequestParam(required = false) @Parameter(description = "БИКи банков") List<String> banksBic,
             @RequestParam(defaultValue = "0") @Parameter(description = "Индекс страницы") @PositiveOrZero int page,
             @RequestParam(defaultValue = "10") @Parameter(description = "Размер страницы") @Positive int size
     ) {
-        CreditParams params = new CreditParams(isActive, currencyNum, minAmount, maxAmount, rate, minPeriod,
-                maxPeriod, paymentType, creditOnline, onlineApprove, collateral);
+        CreditParams params = new CreditParams(isActive, currencyNum, amountMin, amountMax, rate, minPeriod,
+                maxPeriod, paymentType, creditOnline, onlineApprove, collateral, banksBic);
         List<Credit> credits = creditService.getAll(params, page, size);
         return creditMapper.toCreditResponseDtos(credits);
     }
@@ -90,7 +92,8 @@ public class CreditController {
             )}
     )})
     @GetMapping("/{id}")
-    public CreditResponseDto getById(@PathVariable @Parameter(description = "Идентификатор кредита") long id) {
+    public CreditResponseDto getById(@PathVariable @Parameter(description = "Идентификатор кредита")
+                                  @Min(value = 0, message = "Недопустимое значение. Id должно быть больше 0") long id) {
         Credit credit = creditService.getById(id);
         return creditMapper.toCreditResponseDto(credit);
     }
@@ -129,7 +132,8 @@ public class CreditController {
     )})
     @PutMapping("/{id}")
     public CreditResponseDto update(
-            @PathVariable @Parameter(description = "Идентификатор кредита", required = true) Long id,
+            @PathVariable @Parameter(description = "Идентификатор кредита", required = true)
+            @Min(value = 0, message = "Недопустимое значение. Id должно быть больше 0") Long id,
             @RequestBody @Parameter(description = "Обновленный кредит", required = true) CreditUpdateDto creditUpdateDto
     ) {
         Credit credit = creditService.update(id, creditUpdateDto);
@@ -147,7 +151,8 @@ public class CreditController {
     )})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable @Parameter(description = "Идентификатор кредита", required = true) Long id) {
+    public void delete(@PathVariable @Parameter(description = "Идентификатор кредита", required = true)
+                           @Min(value = 0, message = "Недопустимое значение. Id должно быть больше 0") Long id) {
         creditService.delete(id);
     }
 

@@ -25,6 +25,7 @@ import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.repository.credit.CreditRepository;
 import ru.cobp.backend.service.bank.BankService;
 import ru.cobp.backend.service.currency.CurrencyService;
+import ru.cobp.backend.validator.CreditValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,9 @@ public class CreditServiceTest {
     @Mock
     private CreditMapper creditMapper;
 
+    @Mock
+    private CreditValidator creditValidator;
+
     @InjectMocks
     private CreditServiceImpl creditService;
 
@@ -61,9 +65,10 @@ public class CreditServiceTest {
         List<Credit> expectedList = List.of(TestUtils.buildGazprombankCredit());
         Pageable page = PageRequest.of(0, 10, Sort.by("rate").ascending());
         CreditParams params = new CreditParams(null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null, null);
         Predicate p = new BooleanBuilder();
 
+        when(creditValidator.validateCreditParams(params)).thenReturn(true);
         when(creditRepository.findAll(p, page)).thenReturn(new PageImpl<>(expectedList));
 
         List<Credit> actualList = creditService.getAll(params, 0, 10);
@@ -131,6 +136,7 @@ public class CreditServiceTest {
         Credit credit = TestUtils.buildGazprombankCredit();
         Credit expectedCredit = TestUtils.buildGazprombankUpdatedCredit();
 
+        when(creditValidator.validateCreditUpdateDto(creditUpdateDto)).thenReturn(true);
         when(creditRepository.findById(creditId)).thenReturn(Optional.of(credit));
         when(creditRepository.save(any(Credit.class))).thenReturn(expectedCredit);
 
@@ -147,10 +153,12 @@ public class CreditServiceTest {
     @Test
     void updateCredit_whenCreditNotFound_thenNotFoundExceptionThrown() {
         Long creditId = 2L;
+        CreditUpdateDto creditUpdateDto = TestUtils.buildGazprombankCreditDto();
 
+        when(creditValidator.validateCreditUpdateDto(creditUpdateDto)).thenReturn(true);
         when(creditRepository.findById(creditId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> creditService.update(creditId, any(CreditUpdateDto.class)));
+        assertThrows(NotFoundException.class, () -> creditService.update(creditId, creditUpdateDto));
     }
 
     @Test

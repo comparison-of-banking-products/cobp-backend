@@ -45,4 +45,11 @@ public class ExceptionHandlerController {
         return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handle(ValidationException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
+    }
+
 }

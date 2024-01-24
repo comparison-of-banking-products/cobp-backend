@@ -216,9 +216,9 @@ public class TestUtils {
                 24.4,
                 13,
                 PaymentType.ANNUITY,
-                true,
-                true,
-                false
+                Boolean.TRUE,
+                Boolean.TRUE,
+                Boolean.TRUE
         );
     }
 
