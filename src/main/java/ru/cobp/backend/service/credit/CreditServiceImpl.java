@@ -11,11 +11,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
+import ru.cobp.backend.dto.bank.BankSort;
 import ru.cobp.backend.dto.calculator.MinimumRateCreditParams;
-import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditParams;
+import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
+import ru.cobp.backend.exception.ValidationException;
 import ru.cobp.backend.mapper.CreditMapper;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.credit.Credit;
@@ -24,6 +26,7 @@ import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.repository.credit.CreditRepository;
 import ru.cobp.backend.service.bank.BankService;
 import ru.cobp.backend.service.currency.CurrencyService;
+import ru.cobp.backend.validator.CreditValidator;
 
 import java.util.List;
 
@@ -42,11 +45,17 @@ public class CreditServiceImpl implements CreditService {
 
     private final CreditMapper creditMapper;
 
+    private final CreditValidator creditValidator;
+
     @Override
     public List<Credit> getAll(CreditParams params, int page, int size) {
-        Predicate p = buildQCreditPredicateByParams(params);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("rate").ascending());
-        return Utils.toList(creditRepository.findAll(p, pageable));
+        if (creditValidator.validateCreditParams(params)) {
+            Predicate p = buildQCreditPredicateByParams(params);
+            Pageable pageable = PageRequest.of(page, size, Sort.by("rate").ascending());
+            return Utils.toList(creditRepository.findAll(p, pageable));
+        } else {
+            throw new ValidationException("Ошибка валидации параметров поиска кредитов");
+        }
     }
 
     @Override
@@ -57,19 +66,27 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Credit create(NewCreditDto newCreditDto) {
-        Bank bank = bankService.getBankByBicOrThrowException(newCreditDto.getBankBic());
-        Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
-        Credit credit = creditMapper.toCredit(newCreditDto);
-        credit.setBank(bank);
-        credit.setCurrency(currency);
-        return creditRepository.save(credit);
+        if (newCreditDto.getAmountMax() > newCreditDto.getAmountMin()) {
+            Bank bank = bankService.getBankByBicOrThrowException(newCreditDto.getBankBic());
+            Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
+            Credit credit = creditMapper.toCredit(newCreditDto);
+            credit.setBank(bank);
+            credit.setCurrency(currency);
+            return creditRepository.save(credit);
+        } else {
+            throw new ValidationException("Максимальная сумма кредита должна быть больше минимальной");
+        }
     }
 
     @Override
-    public Credit update(Long id, CreditDto creditDto) {
-        Credit credit = getById(id);
-        updateCredit(credit, creditDto);
-        return creditRepository.save(credit);
+    public Credit update(Long id, CreditUpdateDto creditUpdateDto) {
+        if (creditValidator.validateCreditUpdateDto(creditUpdateDto)) {
+            Credit credit = getById(id);
+            updateCredit(credit, creditUpdateDto);
+            return creditRepository.save(credit);
+        } else {
+            throw new ValidationException("Ошибка валидации обновленного кредита");
+        }
     }
 
     @Override
@@ -127,11 +144,11 @@ public class CreditServiceImpl implements CreditService {
         if (params.getCurrencyNum() != null) {
             builder.and(Q_CREDIT.currency.eq(currencyService.getById(params.getCurrencyNum())));
         }
-        if (params.getMinAmount() != null) {
-            builder.and(Q_CREDIT.amountMin.loe(params.getMinAmount()));
+        if (params.getAmountMin() != null) {
+            builder.and(Q_CREDIT.amountMin.loe(params.getAmountMin()));
         }
-        if (params.getMaxAmount() != null) {
-            builder.and(Q_CREDIT.amountMax.goe(params.getMaxAmount()));
+        if (params.getAmountMax() != null) {
+            builder.and(Q_CREDIT.amountMax.goe(params.getAmountMax()));
         }
         if (params.getMinPeriod() != null) {
             builder.and(Q_CREDIT.term.loe(params.getMinPeriod()));
@@ -154,11 +171,14 @@ public class CreditServiceImpl implements CreditService {
         if (params.getCollateral() != null) {
             builder.and(Q_CREDIT.collateral.eq(params.getCollateral()));
         }
+        if (params.getBanksBic() != null) {
+            builder.and(Q_CREDIT.bank.in(bankService.getAll(BankSort.CREDITS, params.getBanksBic())));
+        }
         return builder;
 
     }
 
-    private void updateCredit(Credit credit, CreditDto creditDto) {
+    private void updateCredit(Credit credit, CreditUpdateDto creditDto) {
         if (creditDto.getIsActive() != null) {
             credit.setIsActive(creditDto.getIsActive());
         }
@@ -171,10 +191,10 @@ public class CreditServiceImpl implements CreditService {
         if (creditDto.getRate() != null) {
             credit.setRate(creditDto.getRate());
         }
-        if (creditDto.getMinAmount() != null) {
-            credit.setAmountMin(creditDto.getMinAmount());
+        if (creditDto.getAmountMin() != null) {
+            credit.setAmountMin(creditDto.getAmountMin());
         }
-        if (creditDto.getMaxAmount() != null) {
+        if (creditDto.getAmountMax() != null) {
             credit.setAmountMax(credit.getAmountMax());
         }
         if (creditDto.getTerm() != null) {
