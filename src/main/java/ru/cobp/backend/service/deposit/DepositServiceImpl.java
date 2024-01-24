@@ -149,12 +149,17 @@ public class DepositServiceImpl implements DepositService {
             builder.and(Q_DEPOSIT.isActive.eq(params.isActive()));
         }
 
-        if (params.amountMin() != null) {
-            builder.and(Q_DEPOSIT.amountMin.goe(params.amountMin()));
-        }
+        if (params.amountMin() != null && params.amountMax() != null) {
+            builder.and(Q_DEPOSIT.amountMin.loe(params.amountMin()));
+            builder.and(Q_DEPOSIT.amountMax.goe(params.amountMax()));
 
-        if (params.amountMax() != null) {
-            builder.and(Q_DEPOSIT.amountMax.loe(params.amountMax()));
+        } else if (params.amountMin() != null) {
+            builder.and(Q_DEPOSIT.amountMin.loe(params.amountMin()));
+            builder.and(Q_DEPOSIT.amountMax.goe(params.amountMin()));
+
+        } else if (params.amountMax() != null) {
+            builder.and(Q_DEPOSIT.amountMin.loe(params.amountMax()));
+            builder.and(Q_DEPOSIT.amountMax.goe(params.amountMax()));
         }
 
         if (params.termMin() != null) {
