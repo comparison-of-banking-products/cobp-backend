@@ -2,9 +2,9 @@ package ru.cobp.backend.validation.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import ru.cobp.backend.validation.constraints.BicLengthCon;
+import ru.cobp.backend.validation.constraints.BicLength;
 
-public class BicLengthValidator implements ConstraintValidator<BicLengthCon, String> {
+public class BicLengthValidator implements ConstraintValidator<BicLength, String> {
 
     private static final int BIC_LENGTH = 9;
 

@@ -14,10 +14,10 @@ import java.lang.annotation.Target;
 @Positive(message = "{amount.positive.invalid}")
 @Min(value = 10_000, message = "{amount.min.invalid}")
 @Max(value = 100_000_000, message = "{amount.max.invalid}")
-@Target({ElementType.ANNOTATION_TYPE, ElementType.PARAMETER, ElementType.TYPE_USE})
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-public @interface AmountCon {
+public @interface Amount {
 
     String message() default "";
 

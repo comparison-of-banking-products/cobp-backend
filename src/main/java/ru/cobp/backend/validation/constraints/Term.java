@@ -15,10 +15,10 @@ import java.lang.annotation.Target;
 @Positive(message = "{term.positive.invalid}")
 @Min(value = 1, message = "{term.min.invalid}")
 @Max(value = 120, message = "{term.max.invalid}")
-@Target({ElementType.ANNOTATION_TYPE, ElementType.PARAMETER, ElementType.TYPE_USE})
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-public @interface TermCon {
+public @interface Term {
 
     String message() default "";
 

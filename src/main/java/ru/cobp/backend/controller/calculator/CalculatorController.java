@@ -22,11 +22,11 @@ import ru.cobp.backend.mapper.CalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDepositList;
 import ru.cobp.backend.service.calculator.CalculatorService;
-import ru.cobp.backend.validation.constraints.AmountCon;
-import ru.cobp.backend.validation.constraints.BicCon;
-import ru.cobp.backend.validation.constraints.PageIndexCon;
-import ru.cobp.backend.validation.constraints.PageSizeCon;
-import ru.cobp.backend.validation.constraints.TermCon;
+import ru.cobp.backend.validation.constraints.Amount;
+import ru.cobp.backend.validation.constraints.Bic;
+import ru.cobp.backend.validation.constraints.PageIndex;
+import ru.cobp.backend.validation.constraints.PageSize;
+import ru.cobp.backend.validation.constraints.Term;
 
 import java.util.List;
 
@@ -59,10 +59,10 @@ public class CalculatorController {
     @GetMapping("/deposits")
     public CalculatedDepositListResponseDto getAllCalculatedDeposits(
             @Parameter(description = "Сумма вклада в рублях")
-            @RequestParam @AmountCon int amount,
+            @RequestParam @Amount int amount,
 
             @Parameter(description = "Срок вклада в месяцах")
-            @RequestParam @TermCon int term,
+            @RequestParam @Term int term,
 
             @Parameter(description = "Вклад с капитализацией")
             @RequestParam(required = false) Boolean capitalization,
@@ -74,13 +74,13 @@ public class CalculatorController {
             @RequestParam(required = false) Boolean partialWithdrawal,
 
             @Parameter(description = "Список БИК номеров")
-            @RequestParam(defaultValue = "") List<@BicCon String> bics,
+            @RequestParam(defaultValue = "") List<@Bic String> bics,
 
             @Parameter(description = "Индекс страницы")
-            @RequestParam(defaultValue = "0") @PageIndexCon int page,
+            @RequestParam(defaultValue = "0") @PageIndex int page,
 
             @Parameter(description = "Размер страницы")
-            @RequestParam(defaultValue = "10") @PageSizeCon int size
+            @RequestParam(defaultValue = "10") @PageSize int size
     ) {
         MaximumRateDepositParams params = new MaximumRateDepositParams(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, page, size
@@ -104,10 +104,10 @@ public class CalculatorController {
     @GetMapping("/credits")
     public CalculatedCreditListResponseDto getAllCalculatedCredits(
             @Parameter(description = "Сумма кредита в рублях")
-            @RequestParam @AmountCon int amount,
+            @RequestParam @Amount int amount,
 
             @Parameter(description = "Срок кредита в месяцах")
-            @RequestParam @TermCon int term,
+            @RequestParam @Term int term,
 
             @Parameter(description = "Получение без посещения банка")
             @RequestParam(required = false) Boolean creditOnline,
@@ -119,12 +119,13 @@ public class CalculatorController {
             @RequestParam(required = false) Boolean collateral,
 
             @Parameter(description = "Список БИК номеров")
-            @RequestParam(defaultValue = "") List<@BicCon String> bics,
+            @RequestParam(defaultValue = "") List<@Bic String> bics,
 
             @Parameter(description = "Индекс страницы")
-            @RequestParam(defaultValue = "0") @PageIndexCon int page,
+            @RequestParam(defaultValue = "0") @PageIndex int page,
+
             @Parameter(description = "Размер страницы")
-            @RequestParam(defaultValue = "10") @PageSizeCon int size
+            @RequestParam(defaultValue = "10") @PageSize int size
     ) {
         MinimumRateCreditParams params = new MinimumRateCreditParams(
                 amount, term, creditOnline, onlineApprove, collateral, bics, page, size
