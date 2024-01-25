@@ -44,4 +44,8 @@ public class Constants {
 
     public static final String CURRENCY_NAME_REGEXP = "^[а-яА-Я\\s]*$";
 
+    public static final int DEPOSIT_NAME_MAX_LENGTH = 100;
+
+    public static final String DEPOSIT_NAME_REGEXP = "^[0-9a-zA-Zа-яёЁА-Я-@#$.,?%^&+=!\"'«»\\s]*$";
+
 }

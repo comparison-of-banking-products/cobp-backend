@@ -12,12 +12,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@NotBlank(message = "{currency-num.blank.invalid}")
+@NotBlank(message = "{currency.num.blank.invalid}")
 @Size.List({
-        @Size(min = Constants.CURRENCY_NUM_LENGTH, message = "{currency-num.length.invalid}"),
-        @Size(max = Constants.CURRENCY_NUM_LENGTH, message = "{currency-num.length.invalid}")
+        @Size(min = Constants.CURRENCY_NUM_LENGTH, message = "{currency.num.length.invalid}"),
+        @Size(max = Constants.CURRENCY_NUM_LENGTH, message = "{currency.num.length.invalid}")
 })
-@Pattern(regexp = Constants.CURRENCY_NUM_REGEXP, message = "{currency-num.content.invalid}")
+@Pattern(regexp = Constants.CURRENCY_NUM_REGEXP, message = "{currency.num.content.invalid}")
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
