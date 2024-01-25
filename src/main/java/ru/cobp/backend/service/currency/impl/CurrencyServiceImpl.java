@@ -31,7 +31,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public Currency getById(Long currencyNum) {
+    public Currency getById(String currencyNum) {
         return currencyRepository.findById(currencyNum).orElseThrow(
                 () -> new NotFoundException(ExceptionMessage.CURRENCY_NOT_FOUND)
         );
@@ -39,7 +39,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     @Transactional
-    public void deleteById(Long currencyNum) {
+    public void deleteById(String currencyNum) {
         currencyRepository.deleteById(currencyNum);
     }
 

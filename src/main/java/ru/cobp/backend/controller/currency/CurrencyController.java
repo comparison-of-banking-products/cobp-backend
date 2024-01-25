@@ -82,7 +82,7 @@ public class CurrencyController {
             )}
     )})
     @PutMapping("/{num}")
-    public CurrencyResponseDto update(@PathVariable Long num,
+    public CurrencyResponseDto update(@PathVariable String num,
                                       @RequestBody @Valid CurrencyCreateUpdateDto updateCurrencyDto) {
         Currency oldCurrency = currencyService.getById(num);
         Currency updateCurrency = currencyMapper.fromCurrencyCreateUpdateDto(updateCurrencyDto);
@@ -122,7 +122,7 @@ public class CurrencyController {
             )}
     )})
     @GetMapping("/{num}")
-    public CurrencyResponseDto getById(@PathVariable Long num) {
+    public CurrencyResponseDto getById(@PathVariable String num) {
         Currency response = currencyService.getById(num);
         return currencyMapper.toCurrencyResponseDto(response);
     }
@@ -137,7 +137,7 @@ public class CurrencyController {
     )})
     @DeleteMapping("/{num}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long num) {
+    public void delete(@PathVariable String num) {
         currencyService.deleteById(num);
     }
 

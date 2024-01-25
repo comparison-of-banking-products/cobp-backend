@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import ru.cobp.backend.common.TestUtils;
 import ru.cobp.backend.dto.currency.CurrencyCreateUpdateDto;
 import ru.cobp.backend.dto.currency.CurrencyResponseDto;
 import ru.cobp.backend.mapper.CurrencyRateMapper;
@@ -48,11 +49,7 @@ class CurrencyControllerTest {
 
     @BeforeEach
     void init() {
-        createUpdateDto = CurrencyCreateUpdateDto.builder()
-                .num(124L)
-                .code("CAD")
-                .currency("Канадский доллар")
-                .build();
+        createUpdateDto = TestUtils.buildCurrencyCreateUpdateDto();
     }
 
     @Test
@@ -65,7 +62,6 @@ class CurrencyControllerTest {
                 .andExpect(jsonPath("$.num").value(createUpdateDto.getNum()))
                 .andExpect(jsonPath("$.code").value(createUpdateDto.getCode()))
                 .andExpect(jsonPath("$.currency").value(createUpdateDto.getCurrency()));
-
     }
 
     @Test

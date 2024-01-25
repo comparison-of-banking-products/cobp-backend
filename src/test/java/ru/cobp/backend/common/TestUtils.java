@@ -2,6 +2,7 @@ package ru.cobp.backend.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.cobp.backend.dto.bank.BankCreateUpdateDto;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankShortResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
@@ -12,6 +13,7 @@ import ru.cobp.backend.dto.credit.CreditDto;
 import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.CreditShortResponseDto;
 import ru.cobp.backend.dto.credit.NewCreditDto;
+import ru.cobp.backend.dto.currency.CurrencyCreateUpdateDto;
 import ru.cobp.backend.dto.currency.CurrencyResponseDto;
 import ru.cobp.backend.dto.deposit.DepositShortResponseDto;
 import ru.cobp.backend.model.bank.Bank;
@@ -120,6 +122,25 @@ public class TestUtils {
         );
     }
 
+    public static BankCreateUpdateDto buildBankCreateUpdateDto() {
+        return BankCreateUpdateDto.builder()
+                .bic("123456789")
+                .name("Название")
+                .description("Описание")
+                .legalEntity("ОАО \"Банк\"")
+                .logo("logo.svg")
+                .url("https://url.com")
+                .build();
+    }
+
+    public static CurrencyCreateUpdateDto buildCurrencyCreateUpdateDto() {
+        return CurrencyCreateUpdateDto.builder()
+                .num("124")
+                .code("CAD")
+                .currency("Канадский доллар")
+                .build();
+    }
+
     public static List<CalculatedCredit> buildGazprombankCalculatedCredits() {
         return List.of(buildGazprombankCalculatedCredit());
     }
@@ -164,7 +185,7 @@ public class TestUtils {
     }
 
     public static Currency buildRubCurrency() {
-        return new Currency(643L, "RUB", "Российский рубль");
+        return new Currency("643", "RUB", "Российский рубль");
     }
 
     public static List<Bank> buildBanks() {
@@ -193,7 +214,7 @@ public class TestUtils {
     }
 
     public static Currency buildUsdCurrency() {
-        return new Currency(840L, "USD", "Доллар США");
+        return new Currency("840", "USD", "Доллар США");
     }
 
     public static List<CurrencyRate> buildCurrencyRates() {
@@ -209,7 +230,7 @@ public class TestUtils {
                 "044525823",
                 "Газпромбанк Кредит наличными",
                 Boolean.TRUE,
-                643L,
+                "643",
                 "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
                 10000,
                 7000000,

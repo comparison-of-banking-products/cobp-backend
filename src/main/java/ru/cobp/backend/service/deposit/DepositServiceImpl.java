@@ -99,7 +99,7 @@ public class DepositServiceImpl implements DepositService {
         return bankService.getBankByBicOrThrowException(bic);
     }
 
-    private Currency getCurrency(long num) {
+    private Currency getCurrency(String num) {
         return currencyService.getById(num);
     }
 

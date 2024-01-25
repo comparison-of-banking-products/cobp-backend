@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import ru.cobp.backend.model.currency.Currency;
 
 @Repository
-public interface CurrencyRepository extends JpaRepository<Currency, Long>, QuerydslPredicateExecutor<Currency> {
+public interface CurrencyRepository extends JpaRepository<Currency, String>, QuerydslPredicateExecutor<Currency> {
 }

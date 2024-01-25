@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BankShortResponseDto {
 
-    @Schema(description = "Название банка")
+    @Schema(description = "Сокращенное название банка")
     private String name;
 
-    @Schema(description = "Лого банка")
+    @Schema(description = "Логотип банка")
     private String logo;
 
 }

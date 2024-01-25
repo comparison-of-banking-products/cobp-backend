@@ -51,12 +51,10 @@ public class BankServiceImpl implements BankService {
     @Override
     @Transactional
     public void deleteByBic(String bic) {
-        if (bankRepository.findById(bic).isEmpty()) {
-            throw new NotFoundException(
-                    String.format(ExceptionMessage.BANK_NOT_FOUND, bic)
-            );
+        long deleteCount = bankRepository.deleteByBic(bic);
+        if (deleteCount == 0) {
+            throw new NotFoundException(String.format(ExceptionMessage.BANK_NOT_FOUND, bic));
         }
-        bankRepository.deleteById(bic);
     }
 
     @Override

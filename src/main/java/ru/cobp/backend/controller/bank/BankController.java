@@ -78,9 +78,8 @@ public class BankController {
                                   @RequestBody @Valid BankCreateUpdateDto updateBankDto) {
         Bank oldBank = bankService.getBankByBicOrThrowException(bic);
         Bank updateBank = bankMapper.fromBankCreateUpdateDto(updateBankDto);
-        oldBank = bankMapper.updateBank(oldBank, updateBank);
-        Bank response = bankService.update(oldBank);
-        return bankMapper.toBankResponseDto(response);
+        bankMapper.updateBank(oldBank, updateBank);
+        return bankMapper.toBankResponseDto(bankService.update(oldBank));
     }
 
     @Operation(
