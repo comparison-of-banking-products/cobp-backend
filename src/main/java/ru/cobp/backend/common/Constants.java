@@ -18,4 +18,8 @@ public class Constants {
 
     public static final int URL_MAX_LENGTH = 100;
 
+    public static final int CURRENCY_NUM_LENGTH = 3;
+
+    public static final String CURRENCY_NUM_REGEXP = "^[0-9]*$";
+
 }
