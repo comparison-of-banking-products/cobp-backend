@@ -24,10 +24,11 @@ services:
       - SPRING_DATASOURCE_PASSWORD=dev
       - SPRING_PROFILES_ACTIVE=remote
 
-  cobp-front:
+  cobp-frontend:
     image: ghcr.io/comparison-of-banking-products/cobp-frontend:dev
-    container_name: cobp-front
+    container_name: cobp-frontend
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - cobp-backend
