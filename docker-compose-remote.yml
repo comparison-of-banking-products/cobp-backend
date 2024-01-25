@@ -28,6 +28,6 @@ services:
     image: ghcr.io/comparison-of-banking-products/cobp-frontend:dev
     container_name: cobp-front
     ports:
-      - "8081:80"
+      - "80:80"
     depends_on:
       - cobp-backend
