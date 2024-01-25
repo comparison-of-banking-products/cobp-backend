@@ -14,4 +14,8 @@ public class Constants {
 
     public static final String NAME_REGEXP = "^[а-яА-Я-\\s]*$";
 
+    public static final String URL_REGEXP = "(http(s)?:\\/\\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
+
+    public static final int URL_MAX_LENGTH = 100;
+
 }
