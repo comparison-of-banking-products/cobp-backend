@@ -3,8 +3,11 @@ package ru.cobp.backend.exception;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -59,9 +62,23 @@ public class ExceptionHandlerController {
         return new ErrorResponseDto(LocalDateTime.now(), String.join(VIOLATIONS_DELIMITER, violationMessages));
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handle(MethodArgumentNotValidException ex) {
+        log.error(ex.getMessage(), ex);
+        List<String> violationMessages = buildAllErrorsMessages(ex.getBindingResult());
+        return new ErrorResponseDto(LocalDateTime.now(), String.join(VIOLATIONS_DELIMITER, violationMessages));
+    }
+
     private List<String> buildConstraintViolationMessages(Set<ConstraintViolation<?>> violations) {
         return violations.stream()
                 .map(ConstraintViolation::getMessage)
+                .toList();
+    }
+
+    private List<String> buildAllErrorsMessages(BindingResult bindingResult) {
+        return bindingResult.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
     }
 
