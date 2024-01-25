@@ -1,10 +1,5 @@
 package ru.cobp.backend.validation.constraints;
 
-//@NotBlank(message = "Необоходимо указать цифровой код валюты")
-//    @Pattern(regexp = "^[0-9]*$", message = "Цифровой код валюты состоит из символов от 0 до 9")
-//    @Size(min = 3, max = 3, message = "Номер валюты должен состоять из 3 символов")
-
-
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.constraints.NotBlank;
