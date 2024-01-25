@@ -23,7 +23,7 @@ import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDepositList;
 import ru.cobp.backend.service.calculator.CalculatorService;
 import ru.cobp.backend.validation.constraints.Amount;
-import ru.cobp.backend.validation.constraints.Bic;
+import ru.cobp.backend.validation.constraints.BicParam;
 import ru.cobp.backend.validation.constraints.PageIndex;
 import ru.cobp.backend.validation.constraints.PageSize;
 import ru.cobp.backend.validation.constraints.Term;
@@ -74,7 +74,7 @@ public class CalculatorController {
             @RequestParam(required = false) Boolean partialWithdrawal,
 
             @Parameter(description = "Список БИК номеров")
-            @RequestParam(defaultValue = "") List<@Bic String> bics,
+            @RequestParam(defaultValue = "") List<@BicParam String> bics,
 
             @Parameter(description = "Индекс страницы")
             @RequestParam(defaultValue = "0") @PageIndex int page,
@@ -119,7 +119,7 @@ public class CalculatorController {
             @RequestParam(required = false) Boolean collateral,
 
             @Parameter(description = "Список БИК номеров")
-            @RequestParam(defaultValue = "") List<@Bic String> bics,
+            @RequestParam(defaultValue = "") List<@BicParam String> bics,
 
             @Parameter(description = "Индекс страницы")
             @RequestParam(defaultValue = "0") @PageIndex int page,

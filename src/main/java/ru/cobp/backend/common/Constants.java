@@ -8,4 +8,8 @@ public class Constants {
 
     public static final int NUMBER_OF_MONTHS_IN_YEAR = 12;
 
+    public static final int BIC_LENGTH = 9;
+
+    public static final String ONLY_DIGITS_PATTERN = "\\d+";
+
 }
