@@ -16,6 +16,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import ru.cobp.backend.client.exchange.ExchangeRatesClient;
+import ru.cobp.backend.common.TestUtils;
 import ru.cobp.backend.dto.bank.BankCreateUpdateDto;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankSort;
@@ -61,14 +62,7 @@ class BankControllerTest {
 
     @BeforeEach
     void init() {
-        createUpdateDto = BankCreateUpdateDto.builder()
-                .bic("123456789")
-                .name("bank name")
-                .description("description")
-                .legalEntity("legal entity")
-                .logo("logo.svg")
-                .url("https://url.com")
-                .build();
+        createUpdateDto = TestUtils.buildBankCreateUpdateDto();
     }
 
     @Test

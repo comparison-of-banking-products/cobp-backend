@@ -49,7 +49,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponseDto handle(DuplicateException ex) {
+    public ErrorResponseDto handle(final DuplicateException ex) {
         log.error(ex.getMessage(), ex);
         return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
     }

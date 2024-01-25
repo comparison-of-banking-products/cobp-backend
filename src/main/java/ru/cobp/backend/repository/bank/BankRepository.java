@@ -7,4 +7,5 @@ import ru.cobp.backend.model.bank.Bank;
 
 @Repository
 public interface BankRepository extends JpaRepository<Bank, String>, QuerydslPredicateExecutor<Bank> {
+    long deleteByBic(String bic);
 }

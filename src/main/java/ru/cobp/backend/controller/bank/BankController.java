@@ -22,6 +22,7 @@ import ru.cobp.backend.mapper.BankMapper;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.service.bank.BankService;
 import ru.cobp.backend.service.storage.StorageService;
+import ru.cobp.backend.validation.constraints.Bic;
 
 import java.util.List;
 
@@ -74,13 +75,12 @@ public class BankController {
             )}
     )})
     @PutMapping("/{bic}")
-    public BankResponseDto update(@PathVariable String bic,
+    public BankResponseDto update(@PathVariable @Bic String bic,
                                   @RequestBody @Valid BankCreateUpdateDto updateBankDto) {
         Bank oldBank = bankService.getBankByBicOrThrowException(bic);
         Bank updateBank = bankMapper.fromBankCreateUpdateDto(updateBankDto);
-        oldBank = bankMapper.updateBank(oldBank, updateBank);
-        Bank response = bankService.update(oldBank);
-        return bankMapper.toBankResponseDto(response);
+        bankMapper.updateBank(oldBank, updateBank);
+        return bankMapper.toBankResponseDto(bankService.update(oldBank));
     }
 
     @Operation(
@@ -96,7 +96,7 @@ public class BankController {
             )}
     )})
     @GetMapping("/{bic}")
-    public BankResponseDto getByBic(@PathVariable String bic) {
+    public BankResponseDto getByBic(@PathVariable @Bic String bic) {
         Bank bank = bankService.getBankByBicOrThrowException(bic);
         return bankMapper.toBankResponseDto(bank);
     }
@@ -111,7 +111,7 @@ public class BankController {
     )})
     @DeleteMapping("/{bic}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable String bic) {
+    public void delete(@PathVariable @Bic String bic) {
         bankService.deleteByBic(bic);
     }
 
@@ -132,7 +132,7 @@ public class BankController {
             @RequestParam(required = false) BankSort sort,
 
             @Parameter(description = "Список БИК-ов")
-            @RequestParam(defaultValue = "") List<String> bics
+            @RequestParam(defaultValue = "") List<@Bic String> bics
     ) {
         List<Bank> banks = bankService.getAll(sort, bics);
         return bankMapper.toBankResponseDtos(banks);

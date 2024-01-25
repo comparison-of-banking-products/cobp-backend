@@ -58,7 +58,7 @@ public class CreditController {
     @GetMapping
     public List<CreditResponseDto> getAll(
             @RequestParam(required = false) @Parameter(description = "Доступность предложения") Boolean isActive,
-            @RequestParam(required = false) @Parameter(description = "Код валюты") Long currencyNum,
+            @RequestParam(required = false) @Parameter(description = "Код валюты") String currencyNum,
             @RequestParam(required = false) @Parameter(description = "Минимальная сумма кредита") Integer minAmount,
             @RequestParam(required = false) @Parameter(description = "Максимальная сумма кредита") Integer maxAmount,
             @RequestParam(required = false) @Parameter(description = "Кредитная ставка") Double rate,

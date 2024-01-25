@@ -24,7 +24,7 @@ public class NewCreditDto {
     private Boolean isActive;
 
     @NotNull
-    private Long currencyNum;
+    private String currencyNum;
 
     @NotBlank
     @Size(min = 3, max = 100)

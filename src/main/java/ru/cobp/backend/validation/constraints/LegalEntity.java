@@ -12,13 +12,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@NotBlank(message = "{name.blank.invalid}")
-@Size(max = 100, message = "{name.length.invalid}")
-@Pattern(regexp = Constants.NAME_REGEXP, message = "{name.content.invalid}")
+@NotBlank(message = "{legalEntity.blank.invalid}")
+@Size(max = Constants.LEGAL_ENTITY_MAX_LENGTH, message = "{legalEntity.length.invalid}")
+@Pattern(regexp = Constants.LEGAL_ENTITY_REGEXP, message = "{legalEntity.content.invalid}")
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-public @interface Name {
+public @interface LegalEntity {
 
     String message() default "";
 
