@@ -100,7 +100,7 @@ public class CreditServiceTest {
         Credit expectedCredit = TestUtils.buildGazprombankCredit();
 
         when(bankService.getBankByBicOrThrowException(newCreditDto.getBankBic())).thenReturn(bank);
-        when(currencyService.getById(newCreditDto.getCurrencyNum())).thenReturn(currency);
+        when(currencyService.getByNum(newCreditDto.getCurrencyNum())).thenReturn(currency);
         when(creditMapper.toCredit(newCreditDto)).thenReturn(creditWithoutBankAndCurrency);
         when(creditRepository.save(any(Credit.class))).thenReturn(expectedCredit);
 

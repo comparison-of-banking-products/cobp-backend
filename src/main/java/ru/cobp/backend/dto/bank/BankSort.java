@@ -1,8 +1,8 @@
 package ru.cobp.backend.dto.bank;
 
 public enum BankSort {
-    CREDITS("Параметр сортировки банков с кредитами"),
-    DEPOSITS("Параметр сортировки банков с вкладами");
+    CREDITS("Параметр фильтрации банков с кредитами"),
+    DEPOSITS("Параметр фильтрации банков с вкладами");
 
     public final String label;
 

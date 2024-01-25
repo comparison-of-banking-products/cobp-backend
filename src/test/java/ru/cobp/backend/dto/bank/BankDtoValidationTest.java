@@ -40,9 +40,9 @@ class BankDtoValidationTest {
     @Test
     void testBankCreateUpdateDto_whenInvalidParameters_throwValidationExceptions() {
         // given
-        createUpdateDto.setBic("123456A");  // BIC 6 digits & 1 letter
-        createUpdateDto.setName("XYZ");     // english letters
-        createUpdateDto.setDescription(""); // empty description
+        createUpdateDto.setBic("123456A");
+        createUpdateDto.setName("XYZ");
+        createUpdateDto.setDescription("");
 
         // when
         Set<ConstraintViolation<BankCreateUpdateDto>> violations = validator.validate(createUpdateDto);
@@ -53,10 +53,10 @@ class BankDtoValidationTest {
 
         // then
         assertEquals(4, violations.size());
-        assertTrue(messages.contains("БИК должен состоять из чисел от 0 до 9"));
-        assertTrue(messages.contains("БИК должен состоять из 9 символов"));
-        assertTrue(messages.contains("Название может состоять из символов русского алфавита, дефиса"));
-        assertTrue(messages.contains("Необходимо указать описание банка"));
+        assertTrue(messages.contains("{bic.length.invalid}"));
+        assertTrue(messages.contains("{name.content.invalid}"));
+        assertTrue(messages.contains("{bic.digits.invalid}"));
+        assertTrue(messages.contains("{description.blank.invalid}"));
     }
 
 }

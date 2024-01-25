@@ -51,9 +51,9 @@ class CurrencyDtoValidationTest {
 
         // then
         assertEquals(3, violations.size());
-        assertTrue(messages.contains("Наименование валюты содержит только русские буквы и пробелы"));
-        assertTrue(messages.contains("Буквенный код валюты состоит из символов латинского алфавита"));
-        assertTrue(messages.contains("Буквенный код валюты должен состоять из 3 символов"));
+        assertTrue(messages.contains("{currency-name.content.invalid}"));
+        assertTrue(messages.contains("{currency-code.content.invalid}"));
+        assertTrue(messages.contains("{currency-code.length.invalid}"));
     }
 
 }

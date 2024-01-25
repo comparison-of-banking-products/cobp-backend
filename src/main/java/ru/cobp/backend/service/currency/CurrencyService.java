@@ -10,7 +10,7 @@ public interface CurrencyService {
 
     Currency update(Currency updCurrency);
 
-    Currency getById(String currencyId);
+    Currency getByNum(String currencyNum);
 
     void deleteById(String currencyId);
 

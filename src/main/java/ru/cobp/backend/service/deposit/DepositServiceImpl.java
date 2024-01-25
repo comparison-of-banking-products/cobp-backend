@@ -100,7 +100,7 @@ public class DepositServiceImpl implements DepositService {
     }
 
     private Currency getCurrency(String num) {
-        return currencyService.getById(num);
+        return currencyService.getByNum(num);
     }
 
     private void checkDepositExistsOrThrow(long id) {
