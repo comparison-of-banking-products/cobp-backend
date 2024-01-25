@@ -19,7 +19,7 @@ CREATE TABLE banks (
 );
 
 CREATE TABLE currencies (
-	num         BIGINT      NOT NULL,
+	num         CHAR(3)     NOT NULL,
 	code        CHAR(3)     NOT NULL,
 	currency    VARCHAR(30)	NOT NULL,
 

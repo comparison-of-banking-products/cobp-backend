@@ -1,14 +1,19 @@
 package ru.cobp.backend.dto.bank;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.cobp.backend.validation.constraints.Description;
+import ru.cobp.backend.validation.constraints.BankName;
+import ru.cobp.backend.validation.constraints.Bic;
+import ru.cobp.backend.validation.constraints.LegalEntity;
+import ru.cobp.backend.validation.constraints.Logo;
+import ru.cobp.backend.validation.constraints.Url;
 
+@Schema(description = "Данные для создания / обновления банка")
 @Builder
 @Getter
 @Setter
@@ -17,30 +22,26 @@ import lombok.Setter;
 public class BankCreateUpdateDto {
 
     @Schema(description = "БИК")
-    @NotNull(message = "Необходимо указать БИК банка")
+    @Bic
     private String bic;
 
-    @Schema(description = "Название")
-    @NotNull(message = "Необходимо указать название банка")
-    @Size(max = 100)
+    @Schema(description = "Сокращенное название банка")
+    @BankName
     private String name;
 
-    @Schema(description = "Юридическое лицо")
-    @NotNull(message = "Необходимо указать полное юридическое лицо")
-    @Size(max = 100)
+    @Schema(description = "Полное наименование банка (юридическое лицо)")
+    @LegalEntity
     private String legalEntity;
 
-    @Schema(description = "Описание")
-    @NotNull(message = "Необходимо указать описание банка")
+    @Schema(description = "Информация о банке")
+    @Description
     private String description;
 
-    @Schema(description = "Лого")
-    @NotNull(message = "Необходимо указать лого банка")
-    @Size(max = 100)
+    @Schema(description = "Логотип банка")
+    @Logo
     private String logo;
 
-    @Schema(description = "Онлайн-адрес")
-    @NotNull(message = "Необходимо указать онлайн-адрес банка")
-    @Size(max = 100)
+    @Schema(description = "Наименование сайта банка")
+    @Url
     private String url;
 }

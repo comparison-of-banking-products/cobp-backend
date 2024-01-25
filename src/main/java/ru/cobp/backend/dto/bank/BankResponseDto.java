@@ -11,22 +11,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BankResponseDto {
 
-    @Schema(description = "БИК")
+    @Schema(description = "БИК, уникальный идентификатор банка в системе Центробанка")
     private String bic;
 
-    @Schema(description = "Название")
+    @Schema(description = "Сокращенное название банка")
     private String name;
 
-    @Schema(description = "Юридическое лицо")
+    @Schema(description = "Полное наименование банка с указанием организационно-правовой формы")
     private String legalEntity;
 
-    @Schema(description = "Описание")
+    @Schema(description = "Информация о банке")
     private String description;
 
-    @Schema(description = "Лого")
+    @Schema(description = "Логотип банка")
     private String logo;
 
-    @Schema(description = "Онлайн-адрес")
+    @Schema(description = "Наименование сайта банка")
     private String url;
 
 }

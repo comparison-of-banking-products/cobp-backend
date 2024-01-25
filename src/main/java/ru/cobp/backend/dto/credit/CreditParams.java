@@ -10,7 +10,7 @@ public class CreditParams {
 
     Boolean isActive;
 
-    Long currencyNum;
+    String currencyNum;
 
     Integer minAmount;
 

@@ -21,7 +21,7 @@ public class Currency {
 
     @Id
     @Column(name = "num", nullable = false)
-    private Long num;
+    private String num;
 
     @Column(name = "code", length = 3, nullable = false, unique = true)
     private String code;

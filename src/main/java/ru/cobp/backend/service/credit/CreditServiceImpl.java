@@ -58,7 +58,7 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public Credit create(NewCreditDto newCreditDto) {
         Bank bank = bankService.getBankByBicOrThrowException(newCreditDto.getBankBic());
-        Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
+        Currency currency = currencyService.getByNum(newCreditDto.getCurrencyNum());
         Credit credit = creditMapper.toCredit(newCreditDto);
         credit.setBank(bank);
         credit.setCurrency(currency);
@@ -125,7 +125,7 @@ public class CreditServiceImpl implements CreditService {
             builder.and(Q_CREDIT.isActive.eq(params.getIsActive()));
         }
         if (params.getCurrencyNum() != null) {
-            builder.and(Q_CREDIT.currency.eq(currencyService.getById(params.getCurrencyNum())));
+            builder.and(Q_CREDIT.currency.eq(currencyService.getByNum(params.getCurrencyNum())));
         }
         if (params.getMinAmount() != null) {
             builder.and(Q_CREDIT.amountMin.loe(params.getMinAmount()));
