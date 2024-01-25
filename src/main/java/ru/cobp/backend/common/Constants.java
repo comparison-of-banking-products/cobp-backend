@@ -10,6 +10,8 @@ public class Constants {
 
     public static final int BIC_LENGTH = 9;
 
-    public static final String ONLY_DIGITS_PATTERN = "\\d+";
+    public static final String ONLY_DIGITS_REGEXP = "\\d+";
+
+    public static final String NAME_REGEXP = "^[а-яА-Я-\\s]*$";
 
 }

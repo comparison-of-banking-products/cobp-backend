@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
         @Size(min = Constants.BIC_LENGTH, message = "{bic.length.invalid}"),
         @Size(max = Constants.BIC_LENGTH, message = "{bic.length.invalid}")
 })
-@Pattern(regexp = Constants.ONLY_DIGITS_PATTERN, message = "{bic.digits.invalid}")
+@Pattern(regexp = Constants.ONLY_DIGITS_REGEXP, message = "{bic.digits.invalid}")
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
