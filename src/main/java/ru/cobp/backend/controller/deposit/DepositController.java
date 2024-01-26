@@ -8,12 +8,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.cobp.backend.dto.deposit.DepositListResponseDto;
 import ru.cobp.backend.dto.deposit.DepositParams;
@@ -26,6 +26,13 @@ import ru.cobp.backend.model.deposit.Deposit;
 import ru.cobp.backend.model.deposit.DepositPatch;
 import ru.cobp.backend.model.deposit.ScrapedDeposit;
 import ru.cobp.backend.service.deposit.DepositService;
+import ru.cobp.backend.validation.constraints.Amount;
+import ru.cobp.backend.validation.constraints.Bic;
+import ru.cobp.backend.validation.constraints.Id;
+import ru.cobp.backend.validation.constraints.PageIndex;
+import ru.cobp.backend.validation.constraints.PageSize;
+import ru.cobp.backend.validation.constraints.Rate;
+import ru.cobp.backend.validation.constraints.Term;
 
 import java.util.List;
 
@@ -34,8 +41,9 @@ import java.util.List;
         description = "Контроллер для работы с вкладами"
 )
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(path = "/v1/deposits")
+@Validated
+@RequiredArgsConstructor
 public class DepositController {
 
     private final DepositService depositService;
@@ -57,7 +65,7 @@ public class DepositController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DepositResponseDto postDeposit(
-            @RequestBody DepositPostRequestDto depositDto
+            @RequestBody @Valid DepositPostRequestDto depositDto
     ) {
         Deposit deposit = depositMapper.toDeposit(depositDto);
         Deposit saved = depositService.save(deposit);
@@ -79,9 +87,9 @@ public class DepositController {
     @PatchMapping("/{id}")
     public DepositResponseDto patchDeposit(
             @Parameter(description = "Идентификатор вклада")
-            @PathVariable long id,
+            @PathVariable @Id long id,
 
-            @RequestBody DepositPatchRequestDto depositDto
+            @RequestBody @Valid DepositPatchRequestDto depositDto
     ) {
         DepositPatch patch = depositMapper.toDepositPatch(depositDto);
         Deposit updated = depositService.update(id, patch);
@@ -103,7 +111,7 @@ public class DepositController {
     @GetMapping("/{id}")
     public DepositResponseDto getDepositById(
             @Parameter(description = "Идентификатор вклада")
-            @PathVariable long id
+            @PathVariable @Id long id
     ) {
         Deposit deposit = depositService.findById(id);
         return depositMapper.toDepositResponseDto(deposit);
@@ -124,28 +132,28 @@ public class DepositController {
     @GetMapping
     public DepositListResponseDto getAllDepositList(
             @Parameter(description = "Список БИК номеров")
-            @RequestParam(defaultValue = "") List<String> bics,
+            @RequestParam(defaultValue = "") List<@Bic String> bics,
 
             @Parameter(description = "Активный")
             @RequestParam(required = false) Boolean isActive,
 
             @Parameter(description = "Минимальная сумма вклада")
-            @RequestParam(required = false) Integer amountMin,
+            @RequestParam(required = false) @Amount Integer amountMin,
 
             @Parameter(description = "Максимальная сумма вклада")
-            @RequestParam(required = false) Integer amountMax,
+            @RequestParam(required = false) @Amount Integer amountMax,
 
             @Parameter(description = "Минимальный срок вклада")
-            @RequestParam(required = false) Integer termMin,
+            @RequestParam(required = false) @Term Integer termMin,
 
             @Parameter(description = "Максимальный срок вклада")
-            @RequestParam(required = false) Integer termMax,
+            @RequestParam(required = false) @Term Integer termMax,
 
             @Parameter(description = "Минимальная процентная ставка")
-            @RequestParam(required = false) Double rateMin,
+            @RequestParam(required = false) @Rate Double rateMin,
 
             @Parameter(description = "Максимальная процентная ставка")
-            @RequestParam(required = false) Double rateMax,
+            @RequestParam(required = false) @Rate Double rateMax,
 
             @Parameter(description = "С капитализацией")
             @RequestParam(required = false) Boolean capitalization,
@@ -157,10 +165,10 @@ public class DepositController {
             @RequestParam(required = false) Boolean partialWithdrawal,
 
             @Parameter(description = "Индекс страницы")
-            @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+            @RequestParam(defaultValue = "0") @PageIndex int page,
 
             @Parameter(description = "Размер страницы")
-            @RequestParam(defaultValue = "10") @Positive int size
+            @RequestParam(defaultValue = "10") @PageSize int size
     ) {
         DepositParams params = new DepositParams(
                 bics,
@@ -194,7 +202,7 @@ public class DepositController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDeposit(
             @Parameter(description = "Идентификатор вклада")
-            @PathVariable long id
+            @PathVariable @Id long id
     ) {
         depositService.deleteById(id);
     }

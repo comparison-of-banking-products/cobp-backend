@@ -3,6 +3,9 @@ package ru.cobp.backend.dto.deposit;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.cobp.backend.validation.constraints.Amount;
+import ru.cobp.backend.validation.constraints.Rate;
+import ru.cobp.backend.validation.constraints.Term;
 
 @Schema(description = "Обновление вклада")
 @Data
@@ -13,15 +16,19 @@ public class DepositPatchRequestDto {
     private Boolean isActive;
 
     @Schema(description = "Минимальная сумма")
+    @Amount
     private Integer amountMin;
 
     @Schema(description = "Максимальная сумма")
+    @Amount
     private Integer amountMax;
 
     @Schema(description = "Срок")
+    @Term
     private Integer term;
 
     @Schema(description = "Процентная ставка")
+    @Rate
     private Double rate;
 
     @Schema(description = "С капитализацией")

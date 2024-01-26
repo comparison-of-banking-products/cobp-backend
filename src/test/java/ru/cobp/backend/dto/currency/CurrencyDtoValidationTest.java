@@ -51,9 +51,9 @@ class CurrencyDtoValidationTest {
 
         // then
         assertEquals(3, violations.size());
-        assertTrue(messages.contains("{currency-name.content.invalid}"));
-        assertTrue(messages.contains("{currency-code.content.invalid}"));
-        assertTrue(messages.contains("{currency-code.length.invalid}"));
+        assertTrue(messages.contains("{currency.name.content.invalid}"));
+        assertTrue(messages.contains("{currency.code.content.invalid}"));
+        assertTrue(messages.contains("{currency.code.length.invalid}"));
     }
 
 }
