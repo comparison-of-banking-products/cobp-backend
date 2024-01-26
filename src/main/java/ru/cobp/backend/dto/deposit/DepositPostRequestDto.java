@@ -1,17 +1,9 @@
 package ru.cobp.backend.dto.deposit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.cobp.backend.validation.constraints.Amount;
-import ru.cobp.backend.validation.constraints.Bic;
-import ru.cobp.backend.validation.constraints.CurrencyNum;
-import ru.cobp.backend.validation.constraints.DepositName;
-import ru.cobp.backend.validation.constraints.Rate;
-import ru.cobp.backend.validation.constraints.Term;
-import ru.cobp.backend.validation.constraints.Url;
+import ru.cobp.backend.validation.constraints.*;
 
 @Schema(description = "Новый вклад")
 @Data
@@ -19,59 +11,51 @@ import ru.cobp.backend.validation.constraints.Url;
 public class DepositPostRequestDto {
 
     @Schema(description = "БИК банка")
-    @NotBlank(message = "{bic.notblank.invalid}")
-    @Bic
+    @BicNotBlank
     private String bic;
 
     @Schema(description = "Название вклада")
-    @NotBlank(message = "{deposit.name.notblank.invalid}")
-    @DepositName
+    @DepositNameNotBlank
     private String name;
 
     @Schema(description = "URL-адрес вклада")
-    @NotBlank(message = "{url.notblank.invalid}")
-    @Url
+    @UrlNotBlank
     private String productUrl;
 
     @Schema(description = "Доступность")
-    @NotNull(message = "{deposit.active.notnull.invalid}")
+    @DepositIsActiveNotNull
     private Boolean isActive;
 
     @Schema(description = "Цифровой код валюты")
-    @NotBlank(message = "{currency.num.notblank.invalid}")
-    @CurrencyNum
+    @CurrencyNumNotBlank
     private String currencyNum;
 
     @Schema(description = "Минимальная сумма")
-    @NotNull(message = "{amount.notnull.invalid}")
-    @Amount
+    @AmountNotNull
     private Integer amountMin;
 
     @Schema(description = "Максимальная сумма")
-    @NotNull(message = "{amount.notnull.invalid}")
-    @Amount
+    @AmountNotNull
     private Integer amountMax;
 
     @Schema(description = "Срок")
-    @NotNull(message = "{term.notnull.invalid}")
-    @Term
+    @TermNotNull
     private Integer term;
 
     @Schema(description = "Процентная ставка")
-    @NotNull(message = "{rate.notnull.invalid}")
-    @Rate
+    @RateNotNull
     private Double rate;
 
     @Schema(description = "С капитализацией")
-    @NotNull(message = "{deposit.capitalization.notnull.invalid}")
+    @DepositCapitalizationNotNull
     private Boolean capitalization;
 
     @Schema(description = "С пополнением")
-    @NotNull(message = "{deposit.replenishment.notnull.invalid}")
+    @DepositReplenishmentNotNull
     private Boolean replenishment;
 
     @Schema(description = "С частичным снятием")
-    @NotNull(message = "{deposit.partialWithdrawal.notnull.invalid}")
+    @DepositPartialWithdrawalNotNull
     private Boolean partialWithdrawal;
 
 }

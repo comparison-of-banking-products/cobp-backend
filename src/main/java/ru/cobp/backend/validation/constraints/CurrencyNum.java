@@ -2,7 +2,6 @@ package ru.cobp.backend.validation.constraints;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import ru.cobp.backend.common.Constants;
@@ -12,7 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@NotBlank(message = "{currency.num.blank.invalid}")
 @Size.List({
         @Size(min = Constants.CURRENCY_NUM_LENGTH, message = "{currency.num.length.invalid}"),
         @Size(max = Constants.CURRENCY_NUM_LENGTH, message = "{currency.num.length.invalid}")

@@ -48,4 +48,8 @@ public class Constants {
 
     public static final String DEPOSIT_NAME_REGEXP = "^[0-9a-zA-Zа-яёЁА-Я-@#$.,?%^&+=!\"'«»\\s]*$";
 
+    public static final int DEPOSIT_AMOUNT_MIN = 10_000;
+
+    public static final int DEPOSIT_AMOUNT_MAX = 100_000_000;
+
 }
