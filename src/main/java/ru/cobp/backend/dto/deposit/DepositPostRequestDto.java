@@ -1,6 +1,7 @@
 package ru.cobp.backend.dto.deposit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,17 +19,17 @@ import ru.cobp.backend.validation.constraints.Url;
 public class DepositPostRequestDto {
 
     @Schema(description = "БИК банка")
-    @NotNull(message = "{bic.notnull.invalid}")
+    @NotBlank(message = "{bic.notblank.invalid}")
     @Bic
     private String bic;
 
     @Schema(description = "Название вклада")
-    @NotNull(message = "{deposit.name.notnull.invalid}")
+    @NotBlank(message = "{deposit.name.notblank.invalid}")
     @DepositName
     private String name;
 
     @Schema(description = "URL-адрес вклада")
-    @NotNull(message = "{url.notnull.invalid}")
+    @NotBlank(message = "{url.notblank.invalid}")
     @Url
     private String productUrl;
 
@@ -37,7 +38,7 @@ public class DepositPostRequestDto {
     private Boolean isActive;
 
     @Schema(description = "Цифровой код валюты")
-    @NotNull(message = "{currency.num.notnull.invalid}")
+    @NotBlank(message = "{currency.num.notblank.invalid}")
     @CurrencyNum
     private String currencyNum;
 
