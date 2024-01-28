@@ -1,13 +1,16 @@
 package ru.cobp.backend.dto.currency;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.cobp.backend.validation.constraints.Code;
+import ru.cobp.backend.validation.constraints.CurrencyName;
+import ru.cobp.backend.validation.constraints.CurrencyNum;
 
+@Schema(description = "Данные для создания / обновления валюты")
 @Builder
 @Getter
 @Setter
@@ -15,14 +18,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CurrencyCreateUpdateDto {
 
-    @NotNull
-    private Long num;
+    @Schema(description = "Цифровой код валюты")
+    @CurrencyNum
+    private String num;
 
-    @NotNull
-    @Size(min = 3, max = 3)
+    @Schema(description = "Буквенный код валюты")
+    @Code
     private String code;
 
-    @NotNull
-    @Size(max = 30)
+    @Schema(description = "Наименование валюты")
+    @CurrencyName
     private String currency;
 }

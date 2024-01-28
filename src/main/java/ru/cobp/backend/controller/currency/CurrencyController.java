@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ import ru.cobp.backend.model.currency.Currency;
 import ru.cobp.backend.model.currency.CurrencyRate;
 import ru.cobp.backend.service.currency.CurrencyRatesService;
 import ru.cobp.backend.service.currency.CurrencyService;
+import ru.cobp.backend.validation.constraints.CurrencyNum;
 
 import java.util.List;
 
@@ -36,6 +38,7 @@ import java.util.List;
         name = "Валюты",
         description = "Контроллер для работы с валютами"
 )
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/v1/currencies")
@@ -82,9 +85,9 @@ public class CurrencyController {
             )}
     )})
     @PutMapping("/{num}")
-    public CurrencyResponseDto update(@PathVariable Long num,
+    public CurrencyResponseDto update(@PathVariable @CurrencyNum String num,
                                       @RequestBody @Valid CurrencyCreateUpdateDto updateCurrencyDto) {
-        Currency oldCurrency = currencyService.getById(num);
+        Currency oldCurrency = currencyService.getByNum(num);
         Currency updateCurrency = currencyMapper.fromCurrencyCreateUpdateDto(updateCurrencyDto);
         oldCurrency = currencyMapper.updateCurrency(oldCurrency, updateCurrency);
         Currency response = currencyService.update(oldCurrency);
@@ -122,8 +125,8 @@ public class CurrencyController {
             )}
     )})
     @GetMapping("/{num}")
-    public CurrencyResponseDto getById(@PathVariable Long num) {
-        Currency response = currencyService.getById(num);
+    public CurrencyResponseDto getById(@PathVariable @CurrencyNum String num) {
+        Currency response = currencyService.getByNum(num);
         return currencyMapper.toCurrencyResponseDto(response);
     }
 
@@ -137,7 +140,7 @@ public class CurrencyController {
     )})
     @DeleteMapping("/{num}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long num) {
+    public void delete(@PathVariable @CurrencyNum String num) {
         currencyService.deleteById(num);
     }
 

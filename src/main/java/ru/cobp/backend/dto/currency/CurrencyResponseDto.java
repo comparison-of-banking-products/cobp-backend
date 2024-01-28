@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CurrencyResponseDto {
 
     @Schema(description = "Цифровой код")
-    private Long num;
+    private String num;
 
     @Schema(description = "Символьный код")
     private String code;

@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -18,12 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
-import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
-import ru.cobp.backend.dto.calculator.DepositCalculatorParams;
+import ru.cobp.backend.dto.calculator.MaximumRateDepositParams;
+import ru.cobp.backend.dto.calculator.MinimumRateCreditParams;
 import ru.cobp.backend.mapper.CalculatorMapper;
 import ru.cobp.backend.model.calculator.CalculatedCreditList;
 import ru.cobp.backend.model.calculator.CalculatedDepositList;
 import ru.cobp.backend.service.calculator.CalculatorService;
+import ru.cobp.backend.validation.constraints.Amount;
+import ru.cobp.backend.validation.constraints.Bic;
+import ru.cobp.backend.validation.constraints.PageIndex;
+import ru.cobp.backend.validation.constraints.PageSize;
+import ru.cobp.backend.validation.constraints.Term;
 
 import java.util.List;
 
@@ -56,10 +59,10 @@ public class CalculatorController {
     @GetMapping("/deposits")
     public CalculatedDepositListResponseDto getAllCalculatedDeposits(
             @Parameter(description = "Сумма вклада в рублях")
-            @RequestParam @Positive int amount,
+            @RequestParam @Amount int amount,
 
             @Parameter(description = "Срок вклада в месяцах")
-            @RequestParam @Positive int term,
+            @RequestParam @Term int term,
 
             @Parameter(description = "Вклад с капитализацией")
             @RequestParam(required = false) Boolean capitalization,
@@ -71,15 +74,15 @@ public class CalculatorController {
             @RequestParam(required = false) Boolean partialWithdrawal,
 
             @Parameter(description = "Список БИК номеров")
-            @RequestParam(defaultValue = "") List<String> bics,
+            @RequestParam(defaultValue = "") List<@Bic String> bics,
 
             @Parameter(description = "Индекс страницы")
-            @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+            @RequestParam(defaultValue = "0") @PageIndex int page,
 
             @Parameter(description = "Размер страницы")
-            @RequestParam(defaultValue = "10") @Positive int size
+            @RequestParam(defaultValue = "10") @PageSize int size
     ) {
-        DepositCalculatorParams params = new DepositCalculatorParams(
+        MaximumRateDepositParams params = new MaximumRateDepositParams(
                 amount, term, capitalization, replenishment, partialWithdrawal, bics, page, size
         );
         CalculatedDepositList calculatedDepositList = calculatorService.getAllMaximumRateCalculatedDepositList(params);
@@ -101,10 +104,10 @@ public class CalculatorController {
     @GetMapping("/credits")
     public CalculatedCreditListResponseDto getAllCalculatedCredits(
             @Parameter(description = "Сумма кредита в рублях")
-            @RequestParam @Positive int amount,
+            @RequestParam @Amount int amount,
 
             @Parameter(description = "Срок кредита в месяцах")
-            @RequestParam @Positive int term,
+            @RequestParam @Term int term,
 
             @Parameter(description = "Получение без посещения банка")
             @RequestParam(required = false) Boolean creditOnline,
@@ -116,15 +119,15 @@ public class CalculatorController {
             @RequestParam(required = false) Boolean collateral,
 
             @Parameter(description = "Список БИК номеров")
-            @RequestParam(defaultValue = "") List<String> bics,
+            @RequestParam(defaultValue = "") List<@Bic String> bics,
 
             @Parameter(description = "Индекс страницы")
-            @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+            @RequestParam(defaultValue = "0") @PageIndex int page,
 
             @Parameter(description = "Размер страницы")
-            @RequestParam(defaultValue = "10") @Positive int size
+            @RequestParam(defaultValue = "10") @PageSize int size
     ) {
-        CreditCalculatorParams params = new CreditCalculatorParams(
+        MinimumRateCreditParams params = new MinimumRateCreditParams(
                 amount, term, creditOnline, onlineApprove, collateral, bics, page, size
         );
         CalculatedCreditList calculatedCreditList = calculatorService.getAllMinimumRateCalculatedCreditList(params);

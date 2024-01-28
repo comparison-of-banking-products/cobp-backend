@@ -21,7 +21,7 @@ public interface BankMapper {
 
     Bank fromBankCreateUpdateDto(BankCreateUpdateDto createUpdateDto);
 
-    default Bank updateBank(Bank oldBank, Bank updateBank) {
+    default void updateBank(Bank oldBank, Bank updateBank) {
         if (updateBank.getName() != null) {
             oldBank.setName(updateBank.getName());
         }
@@ -37,6 +37,5 @@ public interface BankMapper {
         if (updateBank.getUrl() != null) {
             oldBank.setUrl(updateBank.getUrl());
         }
-        return oldBank;
     }
 }

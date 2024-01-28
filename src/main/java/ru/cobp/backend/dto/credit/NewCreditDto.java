@@ -1,11 +1,11 @@
 package ru.cobp.backend.dto.credit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.model.credit.PaymentType;
+import ru.cobp.backend.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
@@ -13,52 +13,55 @@ import ru.cobp.backend.model.credit.PaymentType;
 @Schema(description = "Сущность нового кредита")
 public class NewCreditDto {
 
-    @NotBlank
+    @BicNotBlank
+    @Schema(description = "БИК банка")
     private String bankBic;
 
-    @NotBlank
-    @Size(min = 3, max = 100)
+    @BankName
+    @Schema(description = "Название кредита")
     private String name;
 
-    @NotNull
+    @CreditIsActiveNotNull
+    @Schema(description = "Доступность кредита")
     private Boolean isActive;
 
-    @NotNull
-    private Long currencyNum;
+    @CurrencyNumNotBlank
+    @Schema(description = "Код валюты")
+    private String currencyNum;
 
-    @NotBlank
-    @Size(min = 3, max = 100)
+    @UrlNotBlank
+    @Schema(description = "Ссылка на кредит")
     private String productUrl;
 
-    @NotNull
-    @Positive
+    @AmountNotNull
+    @Schema(description = "Минимальная сумма кредита")
     private Integer amountMin;
 
-    @NotNull
-    @Positive
+    @AmountNotNull
+    @Schema(description = "Максимальная сумма кредита")
     private Integer amountMax;
 
-    @NotNull
-    @Positive
+    @RateNotNull
+    @Schema(description = "Процентная ставка кредита")
     private Double rate;
 
-    @NotNull
-    @Positive
+    @CreditTermNotNull
+    @Schema(description = "Срок кредита")
     private Integer term;
 
-    @NotNull
+    @PaymentTypeNotNull
     @Schema(description = "Тип платежа")
     private PaymentType paymentType;
 
-    @NotNull
+    @CreditOnlineNotNull
     @Schema(description = "Получение без посещения банка")
     private Boolean creditOnline;
 
-    @NotNull
+    @OnlineApproveNotNull
     @Schema(description = "Подтверждение онлайн")
     private Boolean onlineApprove;
 
-    @NotNull
+    @CollateralNotNull
     @Schema(description = "Наличие залога")
     private Boolean collateral;
 

@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.dto.bank.BankSort;
-import ru.cobp.backend.exception.DuplicateException;
-import ru.cobp.backend.exception.ExceptionMessage;
-import ru.cobp.backend.exception.NotFoundException;
+import ru.cobp.backend.exception.ExceptionUtil;
 import ru.cobp.backend.model.bank.Bank;
 import ru.cobp.backend.model.bank.QBank;
 import ru.cobp.backend.model.credit.QCredit;
@@ -43,20 +41,16 @@ public class BankServiceImpl implements BankService {
     @Override
     public Bank getBankByBicOrThrowException(String bic) {
         return bankRepository.findById(bic).orElseThrow(
-                () -> new NotFoundException(
-                        String.format(ExceptionMessage.BANK_NOT_FOUND, bic)
-                ));
+                () -> ExceptionUtil.getBankNotFoundException(bic));
     }
 
     @Override
     @Transactional
     public void deleteByBic(String bic) {
-        if (bankRepository.findById(bic).isEmpty()) {
-            throw new NotFoundException(
-                    String.format(ExceptionMessage.BANK_NOT_FOUND, bic)
-            );
+        long deleteCount = bankRepository.deleteByBic(bic);
+        if (deleteCount == 0) {
+            throw ExceptionUtil.getBankNotFoundException(bic);
         }
-        bankRepository.deleteById(bic);
     }
 
     @Override
@@ -92,9 +86,7 @@ public class BankServiceImpl implements BankService {
 
     private void checkIfBankExistsByBic(String bic) {
         if (bankRepository.findById(bic).isPresent()) {
-            throw new DuplicateException(
-                    String.format(ExceptionMessage.DUPLICATE_EXCEPTION, Bank.class)
-            );
+            throw ExceptionUtil.getDuplicateException(Bank.class);
         }
     }
 }

@@ -10,6 +10,18 @@ public class ExceptionUtil {
         return new DepositNotFoundException(ExceptionMessage.DEPOSIT_NOT_FOUND);
     }
 
+    public static NotFoundException getBankNotFoundException(String bic) {
+        return new NotFoundException(String.format(ExceptionMessage.BANK_NOT_FOUND, bic));
+    }
+
+    public static NotFoundException getCurrencyNotFoundException(String currencyNum) {
+        return new NotFoundException(String.format(ExceptionMessage.CURRENCY_NOT_FOUND, currencyNum));
+    }
+
+    public static <T> DuplicateException getDuplicateException(Class<T> clazz) {
+        return new DuplicateException(String.format(ExceptionMessage.DUPLICATE_EXCEPTION, clazz.getSimpleName()));
+    }
+
     public static ExchangeRatesProcessingFailedException getExchangeRatesProcessingFailedException(Throwable cause) {
         return new ExchangeRatesProcessingFailedException(ExceptionMessage.EXCHANGE_RATES_PROCESSING_FAILED, cause);
     }
@@ -23,6 +35,12 @@ public class ExceptionUtil {
     public static LogoFileNotFoundException getLogoFileNotFoundException(String logoName, Throwable cause) {
         return new LogoFileNotFoundException(
                 String.format("%s [%s]", ExceptionMessage.LOGO_FILE_NOT_FOUND, logoName), cause
+        );
+    }
+
+    public static DepositNotFoundException getDepositNotFoundException(long depositId) {
+        return new DepositNotFoundException(
+                String.format("%s [depositId = %d]", ExceptionMessage.DEPOSIT_NOT_FOUND, depositId)
         );
     }
 

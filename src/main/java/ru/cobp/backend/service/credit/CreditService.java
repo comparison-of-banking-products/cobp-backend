@@ -1,8 +1,8 @@
 package ru.cobp.backend.service.credit;
 
 import org.springframework.data.domain.Page;
-import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
-import ru.cobp.backend.dto.credit.CreditDto;
+import ru.cobp.backend.dto.calculator.MinimumRateCreditParams;
+import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.model.credit.Credit;
@@ -17,10 +17,10 @@ public interface CreditService {
 
     Credit create(NewCreditDto newCreditDto);
 
-    Credit update(Long id, CreditDto creditDto);
+    Credit update(Long id, CreditUpdateDto creditUpdateDto);
 
     void delete(Long id);
 
-    Page<Credit> getAllMinimumRateCreditPage(CreditCalculatorParams params);
+    Page<Credit> getAllMinimumRateCreditPage(MinimumRateCreditParams params);
 
 }

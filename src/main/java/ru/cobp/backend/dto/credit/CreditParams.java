@@ -4,13 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import ru.cobp.backend.model.credit.PaymentType;
 
+import java.util.List;
+
 @Value
 @RequiredArgsConstructor
 public class CreditParams {
 
     Boolean isActive;
 
-    Long currencyNum;
+    String currencyNum;
 
     Integer minAmount;
 
@@ -29,5 +31,7 @@ public class CreditParams {
     Boolean onlineApprove;
 
     Boolean collateral;
+
+    List<String> banksBic;
 
 }

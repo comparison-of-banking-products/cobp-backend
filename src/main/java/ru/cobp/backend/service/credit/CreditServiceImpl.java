@@ -11,8 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.cobp.backend.common.Utils;
-import ru.cobp.backend.dto.calculator.CreditCalculatorParams;
-import ru.cobp.backend.dto.credit.CreditDto;
+import ru.cobp.backend.dto.bank.BankSort;
+import ru.cobp.backend.dto.calculator.MinimumRateCreditParams;
+import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.CreditParams;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.exception.NotFoundException;
@@ -58,7 +59,7 @@ public class CreditServiceImpl implements CreditService {
     @Override
     public Credit create(NewCreditDto newCreditDto) {
         Bank bank = bankService.getBankByBicOrThrowException(newCreditDto.getBankBic());
-        Currency currency = currencyService.getById(newCreditDto.getCurrencyNum());
+        Currency currency = currencyService.getByNum(newCreditDto.getCurrencyNum());
         Credit credit = creditMapper.toCredit(newCreditDto);
         credit.setBank(bank);
         credit.setCurrency(currency);
@@ -66,9 +67,9 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
-    public Credit update(Long id, CreditDto creditDto) {
+    public Credit update(Long id, CreditUpdateDto creditUpdateDto) {
         Credit credit = getById(id);
-        updateCredit(credit, creditDto);
+        updateCredit(credit, creditUpdateDto);
         return creditRepository.save(credit);
     }
 
@@ -82,7 +83,7 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
-    public Page<Credit> getAllMinimumRateCreditPage(CreditCalculatorParams params) {
+    public Page<Credit> getAllMinimumRateCreditPage(MinimumRateCreditParams params) {
         Predicate p = buildQCreditMinimumRatePredicateBy(params);
         Pageable pageable = PageRequest.of(
                 params.page(), params.size(), Sort.sort(Credit.class).by(Credit::getRate).ascending()
@@ -90,7 +91,7 @@ public class CreditServiceImpl implements CreditService {
         return creditRepository.findAll(p, pageable);
     }
 
-    private Predicate buildQCreditMinimumRatePredicateBy(CreditCalculatorParams params) {
+    private Predicate buildQCreditMinimumRatePredicateBy(MinimumRateCreditParams params) {
         BooleanBuilder builder = new BooleanBuilder()
                 .and(Q_CREDIT.rate.goe(JPAExpressions
                         .select(Q_CREDIT.rate.min())
@@ -125,7 +126,7 @@ public class CreditServiceImpl implements CreditService {
             builder.and(Q_CREDIT.isActive.eq(params.getIsActive()));
         }
         if (params.getCurrencyNum() != null) {
-            builder.and(Q_CREDIT.currency.eq(currencyService.getById(params.getCurrencyNum())));
+            builder.and(Q_CREDIT.currency.eq(currencyService.getByNum(params.getCurrencyNum())));
         }
         if (params.getMinAmount() != null) {
             builder.and(Q_CREDIT.amountMin.loe(params.getMinAmount()));
@@ -154,40 +155,43 @@ public class CreditServiceImpl implements CreditService {
         if (params.getCollateral() != null) {
             builder.and(Q_CREDIT.collateral.eq(params.getCollateral()));
         }
+        if (params.getBanksBic() != null) {
+            builder.and(Q_CREDIT.bank.in(bankService.getAll(BankSort.CREDITS, params.getBanksBic())));
+        }
         return builder;
 
     }
 
-    private void updateCredit(Credit credit, CreditDto creditDto) {
-        if (creditDto.getIsActive() != null) {
-            credit.setIsActive(creditDto.getIsActive());
+    private void updateCredit(Credit credit, CreditUpdateDto creditUpdateDto) {
+        if (creditUpdateDto.getIsActive() != null) {
+            credit.setIsActive(creditUpdateDto.getIsActive());
         }
-        if (creditDto.getName() != null) {
-            credit.setName(creditDto.getName());
+        if (creditUpdateDto.getName() != null) {
+            credit.setName(creditUpdateDto.getName());
         }
-        if (creditDto.getProductUrl() != null) {
-            credit.setProductUrl(creditDto.getProductUrl());
+        if (creditUpdateDto.getProductUrl() != null) {
+            credit.setProductUrl(creditUpdateDto.getProductUrl());
         }
-        if (creditDto.getRate() != null) {
-            credit.setRate(creditDto.getRate());
+        if (creditUpdateDto.getRate() != null) {
+            credit.setRate(creditUpdateDto.getRate());
         }
-        if (creditDto.getMinAmount() != null) {
-            credit.setAmountMin(creditDto.getMinAmount());
+        if (creditUpdateDto.getAmountMin() != null) {
+            credit.setAmountMin(creditUpdateDto.getAmountMin());
         }
-        if (creditDto.getMaxAmount() != null) {
+        if (creditUpdateDto.getAmountMax() != null) {
             credit.setAmountMax(credit.getAmountMax());
         }
-        if (creditDto.getTerm() != null) {
-            credit.setTerm(creditDto.getTerm());
+        if (creditUpdateDto.getTerm() != null) {
+            credit.setTerm(creditUpdateDto.getTerm());
         }
-        if (creditDto.getCreditOnline() != null) {
-            credit.setCreditOnline(creditDto.getCreditOnline());
+        if (creditUpdateDto.getCreditOnline() != null) {
+            credit.setCreditOnline(creditUpdateDto.getCreditOnline());
         }
-        if (creditDto.getOnlineApprove() != null) {
-            credit.setOnlineApprove(creditDto.getOnlineApprove());
+        if (creditUpdateDto.getOnlineApprove() != null) {
+            credit.setOnlineApprove(creditUpdateDto.getOnlineApprove());
         }
-        if (creditDto.getCollateral() != null) {
-            credit.setCollateral(creditDto.getCollateral());
+        if (creditUpdateDto.getCollateral() != null) {
+            credit.setCollateral(creditUpdateDto.getCollateral());
         }
     }
 

@@ -10,9 +10,9 @@ public interface CurrencyService {
 
     Currency update(Currency updCurrency);
 
-    Currency getById(Long currencyId);
+    Currency getByNum(String currencyNum);
 
-    void deleteById(Long currencyId);
+    void deleteById(String currencyId);
 
     List<Currency> getAll();
 
