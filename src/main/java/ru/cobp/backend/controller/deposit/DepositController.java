@@ -64,7 +64,7 @@ public class DepositController {
     )})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DepositResponseDto postDeposit(
+    public DepositResponseDto addDeposit(
             @RequestBody @Valid DepositPostRequestDto depositDto
     ) {
         Deposit deposit = depositMapper.toDeposit(depositDto);
