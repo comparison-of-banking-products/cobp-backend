@@ -52,4 +52,8 @@ public class Constants {
 
     public static final int DEPOSIT_AMOUNT_MAX = 100_000_000;
 
+    public static final String CREDIT_NAME_REGEXP = "^[0-9a-zA-Zа-яёЁА-Я-@#$.,?%^&+=!\"'«»\\s]*$";
+
+    public static final int CREDIT_NAME_MAX_LENGTH = 100;
+
 }

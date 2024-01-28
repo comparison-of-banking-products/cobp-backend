@@ -6,41 +6,39 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.cobp.backend.model.credit.PaymentType;
+import ru.cobp.backend.validation.constraints.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Сущность кредита")
-public class CreditDto {
+public class CreditUpdateDto {
 
-    @Schema(description = "Id кредита")
-    private Long id;
-
-    @Schema(description = "БИК банка")
-    private String bankBic;
-
+    @CreditName
     @Schema(description = "Название кредита")
     private String name;
 
     @Schema(description = "Доступность кредита")
     private Boolean isActive;
 
-    @Schema(description = "Код валюты")
-    private Long currencyNum;
-
+    @Url
     @Schema(description = "Ссылка на кредит")
     private String productUrl;
 
+    @Amount
     @Schema(description = "Минимальная сумма кредита")
-    private Integer minAmount;
+    private Integer amountMin;
 
+    @Amount
     @Schema(description = "Максимальная сумма кредита")
-    private Integer maxAmount;
+    private Integer amountMax;
 
+    @Rate
     @Schema(description = "Процентная ставка кредита")
     private Double rate;
 
+    @CreditTerm
     @Schema(description = "Срок кредита")
     private Integer term;
 

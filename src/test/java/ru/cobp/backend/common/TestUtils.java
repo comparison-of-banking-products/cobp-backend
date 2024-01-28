@@ -9,7 +9,7 @@ import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
-import ru.cobp.backend.dto.credit.CreditDto;
+import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.CreditShortResponseDto;
 import ru.cobp.backend.dto.credit.NewCreditDto;
@@ -234,7 +234,7 @@ public class TestUtils {
                 "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
                 10000,
                 7000000,
-                24.4,
+                24.40,
                 13,
                 PaymentType.ANNUITY,
                 true,
@@ -243,17 +243,14 @@ public class TestUtils {
         );
     }
 
-    public static CreditDto buildGazprombankCreditDto() {
-        return new CreditDto(
+    public static CreditUpdateDto buildGazprombankCreditDto() {
+        return new CreditUpdateDto(
+                "Газпромбанк Кредит наличными",
                 null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                25.1,
+                "https://www.gazprombank.ru/personal/take_credit/consumer_credit/5004451/",
+                10000,
+                7000000,
+                25.10,
                 12,
                 null,
                 null,
@@ -273,7 +270,7 @@ public class TestUtils {
                 10000,
                 7000000,
                 12,
-                25.1,
+                25.10,
                 PaymentType.ANNUITY,
                 true,
                 true,
