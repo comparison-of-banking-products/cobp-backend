@@ -18,10 +18,6 @@ public class ExceptionUtil {
         return new NotFoundException(String.format(ExceptionMessage.CURRENCY_NOT_FOUND, currencyNum));
     }
 
-    public static <T> DuplicateException getDuplicateException(Class<T> clazz) {
-        return new DuplicateException(String.format(ExceptionMessage.DUPLICATE_EXCEPTION, clazz.getSimpleName()));
-    }
-
     public static ExchangeRatesProcessingFailedException getExchangeRatesProcessingFailedException(Throwable cause) {
         return new ExchangeRatesProcessingFailedException(ExceptionMessage.EXCHANGE_RATES_PROCESSING_FAILED, cause);
     }

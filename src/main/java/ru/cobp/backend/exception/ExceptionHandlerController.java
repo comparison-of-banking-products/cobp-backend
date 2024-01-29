@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -38,7 +39,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorResponseDto> handle(final NotFoundException ex) {
+    public ResponseEntity<ErrorResponseDto> handle(NotFoundException ex) {
         log.error(ex.getMessage(), ex);
         String reason = "The required object was not found.";
         LocalDateTime timestamp = LocalDateTime.now();
@@ -49,7 +50,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponseDto handle(final DuplicateException ex) {
+    public ErrorResponseDto handle(DataIntegrityViolationException ex) {
         log.error(ex.getMessage(), ex);
         return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
     }

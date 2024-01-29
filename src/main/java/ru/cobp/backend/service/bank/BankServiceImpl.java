@@ -28,7 +28,6 @@ public class BankServiceImpl implements BankService {
     @Override
     @Transactional
     public Bank create(Bank newBank) {
-        checkIfBankExistsByBic(newBank.getBic());
         return bankRepository.save(newBank);
     }
 
@@ -84,9 +83,4 @@ public class BankServiceImpl implements BankService {
         return builder;
     }
 
-    private void checkIfBankExistsByBic(String bic) {
-        if (bankRepository.findById(bic).isPresent()) {
-            throw ExceptionUtil.getDuplicateException(Bank.class);
-        }
-    }
 }
