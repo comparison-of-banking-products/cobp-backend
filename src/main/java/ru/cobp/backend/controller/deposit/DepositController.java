@@ -113,7 +113,7 @@ public class DepositController {
             @Parameter(description = "Идентификатор вклада")
             @PathVariable @Id long id
     ) {
-        Deposit deposit = depositService.findById(id);
+        Deposit deposit = depositService.getById(id);
         return depositMapper.toDepositResponseDto(deposit);
     }
 

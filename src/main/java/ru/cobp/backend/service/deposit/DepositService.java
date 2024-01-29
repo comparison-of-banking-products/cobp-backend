@@ -15,7 +15,7 @@ public interface DepositService {
 
     Deposit update(long id, DepositPatch patch);
 
-    Deposit findById(long id);
+    Deposit getById(long id);
 
     Page<Deposit> findAllDepositPage(DepositParams params);
 
