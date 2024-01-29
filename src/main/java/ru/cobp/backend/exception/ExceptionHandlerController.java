@@ -70,6 +70,13 @@ public class ExceptionHandlerController {
         return new ErrorResponseDto(LocalDateTime.now(), messages);
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDto handle(DepositNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
+    }
+
     private String buildConstraintViolationMessages(Set<ConstraintViolation<?>> violations) {
         return violations.stream()
                 .map(ConstraintViolation::getMessage)
