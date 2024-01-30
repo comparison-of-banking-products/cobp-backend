@@ -6,10 +6,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionUtil {
 
-    public static DepositNotFoundException getDepositNotFoundException() {
-        return new DepositNotFoundException(ExceptionMessage.DEPOSIT_NOT_FOUND);
-    }
-
     public static NotFoundException getBankNotFoundException(String bic) {
         return new NotFoundException(String.format(ExceptionMessage.BANK_NOT_FOUND, bic));
     }

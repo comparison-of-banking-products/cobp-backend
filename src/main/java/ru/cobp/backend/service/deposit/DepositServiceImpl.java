@@ -55,13 +55,13 @@ public class DepositServiceImpl implements DepositService {
     @Override
     @Transactional
     public Deposit update(long id, DepositPatch patch) {
-        Deposit deposit = findById(id);
+        Deposit deposit = getById(id);
         depositMapper.patchDeposit(deposit, patch);
         return depositRepository.save(deposit);
     }
 
     @Override
-    public Deposit findById(long id) {
+    public Deposit getById(long id) {
         return depositRepository
                 .findById(id)
                 .orElseThrow(() -> ExceptionUtil.getDepositNotFoundException(id));
