@@ -20,8 +20,8 @@ import ru.cobp.backend.common.TestUtils;
 import ru.cobp.backend.dto.bank.BankCreateUpdateDto;
 import ru.cobp.backend.dto.bank.BankResponseDto;
 import ru.cobp.backend.dto.bank.BankSort;
-import ru.cobp.backend.exception.DuplicateException;
 import ru.cobp.backend.exception.NotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,13 +81,13 @@ class BankControllerTest {
     @SneakyThrows
     void create_whenBicNotUnique_throwDuplicateException() {
         // given
-        createUpdateDto.setBic("044525111");
+        createUpdateDto.setName("Россельхозбанк");
 
         // then
         mockMvc.perform(post("/v1/banks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUpdateDto)))
-                .andExpect(result -> assertInstanceOf(DuplicateException.class, result.getResolvedException()));
+                .andExpect(result -> assertInstanceOf(DataIntegrityViolationException.class, result.getResolvedException()));
     }
 
     @Test
