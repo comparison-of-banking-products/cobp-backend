@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -38,7 +39,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorResponseDto> handle(final NotFoundException ex) {
+    public ResponseEntity<ErrorResponseDto> handle(NotFoundException ex) {
         log.error(ex.getMessage(), ex);
         String reason = "The required object was not found.";
         LocalDateTime timestamp = LocalDateTime.now();
@@ -49,7 +50,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponseDto handle(final DuplicateException ex) {
+    public ErrorResponseDto handle(DataIntegrityViolationException ex) {
         log.error(ex.getMessage(), ex);
         return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
     }
@@ -58,28 +59,35 @@ public class ExceptionHandlerController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto handle(ConstraintViolationException ex) {
         log.error(ex.getMessage(), ex);
-        List<String> violationMessages = buildConstraintViolationMessages(ex.getConstraintViolations());
-        return new ErrorResponseDto(LocalDateTime.now(), String.join(VIOLATIONS_DELIMITER, violationMessages));
+        String messages = buildConstraintViolationMessages(ex.getConstraintViolations());
+        return new ErrorResponseDto(LocalDateTime.now(), messages);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto handle(MethodArgumentNotValidException ex) {
         log.error(ex.getMessage(), ex);
-        List<String> violationMessages = buildAllErrorsMessages(ex.getBindingResult());
-        return new ErrorResponseDto(LocalDateTime.now(), String.join(VIOLATIONS_DELIMITER, violationMessages));
+        String messages = buildAllErrorsMessages(ex.getBindingResult());
+        return new ErrorResponseDto(LocalDateTime.now(), messages);
     }
 
-    private List<String> buildConstraintViolationMessages(Set<ConstraintViolation<?>> violations) {
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDto handle(DepositNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return new ErrorResponseDto(LocalDateTime.now(), ex.getMessage());
+    }
+
+    private String buildConstraintViolationMessages(Set<ConstraintViolation<?>> violations) {
         return violations.stream()
                 .map(ConstraintViolation::getMessage)
-                .toList();
+                .collect(Collectors.joining(VIOLATIONS_DELIMITER));
     }
 
-    private List<String> buildAllErrorsMessages(BindingResult bindingResult) {
+    private String buildAllErrorsMessages(BindingResult bindingResult) {
         return bindingResult.getAllErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .toList();
+                .collect(Collectors.joining(VIOLATIONS_DELIMITER));
     }
 
 }

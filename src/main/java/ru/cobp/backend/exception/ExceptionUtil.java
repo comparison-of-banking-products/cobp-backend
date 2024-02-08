@@ -6,20 +6,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionUtil {
 
-    public static DepositNotFoundException getDepositNotFoundException() {
-        return new DepositNotFoundException(ExceptionMessage.DEPOSIT_NOT_FOUND);
-    }
-
     public static NotFoundException getBankNotFoundException(String bic) {
         return new NotFoundException(String.format(ExceptionMessage.BANK_NOT_FOUND, bic));
     }
 
     public static NotFoundException getCurrencyNotFoundException(String currencyNum) {
         return new NotFoundException(String.format(ExceptionMessage.CURRENCY_NOT_FOUND, currencyNum));
-    }
-
-    public static <T> DuplicateException getDuplicateException(Class<T> clazz) {
-        return new DuplicateException(String.format(ExceptionMessage.DUPLICATE_EXCEPTION, clazz.getSimpleName()));
     }
 
     public static ExchangeRatesProcessingFailedException getExchangeRatesProcessingFailedException(Throwable cause) {
