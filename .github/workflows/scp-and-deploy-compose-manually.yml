@@ -8,6 +8,7 @@ env:
   PAT_PACKAGES: ${{ secrets.PAT_PACKAGES }}
   COBP_DIR: ${{ secrets.COBP_DIR }}
   COMPOSE_CONFIG: docker-compose-remote.yml
+  BACKEND_ENV: backend.env
 
 jobs:
   scp-and-deploy-compose:
@@ -24,7 +25,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-
           source: ${{ env.COMPOSE_CONFIG }}
           target: ${{ secrets.COBP_DIR }}
 
@@ -34,10 +34,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-
-          envs: REGISTRY, GITHUB_ACTOR, PAT_PACKAGES, COBP_DIR, COMPOSE_CONFIG
+          envs: REGISTRY, GITHUB_ACTOR, PAT_PACKAGES, COBP_DIR, COMPOSE_CONFIG, BACKEND_ENV
           script: |
-            cd $COBP_DIR
-            echo "$PAT_PACKAGES" | docker login $REGISTRY -u $GITHUB_ACTOR --password-stdin
-            docker compose -f $COMPOSE_CONFIG pull
-            docker compose -f $COMPOSE_CONFIG up -d
+            cd "$COBP_DIR"
+            echo "$PAT_PACKAGES" | docker login "$REGISTRY" -u "$GITHUB_ACTOR" --password-stdin
+            docker compose --file "$COMPOSE_CONFIG" --env-file "$BACKEND_ENV" pull
+            docker compose --file "$COMPOSE_CONFIG" --env-file "$BACKEND_ENV" up -d
