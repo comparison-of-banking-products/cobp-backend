@@ -7,9 +7,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=cobp
-      - POSTGRES_USER=dev
-      - POSTGRES_PASSWORD=dev
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
 
   cobp-backend:
     image: ghcr.io/comparison-of-banking-products/cobp-backend:dev
@@ -19,9 +19,9 @@ services:
     depends_on:
       - cobp-database
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://cobp-database:5432/cobp
-      - SPRING_DATASOURCE_USERNAME=dev
-      - SPRING_DATASOURCE_PASSWORD=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cobp-database:5432/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASS}
       - SPRING_PROFILES_ACTIVE=remote
 
   cobp-frontend:
