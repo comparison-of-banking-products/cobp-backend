@@ -1,4 +1,4 @@
-package ru.cobp.backend;
+package ru.cobp.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;

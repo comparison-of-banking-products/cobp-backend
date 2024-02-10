@@ -1,4 +1,4 @@
-package ru.cobp.backend;
+package ru.cobp.backend.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
