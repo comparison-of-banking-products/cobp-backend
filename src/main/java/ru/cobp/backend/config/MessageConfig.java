@@ -1,4 +1,4 @@
-package ru.cobp.backend;
+package ru.cobp.backend.config;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
