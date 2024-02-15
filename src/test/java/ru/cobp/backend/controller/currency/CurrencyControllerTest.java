@@ -20,11 +20,12 @@ import ru.cobp.backend.service.currency.CurrencyRatesService;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -67,12 +68,14 @@ class CurrencyControllerTest {
     @Test
     @SneakyThrows
     void update_whenValidCurrency_thenReturnUpdatedCurrencyResponseDto() {
+        var albanianLekDto = TestUtils.buildAlbanianLekCurrencyCreateUpdateDto();
+
         mockMvc.perform(put("/v1/currencies/{num}", 643L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUpdateDto)))
+                        .content(objectMapper.writeValueAsString(albanianLekDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(createUpdateDto.getCode()))
-                .andExpect(jsonPath("$.currency").value(createUpdateDto.getCurrency()));
+                .andExpect(jsonPath("$.code").value(albanianLekDto.getCode()))
+                .andExpect(jsonPath("$.currency").value(albanianLekDto.getCurrency()));
     }
 
     @Test
@@ -88,8 +91,8 @@ class CurrencyControllerTest {
                 CurrencyResponseDto[].class));
 
         assertNotNull(actual);
-        assertEquals(actual.size(), 7);
-        assertEquals(actual.get(0).getCode(), "CNY");
+        assertEquals(43, actual.size());
+        assertEquals("AUD", actual.get(0).getCode());
     }
 
     @Test
