@@ -34,3 +34,16 @@ services:
       - cobp-backend
     volumes:
       - ./certbot/:/etc/letsencrypt/:rw
+
+  cobp-support:
+    image: ghcr.io/comparison-of-banking-products/cobp-chatbot:dev
+    container_name: cobp-support
+    ports:
+      - "8084:8084"
+    depends_on:
+      - cobp-backend
+    environment:
+      - BOT_USERNAME=${BOT_USERNAME}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - SUPPORT_GROUP_ID=${SUPPORT_GROUP_ID}
+      - SUPPORT_TOPIC_ID=${SUPPORT_TOPIC_ID}
