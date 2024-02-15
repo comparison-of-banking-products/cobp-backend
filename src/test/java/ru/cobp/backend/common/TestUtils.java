@@ -9,9 +9,9 @@ import ru.cobp.backend.dto.calculator.CalculatedCreditListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedCreditResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositListResponseDto;
 import ru.cobp.backend.dto.calculator.CalculatedDepositResponseDto;
-import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.CreditResponseDto;
 import ru.cobp.backend.dto.credit.CreditShortResponseDto;
+import ru.cobp.backend.dto.credit.CreditUpdateDto;
 import ru.cobp.backend.dto.credit.NewCreditDto;
 import ru.cobp.backend.dto.currency.CurrencyCreateUpdateDto;
 import ru.cobp.backend.dto.currency.CurrencyResponseDto;
@@ -340,6 +340,14 @@ public class TestUtils {
 
     public static CalculatedCreditListResponseDto buildGazprombankCalculatedCreditListResponseDto() {
         return new CalculatedCreditListResponseDto(buildGazprombankCalculatedCreditResponseDtos(), 1L);
+    }
+
+    public static CurrencyCreateUpdateDto buildAlbanianLekCurrencyCreateUpdateDto() {
+        return CurrencyCreateUpdateDto.builder()
+                .num("008")
+                .code("ALL")
+                .currency("Албанский лек")
+                .build();
     }
 
 }
