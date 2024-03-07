@@ -36,7 +36,7 @@ services:
       - ./certbot/:/etc/letsencrypt/:rw
 
   cobp-support:
-    image: ghcr.io/comparison-of-banking-products/cobp-chatbot:dev
+    image: ghcr.io/comparison-of-banking-products/cobp-support:dev
     container_name: cobp-support
     ports:
       - "8084:8084"
